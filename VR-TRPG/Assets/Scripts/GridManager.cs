@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GridManager : MonoBehaviour
 {
@@ -23,18 +24,20 @@ public class GridManager : MonoBehaviour
     int fieldSOListIndex = 0;
 
     public event EventHandler OnSelectedChanged;
+    Mouse mouse;
 
     void Awake()
     {
         Instance = this;
         _grid = new Grid<GridObject>(gridWidth, gridHeight, cellSize, Vector3.zero, (Grid<GridObject> g, int x, int z) => new GridObject(g, x, z));
         fieldSO = fieldSOList[fieldSOListIndex];
+        mouse = Mouse.current;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (mouse.leftButton.wasPressedThisFrame)
         {
             _grid.GetXZ(Utils.GetMouseWorldPosition(), out int x, out int z);
             GridObject gridObject = _grid.GetGridObject(x, z);
@@ -48,7 +51,7 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (mouse.rightButton.wasPressedThisFrame)
         {
             GridObject gridObject = _grid.GetGridObject(Utils.GetMouseWorldPosition());
             if (gridObject != null && gridObject.GetField() != null)
@@ -57,14 +60,14 @@ public class GridManager : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Keyboard.current.rKey.wasPressedThisFrame)
         {
             dir = FieldSO.GetNextDir(dir);
         }
 
-        if (Input.mouseScrollDelta.y != 0)
+        if (mouse.scroll.ReadValue().y != 0)
         {
-            fieldSOListIndex = (fieldSOListIndex + (int)Input.mouseScrollDelta.y) % fieldSOList.Count;
+            fieldSOListIndex = (fieldSOListIndex + (int)Mathf.Clamp(mouse.scroll.ReadValue().y, -1f, 1f)) % fieldSOList.Count;
             if (fieldSOListIndex < 0)
             {
                 fieldSOListIndex += fieldSOList.Count;

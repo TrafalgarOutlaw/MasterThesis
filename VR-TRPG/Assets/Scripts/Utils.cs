@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public static class Utils
 {
@@ -33,7 +34,7 @@ public static class Utils
     {
         int layerMask = 0;
         layerMask = ~layerMask;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, layerMask))
         {
             return raycastHit.point;
