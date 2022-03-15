@@ -7,6 +7,7 @@ public class Grid<TGridObject>
     public class OnGridObjectChangedEventArgs : EventArgs
     {
         public int x;
+        public int y;
         public int z;
     }
 

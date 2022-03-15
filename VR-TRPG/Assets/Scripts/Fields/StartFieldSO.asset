@@ -18,3 +18,4 @@ MonoBehaviour:
   prefab: {fileID: 8073743801296197193, guid: 745c9191889c18246b708eeba6f29765, type: 3}
   visual: {fileID: 0}
   isWalkable: 1
+  isPlayer: 1

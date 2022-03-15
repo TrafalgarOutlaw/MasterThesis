@@ -26,23 +26,41 @@ public class FieldGhost : MonoBehaviour
         targetPosition.y = 0f;
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 15f);
 
+
         transform.rotation = Quaternion.Lerp(transform.rotation, GridManager.Instance.GetPlacedFieldRotation(), Time.deltaTime * 15f);
     }
 
     void RefreshVisual()
     {
-        if (visual != null)
+
+        if (visual != null && !visual.CompareTag("Player"))
         {
             Destroy(visual.gameObject);
-            visual = null;
         }
+
+        if (visual != null && visual.CompareTag("Player"))
+        {
+            StartField.Instance.OnStartDeselected();
+        }
+
+        visual = null;
 
         FieldSO placedFieldSO = GridManager.Instance.GetPlacedFieldSO();
 
         if (placedFieldSO)
         {
-            visual = Instantiate(placedFieldSO.prefab, Vector3.zero, Quaternion.identity);
-            visual.GetComponent<Field>()?.SetSize(GridManager.Instance.GetCellSize());
+            if (placedFieldSO.prefab.CompareTag("Player"))
+            {
+                visual = StartField.Instance.transform;
+                StartField.Instance.OnStartSelected();
+                visual.GetComponent<StartField>()?.SetSize(GridManager.Instance.GetCellSize());
+            }
+            else
+            {
+                visual = Instantiate(placedFieldSO.prefab, Vector3.zero, Quaternion.identity);
+                visual.GetComponent<Field>()?.SetSize(GridManager.Instance.GetCellSize());
+            }
+
             visual.parent = transform;
             visual.localPosition = Vector3.zero;
             visual.localEulerAngles = Vector3.zero;

@@ -16,6 +16,7 @@ public class FieldSO : ScriptableObject
     public Transform prefab;
     public Transform visual;
     public bool isWalkable;
+    public bool isPlayer;
 
     public int GetRotationAngle(Dir dir)
     {
