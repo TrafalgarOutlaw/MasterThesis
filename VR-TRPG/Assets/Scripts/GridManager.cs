@@ -10,9 +10,11 @@ public class GridManager : MonoBehaviour
     public static GridManager Instance { get { return _instance; } }
 
     [SerializeField]
-    int gridWidth = 10;
+    int gridLength = 10;
     [SerializeField]
-    int gridHeight = 10;
+    int gridHeight = 3;
+    [SerializeField]
+    int gridWidth = 10;
     [SerializeField]
     float cellSize = 10f;
 
@@ -34,7 +36,9 @@ public class GridManager : MonoBehaviour
     Mouse mouse;
 
     bool _playerIsPlaced = false;
-    public Transform emptyGrids;
+    public Transform freeGrids;
+    Transform[,,] _freeGridArray;
+    int currentY = 0;
 
     void Awake()
     {
@@ -44,19 +48,30 @@ public class GridManager : MonoBehaviour
         }
 
         _instance = this;
-        _grid = new Grid<GridObject>(gridWidth, gridHeight, cellSize, Vector3.zero, (Grid<GridObject> g, int x, int z) => new GridObject(g, x, z));
+        _grid = new Grid<GridObject>(gridLength, gridHeight, gridWidth, cellSize, Vector3.zero, (Grid<GridObject> g, int x, int y, int z) => new GridObject(g, x, y, z));
 
         fieldSO = fieldSOList[fieldSOListIndex];
         mouse = Mouse.current;
 
-        for (int x = 0; x < gridWidth; x++)
+        _freeGridArray = new Transform[gridLength, gridHeight, gridWidth];
+        for (int x = 0; x < gridLength; x++)
         {
-            for (int z = 0; z < gridHeight; z++)
+            for (int y = 0; y < gridHeight; y++)
             {
-                Vector2Int rotationOffset = fieldSO.GetRotationOffset(dir);
-                Vector3 freeGridPosition = _grid.GetWorldPosition(x, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
-                Transform freeGrid = Instantiate(pfFreeGrid, freeGridPosition, Quaternion.Euler(0, fieldSO.GetRotationAngle(dir), 0), emptyGrids);
-                freeGrid.localScale = new Vector3(cellSize, cellSize, cellSize);
+                for (int z = 0; z < gridWidth; z++)
+                {
+                    Vector2Int rotationOffset = fieldSO.GetRotationOffset(dir);
+                    Vector3 freeGridPosition = _grid.GetWorldPosition(x, y, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
+                    Transform freeGrid = Instantiate(pfFreeGrid, freeGridPosition, Quaternion.Euler(0, fieldSO.GetRotationAngle(dir), 0), freeGrids);
+                    _freeGridArray[x, y, z] = freeGrid;
+                    freeGrid.localScale = new Vector3(cellSize, cellSize, cellSize);
+                    freeGrid.GetComponent<FreeGrid>().SetIndex(x, y, z);
+
+                    if (y == 0)
+                    {
+                        freeGrid.GetComponent<FreeGrid>().EnableGrid();
+                    }
+                }
             }
         }
     }
@@ -66,12 +81,14 @@ public class GridManager : MonoBehaviour
     {
         if (mouse.leftButton.wasPressedThisFrame)
         {
-            _grid.GetXZ(Utils.GetMouseWorldPosition(), out int x, out int z);
-            GridObject gridObject = _grid.GetGridObject(x, z);
+            _grid.GetXZ(Utils.GetMouseWorldPosition(), out int x, out int y, out int z);
+
+            GridObject gridObject = _grid.GetGridObject(x, y, z);
             if (gridObject != null && gridObject.CanBuild())
             {
                 Vector2Int rotationOffset = fieldSO.GetRotationOffset(dir);
-                Vector3 placedFieldWorldPosition = _grid.GetWorldPosition(x, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
+                Vector3 placedFieldWorldPosition = GetMouseWorldSnappedPosition(); //_grid.GetWorldPosition(x, y, z); //+ new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
+                Debug.Log(placedFieldWorldPosition);
                 Transform builtTransform;
                 if (fieldSO.isPlayer)
                 {
@@ -100,6 +117,7 @@ public class GridManager : MonoBehaviour
                     builtTransform.GetComponent<Field>()?.SetSize(cellSize);
                 }
                 gridObject.SetField(builtTransform);
+
             }
         }
 
@@ -137,6 +155,45 @@ public class GridManager : MonoBehaviour
             fieldSO = fieldSOList[fieldSOListIndex];
             RefreshSelectedObjectType();
         }
+
+        if (Keyboard.current.iKey.wasPressedThisFrame)
+        {
+            DisableCurrentRow(currentY);
+            currentY = (currentY + 1) % gridHeight;
+            EnableCurrentRow(currentY);
+        }
+        if (Keyboard.current.kKey.wasPressedThisFrame)
+        {
+            DisableCurrentRow(currentY);
+            currentY--;
+            if (currentY < 0)
+            {
+                currentY += gridHeight;
+            }
+            EnableCurrentRow(currentY);
+        }
+    }
+
+    void EnableCurrentRow(int currentY)
+    {
+        for (int x = 0; x < gridLength; x++)
+        {
+            for (int z = 0; z < gridWidth; z++)
+            {
+                _freeGridArray[x, currentY, z].GetComponent<FreeGrid>().EnableGrid();
+            }
+        }
+    }
+
+    void DisableCurrentRow(int currentY)
+    {
+        for (int x = 0; x < gridLength; x++)
+        {
+            for (int z = 0; z < gridWidth; z++)
+            {
+                _freeGridArray[x, currentY, z].GetComponent<FreeGrid>()?.DisableGrid();
+            }
+        }
     }
 
     void RefreshSelectedObjectType()
@@ -146,18 +203,18 @@ public class GridManager : MonoBehaviour
 
     public Vector3 GetMouseWorldSnappedPosition()
     {
-        Vector3 mousePosition = Utils.GetMouseWorldPosition();
-        _grid.GetXZ(mousePosition, out int x, out int z);
+        Vector3Int freeGrid = Utils.GetMouseWorldPosition();
+        //_grid.GetXZ(mousePosition, out int x, out int y, out int z);
 
         if (fieldSO != null)
         {
             Vector2Int rotationOffset = fieldSO.GetRotationOffset(dir);
-            Vector3 placedFieldWorldPosition = _grid.GetWorldPosition(x, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
+            Vector3 placedFieldWorldPosition = _grid.GetWorldPosition(freeGrid.x, freeGrid.y, freeGrid.z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
             return placedFieldWorldPosition;
         }
         else
         {
-            return mousePosition;
+            return freeGrid;
         }
     }
 
@@ -192,20 +249,28 @@ public class GridManager : MonoBehaviour
     {
         Grid<GridObject> _grid;
         int _x;
+        int _y;
         int _z;
         Transform _transform;
 
-        public GridObject(Grid<GridObject> grid, int x, int z)
+        public GridObject(Grid<GridObject> grid, int x, int y, int z)
         {
             _grid = grid;
             _x = x;
+            _y = y;
             _z = z;
+        }
+
+        public Vector3Int GetIndex()
+        {
+            return new Vector3Int(_x, _y, _z);
         }
 
         public void SetField(Transform transform)
         {
             _transform = transform;
-            _grid.TriggerGridObjectChanged(_x, _z);
+            _grid.TriggerGridObjectChanged(_x, _y, _z);
+
         }
 
         public Transform GetField()

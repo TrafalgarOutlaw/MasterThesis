@@ -185,6 +185,7 @@ Transform:
   - {fileID: 1292725382}
   - {fileID: 1954608302}
   - {fileID: 1976551759}
+  - {fileID: 1112842668}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -576,9 +577,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b4f52a58cee9574e9f38d2c22c1d925, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridLength: 10
+  gridHeight: 3
   gridWidth: 10
-  gridHeight: 10
-  cellSize: 4
+  cellSize: 2
   fieldSOList:
   - {fileID: 11400000, guid: 7b9165dc545f5134f903fb6b2527f213, type: 2}
   - {fileID: 11400000, guid: 9309e53d2b14c0848adcbf3e81538d41, type: 2}
@@ -586,6 +588,7 @@ MonoBehaviour:
   pfFreeGrid: {fileID: 4107027186707012726, guid: 0bc501cd397db8a4ea7a32c5906e1970,
     type: 3}
   level: {fileID: 2613113}
+  freeGrids: {fileID: 1112842668}
 --- !u!4 &789435524
 Transform:
   m_ObjectHideFlags: 0
@@ -790,6 +793,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   container: {fileID: 442930099}
   editor: {fileID: 75213287}
+--- !u!1 &1112842667
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1112842668}
+  m_Layer: 0
+  m_Name: FreeGrids
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1112842668
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112842667}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 75213288}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1292725380
 GameObject:
   m_ObjectHideFlags: 0

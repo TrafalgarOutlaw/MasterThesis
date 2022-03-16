@@ -23,7 +23,6 @@ public class FieldGhost : MonoBehaviour
     void LateUpdate()
     {
         Vector3 targetPosition = GridManager.Instance.GetMouseWorldSnappedPosition();
-        targetPosition.y = 0f;
         transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 15f);
 
 
