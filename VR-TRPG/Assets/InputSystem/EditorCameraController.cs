@@ -15,7 +15,7 @@ public class EditorCameraController : MonoBehaviour
     [SerializeField]
 
     VrtrpgActions vrtrpgActions;
-    bool isActive = true;
+    bool isActive;
 
     private void Awake()
     {
@@ -61,7 +61,6 @@ public class EditorCameraController : MonoBehaviour
         float mouseX = vrtrpgActions.Camera.MouseX.ReadValue<float>() * sensitivity;
         float mouseY = vrtrpgActions.Camera.MouseY.ReadValue<float>() * sensitivity;
         transform.Rotate(Vector3.up, mouseX * Time.deltaTime, Space.World);
-        transform.Rotate(Vector3.left, mouseY * Time.deltaTime, Space.World);
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
+        transform.Rotate(Vector3.right, -mouseY * Time.deltaTime);
     }
 }
