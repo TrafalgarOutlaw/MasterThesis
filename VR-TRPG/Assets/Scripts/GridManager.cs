@@ -88,7 +88,6 @@ public class GridManager : MonoBehaviour
             {
                 Vector2Int rotationOffset = fieldSO.GetRotationOffset(dir);
                 Vector3 placedFieldWorldPosition = GetMouseWorldSnappedPosition(); //_grid.GetWorldPosition(x, y, z); //+ new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
-                Debug.Log(placedFieldWorldPosition);
                 Transform builtTransform;
                 if (fieldSO.isPlayer)
                 {
@@ -116,8 +115,42 @@ public class GridManager : MonoBehaviour
                     builtTransform = Instantiate(fieldSO.prefab, placedFieldWorldPosition, Quaternion.Euler(0, fieldSO.GetRotationAngle(dir), 0), level);
                     builtTransform.GetComponent<Field>()?.SetSize(cellSize);
                 }
-                gridObject.SetField(builtTransform);
+                Transform newField = gridObject.SetField(builtTransform);
 
+                if (fieldSO.isWalkable)
+                {
+                    Vector3Int gridIndex = gridObject.GetIndex();
+                    //Debug.Log(gridIndex);
+                    for (int gridX = gridIndex.x - 1; gridX <= gridIndex.x + 1; gridX++)
+                    {
+                        if (gridX < 0 || gridX >= gridLength)
+                            continue;
+                        for (int gridY = gridIndex.y - 1; gridY <= gridIndex.y + 1; gridY++)
+                        {
+                            if (gridY < 0 || gridY >= gridHeight)
+                                continue;
+                            for (int gridZ = gridIndex.z - 1; gridZ <= gridIndex.z + 1; gridZ++)
+                            {
+                                if (gridZ < 0 || gridZ >= gridWidth || (gridX == gridIndex.x && gridY == gridIndex.y && gridZ == gridIndex.z))
+                                    continue;
+                                GridObject neightborGrid = _grid.GetGridObject(gridX, gridY, gridZ);
+                                var isCurrentStart = newField.GetComponent<StartField>();
+                                var testStart = neightborGrid.GetField()?.gameObject.GetComponent<StartField>();
+                                var neightbor = neightborGrid.GetField()?.gameObject.GetComponent<Field>();
+                                if (testStart != null && testStart.isWalkable)
+                                {
+                                    Debug.Log(neightborGrid.GetField());
+                                    StartField.Instance.AddNeightbor(neightborGrid.GetField());
+                                }
+                                if (isCurrentStart != null && neightbor != null && neightbor.isWalkable)
+                                {
+                                    StartField.Instance.AddNeightbor(neightbor.transform);
+                                    Debug.Log(neightborGrid.GetField());
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -131,6 +164,7 @@ public class GridManager : MonoBehaviour
                 {
                     _playerIsPlaced = false;
                     StartField.Instance.OnStartRemoved();
+                    StartField.Instance.ResetNeighbot();
                     fieldSOList.Add(startFieldSO);
                     fieldSOListIndex = fieldSOList.Count - 1;
                     fieldSO = fieldSOList[fieldSOListIndex];
@@ -266,10 +300,11 @@ public class GridManager : MonoBehaviour
             return new Vector3Int(_x, _y, _z);
         }
 
-        public void SetField(Transform transform)
+        public Transform SetField(Transform transform)
         {
             _transform = transform;
             _grid.TriggerGridObjectChanged(_x, _y, _z);
+            return transform;
 
         }
 
@@ -291,11 +326,6 @@ public class GridManager : MonoBehaviour
         public bool CanBuild()
         {
             return _transform == null;
-        }
-
-        public override string ToString()
-        {
-            return _x + ", " + _z + "\n" + _transform;
         }
     }
 }

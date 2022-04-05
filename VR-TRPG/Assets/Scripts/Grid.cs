@@ -85,11 +85,16 @@ public class Grid<TGridObject>
     }
 
 
-    public void GetXZ(Vector3 worlsPosition, out int x, out int y, out int z)
+    public void GetXZ(Vector3Int worldPosition, out int x, out int y, out int z)
     {
-        x = Mathf.FloorToInt((worlsPosition - _originPosition).x / _cellSize);
-        y = Mathf.FloorToInt((worlsPosition - _originPosition).y / _cellSize);
-        z = Mathf.FloorToInt((worlsPosition - _originPosition).z / _cellSize);
+        /*
+        x = Mathf.FloorToInt((worldPosition - _originPosition).x / _cellSize);
+        y = Mathf.FloorToInt((worldPosition - _originPosition).y / _cellSize);
+        z = Mathf.FloorToInt((worldPosition - _originPosition).z / _cellSize);
+        */
+        x = worldPosition.x;
+        y = worldPosition.y;
+        z = worldPosition.z;
     }
 
     public TGridObject GetGridObject(int x, int y, int z)
@@ -103,7 +108,7 @@ public class Grid<TGridObject>
             return default(TGridObject);
         }
     }
-    public TGridObject GetGridObject(Vector3 worldPosition)
+    public TGridObject GetGridObject(Vector3Int worldPosition)
     {
         GetXZ(worldPosition, out int x, out int y, out int z);
         return GetGridObject(x, y, z);
@@ -118,7 +123,7 @@ public class Grid<TGridObject>
         }
     }
 
-    public void SetGridObject(Vector3 worldPosition, TGridObject value)
+    public void SetGridObject(Vector3Int worldPosition, TGridObject value)
     {
         GetXZ(worldPosition, out int x, out int y, out int z);
         SetGridObject(x, y, z, value);

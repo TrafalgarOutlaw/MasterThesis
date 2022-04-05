@@ -202,4 +202,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fac2658b97fff54092df27b64289b00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isWalkable: 1
   visual: {fileID: 4009555894648600840}

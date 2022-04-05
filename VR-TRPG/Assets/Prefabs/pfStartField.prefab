@@ -5826,5 +5826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 429da909d62f8b746a08ea3df60d3b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isWalkable: 1
   xrContainer: {fileID: 4442144522465407332}
   visual: {fileID: 2304513684138392164}

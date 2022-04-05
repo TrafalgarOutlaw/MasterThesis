@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class StartField : MonoBehaviour
 {
+    public bool isWalkable = true;
     static StartField _instance;
 
     [SerializeField]
@@ -13,6 +14,8 @@ public class StartField : MonoBehaviour
     [SerializeField]
     GameObject visual;
     bool _isPlaced = false;
+
+    List<Transform> walkableNeightborList;
 
     public static StartField Instance { get { return _instance; } }
 
@@ -25,6 +28,7 @@ public class StartField : MonoBehaviour
         }
 
         _instance = this;
+        walkableNeightborList = new List<Transform>();
     }
 
     public void OnStartPlaced()
@@ -64,5 +68,15 @@ public class StartField : MonoBehaviour
     internal void OnStartSelected()
     {
         visual.SetActive(true);
+    }
+
+    public void AddNeightbor(Transform neightbor)
+    {
+        walkableNeightborList.Add(neightbor);
+    }
+
+    public void ResetNeighbot()
+    {
+        walkableNeightborList = new List<Transform>();
     }
 }

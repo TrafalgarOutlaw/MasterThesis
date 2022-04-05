@@ -30,13 +30,25 @@ public static class Utils
         return textMesh;
     }
 
-    public static Vector3Int GetMouseWorldPosition()
+    public static Vector3Int GetMouseWorldPosition(bool debug = false)
     {
-        int layerMask = 0;
-        layerMask = ~layerMask;
+        int layerMask = 1 << 6;
+        //layerMask = ~layerMask;
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        //if (Physics.RaycastAll(ray, out RaycastHit raycastHit, 999f, layerMask))
-        RaycastHit[] hits;
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, layerMask))
+        {
+            if (debug)
+            {
+
+                Debug.Log("IN RAYCAST");
+                Debug.Log(raycastHit.collider.transform.parent.GetComponent<FreeGrid>().GetIndex());
+            }
+            return raycastHit.collider.transform.parent.GetComponent<FreeGrid>().GetIndex();
+
+        }
+        return Vector3Int.zero;
+        /*
+            RaycastHit[] hits;
         hits = Physics.RaycastAll(ray, 999f, layerMask);
 
         for (int i = hits.Length - 1; i >= 0; i--)
@@ -48,5 +60,6 @@ public static class Utils
             }
         }
         return Vector3Int.zero;
+        */
     }
 }

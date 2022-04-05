@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Field : MonoBehaviour
 {
+    public bool isWalkable;
     [SerializeField]
     Transform visual;
     public void SetSize(float cellSize)
