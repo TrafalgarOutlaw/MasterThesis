@@ -30,23 +30,27 @@ public static class Utils
         return textMesh;
     }
 
-    public static Vector3Int GetMouseWorldPosition(bool debug = false)
+    public static Vector3 GetMouseWorldPosition(bool debug = false)
     {
         int layerMask = 1 << 6;
         //layerMask = ~layerMask;
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        Debug.DrawRay(Mouse.current.position.ReadValue(), ray.direction);
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, layerMask))
         {
+            EmptyGridObject emptyGridObject = raycastHit.collider.GetComponentInParent<EmptyGridObject>();
             if (debug)
             {
-
                 Debug.Log("IN RAYCAST");
-                Debug.Log(raycastHit.collider.transform.parent.GetComponent<FreeGrid>().GetIndex());
+                Debug.Log("emptyGridObjectIndex: " + emptyGridObject.index);
+                Debug.Log(emptyGridObject.index);
             }
-            return raycastHit.collider.transform.parent.GetComponent<FreeGrid>().GetIndex();
-
+            if (emptyGridObject.IsActive())
+            {
+                return emptyGridObject.index;
+            }
         }
-        return Vector3Int.zero;
+        return -Vector3.one;
         /*
             RaycastHit[] hits;
         hits = Physics.RaycastAll(ray, 999f, layerMask);

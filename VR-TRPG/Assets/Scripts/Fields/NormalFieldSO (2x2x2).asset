@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9bb038d6f640104e8ce340107382e2e, type: 3}
-  m_Name: WaterFieldSO
+  m_Name: NormalFieldSO (2x2x2)
   m_EditorClassIdentifier: 
-  pfField: {fileID: 3057324184302344673, guid: ca585002af5e4b647bd523d771b4d72f, type: 3}
-  nameString: Water
-  width: 1
-  height: 1
-  length: 1
-  fieldVisual: {fileID: 6163206851749612015, guid: cc448f2977ae4b74f8f8a03595f6b24d,
+  pfField: {fileID: 3057324184302344673, guid: 4d2fdc5c8d685cd40be59e057dbae514, type: 3}
+  nameString: Normal (2x2x2)
+  width: 2
+  height: 2
+  length: 2
+  fieldVisual: {fileID: 865465820954907223, guid: 43187126a33b3cc47a889cbabb1cbc43,
     type: 3}
-  isWalkable: 0
+  isWalkable: 1
   isPlayer: 0
   currentWorldPosition: {x: 0, y: 0, z: 0}
   rotationValue: 90

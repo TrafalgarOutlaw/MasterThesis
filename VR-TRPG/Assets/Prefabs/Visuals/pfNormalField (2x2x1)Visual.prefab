@@ -121,7 +121,7 @@ Transform:
   m_GameObject: {fileID: 2940717174552040831}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 2018156929123966403}
   m_Father: {fileID: 8073743801296197193}
@@ -136,9 +136,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8073743801296197193}
-  - component: {fileID: 3057324184302344673}
+  - component: {fileID: 865465820954907223}
   m_Layer: 0
-  m_Name: pfNormalField
+  m_Name: pfNormalField (2x2x1)Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -159,7 +159,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3057324184302344673
+--- !u!114 &865465820954907223
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,8 +168,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6284364594813455962}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fac2658b97fff54092df27b64289b00, type: 3}
+  m_Script: {fileID: 11500000, guid: f63e5bd7607e3c7429d5f0c8af0eb855, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isWalkable: 1
   visual: {fileID: 4009555894648600840}
+  gridObjectCollider: {fileID: 220875221284270694}

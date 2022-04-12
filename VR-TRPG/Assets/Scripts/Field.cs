@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Field : MonoBehaviour
 {
-    public bool isWalkable;
-    [SerializeField]
-    Transform visual;
     public void SetSize(float cellSize)
     {
-        visual.localScale = new Vector3(cellSize, cellSize, cellSize);
+        foreach (Transform child in transform)
+        {
+            child.localScale = Vector3.Scale(child.localScale, new Vector3(cellSize, cellSize, cellSize));
+        }
     }
 }

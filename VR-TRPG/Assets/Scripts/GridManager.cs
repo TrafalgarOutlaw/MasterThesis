@@ -1,182 +1,87 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
+
+[System.Serializable] public class OnGridEventVector3 : UnityEvent<Vector3> { }
+
+[System.Serializable] public class OnGridEventQuaternion : UnityEvent<Quaternion> { }
+[System.Serializable] public class OnGridEventFieldVisual : UnityEvent<FieldVisual, float> { }
 
 public class GridManager : MonoBehaviour
 {
+    // This instance
     private static GridManager _instance;
-
     public static GridManager Instance { get { return _instance; } }
-
-    [SerializeField]
-    int gridLength = 10;
-    [SerializeField]
-    int gridHeight = 3;
-    [SerializeField]
-    int gridWidth = 10;
-    [SerializeField]
-    float cellSize = 10f;
-
-    [SerializeField]
-    List<FieldSO> fieldSOList;
-    FieldSO fieldSO;
-    FieldSO startFieldSO;
-    public Transform pfFreeGrid;
-
-    Grid<GridObject> _grid;
-    FieldSO.Dir dir = FieldSO.Dir.Down;
-
-    int fieldSOListIndex = 0;
-
-    [SerializeField]
-    Transform level;
-
-    public event EventHandler OnSelectedChanged;
     Mouse mouse;
 
-    bool _playerIsPlaced = false;
-    public Transform freeGrids;
-    Transform[,,] _freeGridArray;
+    // Events
+    public OnGridEventVector3 OnSelectedGridCellChange;
+    public OnGridEventQuaternion OnFieldRotationChange;
+    public OnGridEventFieldVisual OnSelectedFieldChange;
+
+    // Grid
+    Grid<GridCell> grid;
+    [SerializeField] int gridLength = 10;
+    [SerializeField] int gridHeight = 3;
+    [SerializeField] int gridWidth = 10;
+    [SerializeField] float cellSize = 10f;
+    [SerializeField] Transform pfGridCell;
+    [SerializeField] Transform gridGameObject;
+    bool isPlayerSet;
     int currentY = 0;
+
+    // Placeable fields
+    [SerializeField] List<FieldSO> fieldSOList;
+    int fieldSOListIndex = 0;
+    FieldSO currentField;
+
+    // Previewfield
+    [SerializeField] Transform previewFieldTransform;
+
+    // Insert into gridCells
+    GridCell currentGridCell;
+    Quaternion currentRotationGridCell = Quaternion.identity;
+    public Vector3 anchor;
+
+    // Level
+    Transform levelObject;
 
     void Awake()
     {
+        // Set Singleton
         if (_instance != null && _instance != this)
         {
             Destroy(this.gameObject);
         }
-
         _instance = this;
-        _grid = new Grid<GridObject>(gridLength, gridHeight, gridWidth, cellSize, Vector3.zero, (Grid<GridObject> g, int x, int y, int z) => new GridObject(g, x, y, z));
 
-        fieldSO = fieldSOList[fieldSOListIndex];
+        // Create GridObject
+        grid = new Grid<GridCell>(gridLength, gridHeight, gridWidth, cellSize, Vector3.zero, pfGridCell, (Grid<GridCell> g, int x, int y, int z, Transform emptyGridObject) => new GridCell(g, x, y, z, emptyGridObject));
+        currentGridCell = grid.GetGridObject(Vector3.zero);
+
+        // Set selectedField
+        currentField = fieldSOList[fieldSOListIndex];
+
         mouse = Mouse.current;
-
-        _freeGridArray = new Transform[gridLength, gridHeight, gridWidth];
-        for (int x = 0; x < gridLength; x++)
-        {
-            for (int y = 0; y < gridHeight; y++)
-            {
-                for (int z = 0; z < gridWidth; z++)
-                {
-                    Vector2Int rotationOffset = fieldSO.GetRotationOffset(dir);
-                    Vector3 freeGridPosition = _grid.GetWorldPosition(x, y, z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
-                    Transform freeGrid = Instantiate(pfFreeGrid, freeGridPosition, Quaternion.Euler(0, fieldSO.GetRotationAngle(dir), 0), freeGrids);
-                    _freeGridArray[x, y, z] = freeGrid;
-                    freeGrid.localScale = new Vector3(cellSize, cellSize, cellSize);
-                    freeGrid.GetComponent<FreeGrid>().SetIndex(x, y, z);
-
-                    if (y == 0)
-                    {
-                        freeGrid.GetComponent<FreeGrid>().EnableGrid();
-                    }
-                }
-            }
-        }
     }
 
-    // Update is called once per frame
+    private void Start()
+    {
+        InputManager.Instance.OnPlaceField.AddListener(TryPlaceFields);
+        InputManager.Instance.OnDeletField.AddListener(TryDeleteFields);
+        InputManager.Instance.OnRotateField.AddListener(RotateField);
+
+        anchor = GetGridCellCenter(Vector3.zero);
+    }
+
     void Update()
     {
-        if (mouse.leftButton.wasPressedThisFrame)
+        GridCell selectedGridCell = GetGridObjectFromMouse();
+        if (selectedGridCell != currentGridCell)
         {
-            _grid.GetXZ(Utils.GetMouseWorldPosition(), out int x, out int y, out int z);
-
-            GridObject gridObject = _grid.GetGridObject(x, y, z);
-            if (gridObject != null && gridObject.CanBuild())
-            {
-                Vector2Int rotationOffset = fieldSO.GetRotationOffset(dir);
-                Vector3 placedFieldWorldPosition = GetMouseWorldSnappedPosition(); //_grid.GetWorldPosition(x, y, z); //+ new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
-                Transform builtTransform;
-                if (fieldSO.isPlayer)
-                {
-                    if (_playerIsPlaced)
-                    {
-                        Debug.Log("Player is already placed in level");
-                        return;
-                    }
-
-                    _playerIsPlaced = true;
-                    builtTransform = StartField.Instance.transform;
-                    builtTransform.GetComponent<StartField>()?.SetSize(cellSize);
-                    builtTransform.parent = level;
-                    builtTransform.transform.position = placedFieldWorldPosition;
-
-                    StartField.Instance.OnStartPlaced();
-                    startFieldSO = fieldSO;
-                    fieldSOList.RemoveAt(fieldSOListIndex);
-                    fieldSOListIndex = 0;
-                    fieldSO = fieldSOList[fieldSOListIndex];
-                    RefreshSelectedObjectType();
-                }
-                else
-                {
-                    builtTransform = Instantiate(fieldSO.prefab, placedFieldWorldPosition, Quaternion.Euler(0, fieldSO.GetRotationAngle(dir), 0), level);
-                    builtTransform.GetComponent<Field>()?.SetSize(cellSize);
-                }
-                Transform newField = gridObject.SetField(builtTransform);
-
-                if (fieldSO.isWalkable)
-                {
-                    Vector3Int gridIndex = gridObject.GetIndex();
-                    //Debug.Log(gridIndex);
-                    for (int gridX = gridIndex.x - 1; gridX <= gridIndex.x + 1; gridX++)
-                    {
-                        if (gridX < 0 || gridX >= gridLength)
-                            continue;
-                        for (int gridY = gridIndex.y - 1; gridY <= gridIndex.y + 1; gridY++)
-                        {
-                            if (gridY < 0 || gridY >= gridHeight)
-                                continue;
-                            for (int gridZ = gridIndex.z - 1; gridZ <= gridIndex.z + 1; gridZ++)
-                            {
-                                if (gridZ < 0 || gridZ >= gridWidth || (gridX == gridIndex.x && gridY == gridIndex.y && gridZ == gridIndex.z))
-                                    continue;
-                                GridObject neightborGrid = _grid.GetGridObject(gridX, gridY, gridZ);
-                                var isCurrentStart = newField.GetComponent<StartField>();
-                                var testStart = neightborGrid.GetField()?.gameObject.GetComponent<StartField>();
-                                var neightbor = neightborGrid.GetField()?.gameObject.GetComponent<Field>();
-                                if (testStart != null && testStart.isWalkable)
-                                {
-                                    Debug.Log(neightborGrid.GetField());
-                                    StartField.Instance.AddNeightbor(neightborGrid.GetField());
-                                }
-                                if (isCurrentStart != null && neightbor != null && neightbor.isWalkable)
-                                {
-                                    StartField.Instance.AddNeightbor(neightbor.transform);
-                                    Debug.Log(neightborGrid.GetField());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (mouse.rightButton.wasPressedThisFrame)
-        {
-            GridObject gridObject = _grid.GetGridObject(Utils.GetMouseWorldPosition());
-            if (gridObject != null && gridObject.GetField() != null)
-            {
-                Transform field = gridObject.GetField();
-                if (field.CompareTag("Player"))
-                {
-                    _playerIsPlaced = false;
-                    StartField.Instance.OnStartRemoved();
-                    StartField.Instance.ResetNeighbot();
-                    fieldSOList.Add(startFieldSO);
-                    fieldSOListIndex = fieldSOList.Count - 1;
-                    fieldSO = fieldSOList[fieldSOListIndex];
-                    RefreshSelectedObjectType();
-                }
-                gridObject.ClearField();
-            }
-        }
-
-        if (Keyboard.current.rKey.wasPressedThisFrame)
-        {
-            dir = FieldSO.GetNextDir(dir);
+            SetCurrentGridCell(selectedGridCell);
         }
 
         if (mouse.scroll.ReadValue().y != 0)
@@ -186,8 +91,10 @@ public class GridManager : MonoBehaviour
             {
                 fieldSOListIndex += fieldSOList.Count;
             }
-            fieldSO = fieldSOList[fieldSOListIndex];
-            RefreshSelectedObjectType();
+            currentField = fieldSOList[fieldSOListIndex];
+            OnSelectedFieldChange.Invoke(currentField.fieldVisual, cellSize);
+
+            // RefreshSelectedObjectType();
         }
 
         if (Keyboard.current.iKey.wasPressedThisFrame)
@@ -208,13 +115,105 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    private void SetCurrentGridCell(GridCell selectedGridCell)
+    {
+        currentGridCell.EnableVisual();
+        currentGridCell = selectedGridCell;
+        selectedGridCell.DisableVisual();
+        Vector3 selectedGridObjectWordlPosition = selectedGridCell.GetWorldPosition();
+        anchor = GetGridCellCenter(selectedGridObjectWordlPosition);
+        OnSelectedGridCellChange.Invoke(anchor);
+    }
+
+    internal FieldVisual GetFieldVisual()
+    {
+        return currentField.fieldVisual;
+    }
+
+    public void TryPlaceFields()
+    {
+        List<GridCell> occupyGridCellList = new List<GridCell>();
+
+        Vector3Int xDirInWorld = Vector3Int.RoundToInt(previewFieldTransform.TransformDirection(Vector3.right));
+        Vector3Int yDirInWorld = Vector3Int.RoundToInt(previewFieldTransform.TransformDirection(Vector3.up));
+        Vector3Int zDirInWorld = Vector3Int.RoundToInt(previewFieldTransform.TransformDirection(Vector3.forward));
+
+        for (int x = 0; x < currentField.width; x++)
+        {
+            for (int y = 0; y < currentField.height; y++)
+            {
+                for (int z = 0; z < currentField.length; z++)
+                {
+                    Vector3Int occupiedGridCellIndex = (x * xDirInWorld + -y * yDirInWorld + z * zDirInWorld) + currentGridCell.GetIndex();
+                    GridCell occupiedGridCell = grid.GetGridObject(occupiedGridCellIndex);
+                    if (occupiedGridCell == null || !occupiedGridCell.CanBuild())
+                    {
+                        Debug.Log("FIELD: " + occupiedGridCellIndex);
+                        Debug.Log("cant build");
+                        return;
+                    }
+                    occupyGridCellList.Add(occupiedGridCell);
+                }
+            }
+        }
+
+        PlaceField(currentField.pfField, occupyGridCellList);
+    }
+
+    private void PlaceField(Field pfField, List<GridCell> occupyGridCellList)
+    {
+        var field = Instantiate(pfField.transform, previewFieldTransform.position, currentRotationGridCell, levelObject);
+        field.GetComponent<Field>().SetSize(cellSize);
+
+        foreach (var cell in occupyGridCellList)
+        {
+            cell.SetField(field, occupyGridCellList);
+        }
+    }
+
+    void TryDeleteFields()
+    {
+        if (currentGridCell.CanBuild())
+        {
+            return;
+        }
+
+        Destroy(currentGridCell.GetPlacedField().gameObject);
+        currentGridCell.ClearField();
+    }
+
+    public void RotateField(Vector3Int dir)
+    {
+        Vector3Int rotation = currentField.GetRotationValue() * dir;
+        Vector3 previewFieldlocalRotation = previewFieldTransform.InverseTransformVector(rotation);
+        currentRotationGridCell *= Quaternion.Euler(previewFieldlocalRotation);
+
+        OnFieldRotationChange.Invoke(currentRotationGridCell);
+    }
+
+    private Vector3 GetGridCellCenter(Vector3 position)
+    {
+        return position + new Vector3(1, -1, 1) * cellSize * .5f;
+    }
+
+    private GridCell GetGridObjectFromMouse()
+    {
+        Vector3 worldPosition = Utils.GetMouseWorldPosition();
+        if (worldPosition == -Vector3.one)
+        {
+            return currentGridCell;
+        }
+        GridCell gridObject = grid.GetGridObject(worldPosition);
+        return gridObject;
+    }
+
     void EnableCurrentRow(int currentY)
     {
         for (int x = 0; x < gridLength; x++)
         {
             for (int z = 0; z < gridWidth; z++)
             {
-                _freeGridArray[x, currentY, z].GetComponent<FreeGrid>().EnableGrid();
+                grid.GetGridObject(new Vector3(x, currentY, z)).EnableForMouse();
             }
         }
     }
@@ -225,42 +224,8 @@ public class GridManager : MonoBehaviour
         {
             for (int z = 0; z < gridWidth; z++)
             {
-                _freeGridArray[x, currentY, z].GetComponent<FreeGrid>()?.DisableGrid();
+                grid.GetGridObject(new Vector3(x, currentY, z)).DisableForMouse();
             }
-        }
-    }
-
-    void RefreshSelectedObjectType()
-    {
-        OnSelectedChanged?.Invoke(this, EventArgs.Empty);
-    }
-
-    public Vector3 GetMouseWorldSnappedPosition()
-    {
-        Vector3Int freeGrid = Utils.GetMouseWorldPosition();
-        //_grid.GetXZ(mousePosition, out int x, out int y, out int z);
-
-        if (fieldSO != null)
-        {
-            Vector2Int rotationOffset = fieldSO.GetRotationOffset(dir);
-            Vector3 placedFieldWorldPosition = _grid.GetWorldPosition(freeGrid.x, freeGrid.y, freeGrid.z) + new Vector3(rotationOffset.x, 0, rotationOffset.y) * _grid.GetCellSize();
-            return placedFieldWorldPosition;
-        }
-        else
-        {
-            return freeGrid;
-        }
-    }
-
-    public Quaternion GetPlacedFieldRotation()
-    {
-        if (fieldSO != null)
-        {
-            return Quaternion.Euler(0, fieldSO.GetRotationAngle(dir), 0);
-        }
-        else
-        {
-            return Quaternion.identity;
         }
     }
 
@@ -269,30 +234,49 @@ public class GridManager : MonoBehaviour
         return cellSize;
     }
 
-    public FieldSO GetPlacedFieldSO()
-    {
-        return fieldSO;
-    }
-
     public bool IsPlayerPlaced()
     {
-        return _playerIsPlaced;
+        return isPlayerSet;
     }
 
-    public class GridObject
+    public class GridCell
     {
-        Grid<GridObject> _grid;
+        Grid<GridCell> _grid;
         int _x;
         int _y;
         int _z;
+        Vector3Int index;
+        Transform _emptyGridObjectTransform;
+        EmptyGridObject _emptyGridObject;
         Transform _transform;
+        Vector3 positionInWorld;
+        List<GridCell> occupiedGridCellList = new List<GridCell>();
 
-        public GridObject(Grid<GridObject> grid, int x, int y, int z)
+        public GridCell(Grid<GridCell> grid, int x, int y, int z, Transform emptyGridObject)
         {
             _grid = grid;
             _x = x;
             _y = y;
             _z = z;
+
+            float cellSize = grid.GetCellSize();
+            positionInWorld = new Vector3(x, y, z) * cellSize;
+            index = new Vector3Int(_x, _y, _z);
+
+            _emptyGridObjectTransform = Instantiate(emptyGridObject, positionInWorld, Quaternion.identity, GridManager.Instance.gridGameObject);
+            _emptyGridObjectTransform.localScale *= cellSize;
+
+            _emptyGridObject = _emptyGridObjectTransform.GetComponent<EmptyGridObject>();
+            _emptyGridObject.SetIndex(new Vector3(x, y, z));
+            if (y != 0)
+            {
+                DisableForMouse();
+            }
+        }
+
+        public Transform GetPlacedField()
+        {
+            return _transform;
         }
 
         public Vector3Int GetIndex()
@@ -300,32 +284,92 @@ public class GridManager : MonoBehaviour
             return new Vector3Int(_x, _y, _z);
         }
 
-        public Transform SetField(Transform transform)
+        public void SetField(Transform transform, List<GridCell> occupyGridCellList)
         {
             _transform = transform;
-            _grid.TriggerGridObjectChanged(_x, _y, _z);
-            return transform;
-
-        }
-
-        public Transform GetField()
-        {
-            return _transform;
+            foreach (var cell in occupyGridCellList)
+            {
+                if (cell != this)
+                {
+                    occupiedGridCellList.Add(cell);
+                }
+            }
         }
 
         public void ClearField()
         {
-            if (!_transform.CompareTag("Player"))
-            {
-                Destroy(_transform.gameObject);
-            }
-
             _transform = null;
+            ClearOccupiedGridCellList();
+        }
+
+        void ClearOccupiedGridCellList()
+        {
+            foreach (var cell in occupiedGridCellList)
+            {
+                cell._transform = null;
+                cell.occupiedGridCellList = new List<GridCell>();
+            }
+            occupiedGridCellList = new List<GridCell>();
         }
 
         public bool CanBuild()
         {
             return _transform == null;
+        }
+
+        internal void DisableVisual()
+        {
+            switch (_emptyGridObjectTransform.gameObject.layer)
+            {
+                default:
+                case 6:
+                    DisableRenderer();
+                    return;
+                case 7:
+                    DisableForMouse();
+                    return;
+            }
+        }
+
+        internal void EnableVisual()
+        {
+            switch (_emptyGridObjectTransform.gameObject.layer)
+            {
+                default:
+                case 6:
+                    EnableRenderer();
+                    return;
+                case 7:
+                    DisableForMouse();
+                    return;
+            }
+        }
+
+        internal void DisableForMouse()
+        {
+            _emptyGridObject.SetLayerRecusrive(7);
+            _emptyGridObject.DisableRenderer();
+        }
+
+        internal void EnableForMouse()
+        {
+            _emptyGridObject.SetLayerRecusrive(6);
+            _emptyGridObject.EnableRenderer();
+        }
+
+        internal void DisableRenderer()
+        {
+            _emptyGridObject.DisableRenderer();
+        }
+
+        internal void EnableRenderer()
+        {
+            _emptyGridObject.EnableRenderer();
+        }
+
+        internal Vector3 GetWorldPosition()
+        {
+            return positionInWorld;
         }
     }
 }

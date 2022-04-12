@@ -967,6 +967,120 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Editor"",
+            ""id"": ""ac0f7f4b-1765-4e55-a3b8-0b3bcf1c2957"",
+            ""actions"": [
+                {
+                    ""name"": ""ToggleRotationMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""dbcd0a30-c4a6-4a12-8c16-a0c7a1294a76"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateField"",
+                    ""type"": ""Value"",
+                    ""id"": ""d6d73839-80c2-4b89-bc2c-5505044c1686"",
+                    ""expectedControlType"": ""Vector3"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e9dffad4-2ba7-4847-9bf3-97495bdd46df"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ToggleRotationMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""WASDQE"",
+                    ""id"": ""f5bda570-f2d7-4bca-958f-a33d87ceae21"",
+                    ""path"": ""3DVector(mode=1)"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateField"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Up"",
+                    ""id"": ""88117a3a-7110-4413-965f-4521c2354820"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RotateField"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Down"",
+                    ""id"": ""64d22a49-c4da-4771-9920-e77455ba75bf"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RotateField"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Left"",
+                    ""id"": ""342b4e23-d750-4129-a8a5-d535a4bedef9"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RotateField"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Right"",
+                    ""id"": ""5b40dfa9-cc39-436b-9ff3-eff5a3f0a33b"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RotateField"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Forward"",
+                    ""id"": ""9849f5a5-b159-4780-949d-6ba9210253bd"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RotateField"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Backward"",
+                    ""id"": ""8138ec30-395d-4342-9512-aa7256b40dcc"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""RotateField"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1056,6 +1170,10 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
         m_Camera_Look = m_Camera.FindAction("Look", throwIfNotFound: true);
         m_Camera_MouseX = m_Camera.FindAction("MouseX", throwIfNotFound: true);
         m_Camera_MouseY = m_Camera.FindAction("MouseY", throwIfNotFound: true);
+        // Editor
+        m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
+        m_Editor_ToggleRotationMode = m_Editor.FindAction("ToggleRotationMode", throwIfNotFound: true);
+        m_Editor_RotateField = m_Editor.FindAction("RotateField", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1330,6 +1448,47 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
         }
     }
     public CameraActions @Camera => new CameraActions(this);
+
+    // Editor
+    private readonly InputActionMap m_Editor;
+    private IEditorActions m_EditorActionsCallbackInterface;
+    private readonly InputAction m_Editor_ToggleRotationMode;
+    private readonly InputAction m_Editor_RotateField;
+    public struct EditorActions
+    {
+        private @VrtrpgActions m_Wrapper;
+        public EditorActions(@VrtrpgActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @ToggleRotationMode => m_Wrapper.m_Editor_ToggleRotationMode;
+        public InputAction @RotateField => m_Wrapper.m_Editor_RotateField;
+        public InputActionMap Get() { return m_Wrapper.m_Editor; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(EditorActions set) { return set.Get(); }
+        public void SetCallbacks(IEditorActions instance)
+        {
+            if (m_Wrapper.m_EditorActionsCallbackInterface != null)
+            {
+                @ToggleRotationMode.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnToggleRotationMode;
+                @ToggleRotationMode.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnToggleRotationMode;
+                @ToggleRotationMode.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnToggleRotationMode;
+                @RotateField.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotateField;
+                @RotateField.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotateField;
+                @RotateField.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotateField;
+            }
+            m_Wrapper.m_EditorActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @ToggleRotationMode.started += instance.OnToggleRotationMode;
+                @ToggleRotationMode.performed += instance.OnToggleRotationMode;
+                @ToggleRotationMode.canceled += instance.OnToggleRotationMode;
+                @RotateField.started += instance.OnRotateField;
+                @RotateField.performed += instance.OnRotateField;
+                @RotateField.canceled += instance.OnRotateField;
+            }
+        }
+    }
+    public EditorActions @Editor => new EditorActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1401,5 +1560,10 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnMouseX(InputAction.CallbackContext context);
         void OnMouseY(InputAction.CallbackContext context);
+    }
+    public interface IEditorActions
+    {
+        void OnToggleRotationMode(InputAction.CallbackContext context);
+        void OnRotateField(InputAction.CallbackContext context);
     }
 }
