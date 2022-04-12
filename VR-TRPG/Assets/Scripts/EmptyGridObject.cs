@@ -48,9 +48,4 @@ public class EmptyGridObject : MonoBehaviour
             SetLayerRecusrive(child.gameObject, layer);
         }
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("TRIGGER ENTER");
-    }
 }

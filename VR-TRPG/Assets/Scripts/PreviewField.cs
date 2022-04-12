@@ -66,7 +66,6 @@ public class PreviewField : MonoBehaviour
         }
     }
 
-
     void RefreshVisual(FieldVisual fieldVisual, float size)
     {
         if (visualTransform != null)

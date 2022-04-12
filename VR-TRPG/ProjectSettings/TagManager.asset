@@ -18,8 +18,8 @@ TagManager:
   - 
   - 
   - 
-  - Ghost
-  - 
+  - GhostPlaceable
+  - GhostNotPlaceable
   - 
   - 
   - 
