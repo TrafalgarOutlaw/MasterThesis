@@ -43,12 +43,8 @@ public static class Utils
             {
                 Debug.Log("IN RAYCAST");
                 Debug.Log("emptyGridObjectIndex: " + emptyGridObject.index);
-                Debug.Log(emptyGridObject.index);
             }
-            if (emptyGridObject.IsActive())
-            {
-                return emptyGridObject.index;
-            }
+            return emptyGridObject.index;
         }
         return -Vector3.one;
         /*

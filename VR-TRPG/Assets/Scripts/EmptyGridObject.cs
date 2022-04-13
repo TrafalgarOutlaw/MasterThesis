@@ -14,16 +14,21 @@ public class EmptyGridObject : MonoBehaviour
         this.index = index;
     }
 
+    public void DisableForMouse()
+    {
+        meshRenderer.enabled = false;
+        SetLayerRecusrive(7);
+    }
+
     public void DisableRenderer()
     {
         meshRenderer.enabled = false;
-        _isActive = false;
     }
 
     public void EnableRenderer()
     {
         meshRenderer.enabled = true;
-        _isActive = true;
+        SetLayerRecusrive(6);
     }
 
     public bool IsActive()

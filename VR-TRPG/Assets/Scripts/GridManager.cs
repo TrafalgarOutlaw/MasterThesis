@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 
 [System.Serializable] public class OnGridEventQuaternion : UnityEvent<Quaternion> { }
 [System.Serializable] public class OnGridEventFieldVisual : UnityEvent<FieldVisual, float> { }
+[System.Serializable] public class OnGridEventInt : UnityEvent<int> { }
 
 public class GridManager : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class GridManager : MonoBehaviour
     public OnGridEventVector3 OnSelectedGridCellChange;
     public OnGridEventQuaternion OnFieldRotationChange;
     public OnGridEventFieldVisual OnSelectedFieldChange;
+    public OnGridEventInt OnIsFieldPlaceableChange;
 
     // Grid
     Grid<GridCell> grid;
@@ -30,7 +32,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] Transform pfGridCell;
     [SerializeField] Transform gridGameObject;
     bool isPlayerSet;
-    int currentY = 0;
+    int currentY = 1;
 
     // Placeable fields
     [SerializeField] List<FieldSO> fieldSOList;
@@ -43,6 +45,8 @@ public class GridManager : MonoBehaviour
     // Insert into gridCells
     GridCell currentGridCell;
     Quaternion currentRotationGridCell = Quaternion.identity;
+    List<GridCell> currentOccupiedGridCellList;
+    public bool isCurrentFieldPlaceable;
     public Vector3 anchor;
 
     // Level
@@ -59,7 +63,7 @@ public class GridManager : MonoBehaviour
 
         // Create GridObject
         grid = new Grid<GridCell>(gridLength, gridHeight, gridWidth, cellSize, Vector3.zero, pfGridCell, (Grid<GridCell> g, int x, int y, int z, Transform emptyGridObject) => new GridCell(g, x, y, z, emptyGridObject));
-        currentGridCell = grid.GetGridObject(Vector3.zero);
+        currentGridCell = grid.GetGridObject(new Vector3(0, currentY, 0));
 
         // Set selectedField
         currentField = fieldSOList[fieldSOListIndex];
@@ -69,11 +73,16 @@ public class GridManager : MonoBehaviour
 
     private void Start()
     {
-        InputManager.Instance.OnPlaceField.AddListener(TryPlaceFields);
+        InputManager.Instance.OnPlaceField.AddListener(TryPlaceField);
         InputManager.Instance.OnDeletField.AddListener(TryDeleteFields);
         InputManager.Instance.OnRotateField.AddListener(RotateField);
 
         anchor = GetGridCellCenter(Vector3.zero);
+    }
+
+    private void OnEnable()
+    {
+        SetCurrentGridCell(currentGridCell);
     }
 
     void Update()
@@ -92,9 +101,9 @@ public class GridManager : MonoBehaviour
                 fieldSOListIndex += fieldSOList.Count;
             }
             currentField = fieldSOList[fieldSOListIndex];
-            OnSelectedFieldChange.Invoke(currentField.fieldVisual, cellSize);
 
-            // RefreshSelectedObjectType();
+            SetCurrentFieldPlaceable();
+            OnSelectedFieldChange.Invoke(currentField.fieldVisual, cellSize);
         }
 
         if (Keyboard.current.iKey.wasPressedThisFrame)
@@ -117,20 +126,18 @@ public class GridManager : MonoBehaviour
 
     private void SetCurrentGridCell(GridCell selectedGridCell)
     {
-        currentGridCell.EnableVisual();
+        currentGridCell.EnableRenderer();
         currentGridCell = selectedGridCell;
-        selectedGridCell.DisableVisual();
+        selectedGridCell.DisableRenderer();
         Vector3 selectedGridObjectWordlPosition = selectedGridCell.GetWorldPosition();
         anchor = GetGridCellCenter(selectedGridObjectWordlPosition);
         OnSelectedGridCellChange.Invoke(anchor);
+
+        SetCurrentFieldPlaceable();
+        OnSelectedFieldChange.Invoke(currentField.fieldVisual, cellSize);
     }
 
-    internal FieldVisual GetFieldVisual()
-    {
-        return currentField.fieldVisual;
-    }
-
-    public void TryPlaceFields()
+    void SetOccupiedGridCellList()
     {
         List<GridCell> occupyGridCellList = new List<GridCell>();
 
@@ -148,26 +155,52 @@ public class GridManager : MonoBehaviour
                     GridCell occupiedGridCell = grid.GetGridObject(occupiedGridCellIndex);
                     if (occupiedGridCell == null || !occupiedGridCell.CanBuild())
                     {
-                        Debug.Log("FIELD: " + occupiedGridCellIndex);
-                        Debug.Log("cant build");
+                        currentOccupiedGridCellList = null;
                         return;
                     }
                     occupyGridCellList.Add(occupiedGridCell);
                 }
             }
         }
-
-        PlaceField(currentField.pfField, occupyGridCellList);
+        currentOccupiedGridCellList = occupyGridCellList;
+        return;
     }
 
-    private void PlaceField(Field pfField, List<GridCell> occupyGridCellList)
+    internal FieldVisual GetFieldVisual()
+    {
+        return currentField.fieldVisual;
+    }
+
+    void SetCurrentFieldPlaceable()
+    {
+        SetOccupiedGridCellList();
+        if (currentOccupiedGridCellList != null)
+        {
+            isCurrentFieldPlaceable = true;
+        }
+        else
+        {
+            isCurrentFieldPlaceable = false;
+        }
+
+    }
+
+    public void TryPlaceField()
+    {
+        if (isCurrentFieldPlaceable)
+        {
+            PlaceField(currentField.pfField);
+        }
+    }
+
+    private void PlaceField(Field pfField)
     {
         var field = Instantiate(pfField.transform, previewFieldTransform.position, currentRotationGridCell, levelObject);
         field.GetComponent<Field>().SetSize(cellSize);
 
-        foreach (var cell in occupyGridCellList)
+        foreach (var cell in currentOccupiedGridCellList)
         {
-            cell.SetField(field, occupyGridCellList);
+            cell.SetField(field, currentOccupiedGridCellList);
         }
     }
 
@@ -189,6 +222,7 @@ public class GridManager : MonoBehaviour
         currentRotationGridCell *= Quaternion.Euler(previewFieldlocalRotation);
 
         OnFieldRotationChange.Invoke(currentRotationGridCell);
+        // SetCurrentFieldPlaceable();
     }
 
     private Vector3 GetGridCellCenter(Vector3 position)
@@ -213,7 +247,7 @@ public class GridManager : MonoBehaviour
         {
             for (int z = 0; z < gridWidth; z++)
             {
-                grid.GetGridObject(new Vector3(x, currentY, z)).EnableForMouse();
+                grid.GetGridObject(new Vector3(x, currentY, z)).EnableRenderer();
             }
         }
     }
@@ -268,7 +302,7 @@ public class GridManager : MonoBehaviour
 
             _emptyGridObject = _emptyGridObjectTransform.GetComponent<EmptyGridObject>();
             _emptyGridObject.SetIndex(new Vector3(x, y, z));
-            if (y != 0)
+            if (y != 1)
             {
                 DisableForMouse();
             }
@@ -317,44 +351,9 @@ public class GridManager : MonoBehaviour
             return _transform == null;
         }
 
-        internal void DisableVisual()
-        {
-            switch (_emptyGridObjectTransform.gameObject.layer)
-            {
-                default:
-                case 6:
-                    DisableRenderer();
-                    return;
-                case 7:
-                    DisableForMouse();
-                    return;
-            }
-        }
-
-        internal void EnableVisual()
-        {
-            switch (_emptyGridObjectTransform.gameObject.layer)
-            {
-                default:
-                case 6:
-                    EnableRenderer();
-                    return;
-                case 7:
-                    DisableForMouse();
-                    return;
-            }
-        }
-
         internal void DisableForMouse()
         {
-            _emptyGridObject.SetLayerRecusrive(7);
-            _emptyGridObject.DisableRenderer();
-        }
-
-        internal void EnableForMouse()
-        {
-            _emptyGridObject.SetLayerRecusrive(6);
-            _emptyGridObject.EnableRenderer();
+            _emptyGridObject.DisableForMouse();
         }
 
         internal void DisableRenderer()

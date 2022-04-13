@@ -9,12 +9,12 @@ public class PreviewField : MonoBehaviour
     public Transform center;
     private Quaternion rotationStartPoint;
     private Vector3Int _targetPosition;
-    Quaternion _targetRotation;
     Vector3 anchor;
 
     float moveDuration;
     private Vector3Int moveStartPosition;
     float rotationDuration;
+    private int _layerMask;
 
 
     // Methods
@@ -22,7 +22,6 @@ public class PreviewField : MonoBehaviour
     {
         anchor = GridManager.Instance.anchor;
 
-        RefreshVisual(GridManager.Instance.GetFieldVisual(), GridManager.Instance.GetCellSize());
         SetCenter(GridManager.Instance.anchor);
     }
 
@@ -31,11 +30,21 @@ public class PreviewField : MonoBehaviour
         GridManager.Instance.OnSelectedGridCellChange.AddListener(SetAnchor);
         GridManager.Instance.OnFieldRotationChange.AddListener(SetTargetRotation);
         GridManager.Instance.OnSelectedFieldChange.AddListener(RefreshVisual);
+
+        RefreshVisual(GridManager.Instance.GetFieldVisual(), GridManager.Instance.GetCellSize());
     }
 
     void SetTargetRotation(Quaternion targetRotation)
     {
         transform.rotation = targetRotation;
+
+        SetLayerRecusrive(visualTransform.gameObject, GridManager.Instance.isCurrentFieldPlaceable ? 11 : 12);
+    }
+
+
+    void SetLayerMask(int layerMask)
+    {
+        _layerMask = layerMask;
     }
 
     void SetAnchor(Vector3 targetPosition)
@@ -80,7 +89,7 @@ public class PreviewField : MonoBehaviour
         visualTransform.parent = transform;
         visualTransform.localPosition = Vector3.zero;
         visualTransform.localEulerAngles = Vector3.zero;
-        SetLayerRecusrive(visualTransform.gameObject, 11);
+        SetLayerRecusrive(visualTransform.gameObject, GridManager.Instance.isCurrentFieldPlaceable ? 11 : 12);
     }
 
     void SetLayerRecusrive(GameObject targetGameObject, int layer)
