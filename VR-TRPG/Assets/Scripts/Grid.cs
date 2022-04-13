@@ -92,7 +92,7 @@ public class Grid<TGridObject>
         z = (int)worldPosition.z;
     }
 
-    public TGridObject GetGridObject(Vector3 index)
+    public TGridObject GetGridCell(Vector3 index)
     {
         if (index.x >= 0 && index.y >= 0 && index.z >= 0 && index.x < _length && index.y < _height && index.z < _width)
         {

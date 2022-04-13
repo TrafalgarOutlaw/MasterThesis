@@ -63,7 +63,7 @@ public class GridManager : MonoBehaviour
 
         // Create GridObject
         grid = new Grid<GridCell>(gridLength, gridHeight, gridWidth, cellSize, Vector3.zero, pfGridCell, (Grid<GridCell> g, int x, int y, int z, Transform emptyGridObject) => new GridCell(g, x, y, z, emptyGridObject));
-        currentGridCell = grid.GetGridObject(new Vector3(0, currentY, 0));
+        currentGridCell = grid.GetGridCell(new Vector3(0, currentY, 0));
 
         // Set selectedField
         currentField = fieldSOList[fieldSOListIndex];
@@ -152,7 +152,7 @@ public class GridManager : MonoBehaviour
                 for (int z = 0; z < currentField.length; z++)
                 {
                     Vector3Int occupiedGridCellIndex = (x * xDirInWorld + -y * yDirInWorld + z * zDirInWorld) + currentGridCell.GetIndex();
-                    GridCell occupiedGridCell = grid.GetGridObject(occupiedGridCellIndex);
+                    GridCell occupiedGridCell = grid.GetGridCell(occupiedGridCellIndex);
                     if (occupiedGridCell == null || !occupiedGridCell.CanBuild())
                     {
                         currentOccupiedGridCellList = null;
@@ -195,8 +195,9 @@ public class GridManager : MonoBehaviour
 
     private void PlaceField(Field pfField)
     {
-        var field = Instantiate(pfField.transform, previewFieldTransform.position, currentRotationGridCell, levelObject);
-        field.GetComponent<Field>().SetSize(cellSize);
+        var fieldTransform = Instantiate(pfField.transform, previewFieldTransform.position, currentRotationGridCell, levelObject);
+        var field = fieldTransform.GetComponent<Field>();
+        field.SetSize(cellSize);
 
         foreach (var cell in currentOccupiedGridCellList)
         {
@@ -230,6 +231,18 @@ public class GridManager : MonoBehaviour
         return position + new Vector3(1, -1, 1) * cellSize * .5f;
     }
 
+    public GridCell GetGridCellFromPosition(Vector3 position)
+    {
+        return grid.GetGridCell(position / cellSize);
+
+    }
+
+    public GridCell GetGridCellFromIndex(Vector3 position)
+    {
+        return grid.GetGridCell(position);
+
+    }
+
     private GridCell GetGridObjectFromMouse()
     {
         Vector3 worldPosition = Utils.GetMouseWorldPosition();
@@ -237,7 +250,7 @@ public class GridManager : MonoBehaviour
         {
             return currentGridCell;
         }
-        GridCell gridObject = grid.GetGridObject(worldPosition);
+        GridCell gridObject = grid.GetGridCell(worldPosition);
         return gridObject;
     }
 
@@ -247,7 +260,7 @@ public class GridManager : MonoBehaviour
         {
             for (int z = 0; z < gridWidth; z++)
             {
-                grid.GetGridObject(new Vector3(x, currentY, z)).EnableRenderer();
+                grid.GetGridCell(new Vector3(x, currentY, z)).EnableRenderer();
             }
         }
     }
@@ -258,7 +271,7 @@ public class GridManager : MonoBehaviour
         {
             for (int z = 0; z < gridWidth; z++)
             {
-                grid.GetGridObject(new Vector3(x, currentY, z)).DisableForMouse();
+                grid.GetGridCell(new Vector3(x, currentY, z)).DisableForMouse();
             }
         }
     }
@@ -282,9 +295,10 @@ public class GridManager : MonoBehaviour
         Vector3Int index;
         Transform _emptyGridObjectTransform;
         EmptyGridObject _emptyGridObject;
-        Transform _transform;
+        Field _field;
         Vector3 positionInWorld;
         List<GridCell> occupiedGridCellList = new List<GridCell>();
+        List<GridCell> neighborGridCellList = new List<GridCell>();
 
         public GridCell(Grid<GridCell> grid, int x, int y, int z, Transform emptyGridObject)
         {
@@ -302,15 +316,54 @@ public class GridManager : MonoBehaviour
 
             _emptyGridObject = _emptyGridObjectTransform.GetComponent<EmptyGridObject>();
             _emptyGridObject.SetIndex(new Vector3(x, y, z));
+
+            UpdateNeighbors();
             if (y != 1)
             {
                 DisableForMouse();
             }
         }
 
-        public Transform GetPlacedField()
+        private void UpdateNeighbors()
         {
-            return _transform;
+            for (int x = -1; x < 2; x++)
+            {
+                for (int y = -1; y < 2; y++)
+                {
+                    for (int z = -1; z < 2; z++)
+                    {
+                        if (x != 0 && (y != 0 || z != 0))
+                        {
+                            continue;
+                        }
+                        if (x == 0 && y == 0 && z == 0)
+                        {
+                            continue;
+                        }
+                        if (y != 0 && z != 0)
+                        {
+                            continue;
+                        }
+                        GridCell neighborGridCell = _grid.GetGridCell(new Vector3Int(_x - x, _y - y, _z - z));
+                        if (neighborGridCell != null)
+                        {
+                            SetNeighbor(this, neighborGridCell);
+                        }
+                    }
+                }
+
+            }
+        }
+
+        private void SetNeighbor(GridCell gridCell, GridCell neighborGridCell)
+        {
+            gridCell.neighborGridCellList.Add(neighborGridCell);
+            neighborGridCell.neighborGridCellList.Add(gridCell);
+        }
+
+        public Field GetPlacedField()
+        {
+            return _field;
         }
 
         public Vector3Int GetIndex()
@@ -318,9 +371,9 @@ public class GridManager : MonoBehaviour
             return new Vector3Int(_x, _y, _z);
         }
 
-        public void SetField(Transform transform, List<GridCell> occupyGridCellList)
+        public void SetField(Field field, List<GridCell> occupyGridCellList)
         {
-            _transform = transform;
+            _field = field;
             foreach (var cell in occupyGridCellList)
             {
                 if (cell != this)
@@ -332,7 +385,7 @@ public class GridManager : MonoBehaviour
 
         public void ClearField()
         {
-            _transform = null;
+            _field = null;
             ClearOccupiedGridCellList();
         }
 
@@ -340,7 +393,7 @@ public class GridManager : MonoBehaviour
         {
             foreach (var cell in occupiedGridCellList)
             {
-                cell._transform = null;
+                cell._field = null;
                 cell.occupiedGridCellList = new List<GridCell>();
             }
             occupiedGridCellList = new List<GridCell>();
@@ -348,7 +401,7 @@ public class GridManager : MonoBehaviour
 
         public bool CanBuild()
         {
-            return _transform == null;
+            return _field == null;
         }
 
         internal void DisableForMouse()
@@ -369,6 +422,11 @@ public class GridManager : MonoBehaviour
         internal Vector3 GetWorldPosition()
         {
             return positionInWorld;
+        }
+
+        internal List<GridCell> GetNeighborGridCellList()
+        {
+            return neighborGridCellList;
         }
     }
 }

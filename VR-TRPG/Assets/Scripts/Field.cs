@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Field : MonoBehaviour
 {
+    public bool isWalkable = true;
     public void SetSize(float cellSize)
     {
         foreach (Transform child in transform)
