@@ -1,9 +1,15 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.Events;
+using System;
 
 [System.Serializable]
 public class RotateEvent : UnityEvent<Vector3Int>
+{
+}
+
+[System.Serializable]
+public class BoolEvent : UnityEvent<bool>
 {
 }
 
@@ -13,6 +19,7 @@ public class InputManager : MonoBehaviour
 
 
     public RotateEvent OnRotateField;
+    public BoolEvent OnChangeLevel;
 
     public UnityEvent OnPlaceField;
     public UnityEvent OnDeletField;
@@ -20,6 +27,7 @@ public class InputManager : MonoBehaviour
     VrtrpgActions vrtrpgActions;
 
     Mouse mouse;
+    Keyboard keyboard;
     private static InputManager _instance;
 
     bool isRotating = true;
@@ -41,6 +49,7 @@ public class InputManager : MonoBehaviour
         vrtrpgActions.Editor.RotateField.started += Rotate;
 
         mouse = Mouse.current;
+        keyboard = Keyboard.current;
     }
 
 
@@ -54,8 +63,26 @@ public class InputManager : MonoBehaviour
         {
             OnDeletField.Invoke();
         }
+
+        if (Keyboard.current.iKey.wasPressedThisFrame)
+        {
+            OnChangeLevel.Invoke(true);
+        }
+        if (Keyboard.current.kKey.wasPressedThisFrame)
+        {
+            OnChangeLevel.Invoke(false);
+        }
     }
 
+    public Vector3 GetMousePosition()
+    {
+        return Mouse.current.position.ReadValue();
+    }
+
+    public Vector2 GetMouseScrollValue()
+    {
+        return mouse.scroll.ReadValue();
+    }
     public void ToggleRotationMode(InputAction.CallbackContext context)
     {
         if (context.started)

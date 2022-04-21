@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 
 [System.Serializable] public class OnGridEventVector3 : UnityEvent<Vector3> { }
 
@@ -15,7 +14,6 @@ public class GridManager : MonoBehaviour
     // This instance
     private static GridManager _instance;
     public static GridManager Instance { get { return _instance; } }
-    Mouse mouse;
 
     // Events
     public OnGridEventVector3 OnSelectedGridCellChange;
@@ -51,7 +49,8 @@ public class GridManager : MonoBehaviour
 
     // Level
     Transform levelObject;
-
+    Vector2 mouseScrollValue;
+    InputManager inputManager;
     void Awake()
     {
         // Set Singleton
@@ -67,15 +66,15 @@ public class GridManager : MonoBehaviour
 
         // Set selectedField
         currentField = fieldSOList[fieldSOListIndex];
-
-        mouse = Mouse.current;
     }
 
     private void Start()
     {
-        InputManager.Instance.OnPlaceField.AddListener(TryPlaceField);
-        InputManager.Instance.OnDeletField.AddListener(TryDeleteFields);
-        InputManager.Instance.OnRotateField.AddListener(RotateField);
+        inputManager = InputManager.Instance;
+        inputManager.OnPlaceField.AddListener(TryPlaceField);
+        inputManager.OnDeletField.AddListener(TryDeleteFields);
+        inputManager.OnRotateField.AddListener(RotateField);
+        inputManager.OnChangeLevel.AddListener(ChangeLevel);
 
         anchor = GetGridCellCenter(Vector3.zero);
     }
@@ -87,15 +86,17 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
+        mouseScrollValue = inputManager.GetMouseScrollValue();
+
         GridCell selectedGridCell = GetGridObjectFromMouse();
         if (selectedGridCell != currentGridCell)
         {
             SetCurrentGridCell(selectedGridCell);
         }
 
-        if (mouse.scroll.ReadValue().y != 0)
+        if (mouseScrollValue.y != 0)
         {
-            fieldSOListIndex = (fieldSOListIndex + (int)Mathf.Clamp(mouse.scroll.ReadValue().y, -1f, 1f)) % fieldSOList.Count;
+            fieldSOListIndex = (fieldSOListIndex + (int)Mathf.Clamp(mouseScrollValue.y, -1f, 1f)) % fieldSOList.Count;
             if (fieldSOListIndex < 0)
             {
                 fieldSOListIndex += fieldSOList.Count;
@@ -105,23 +106,37 @@ public class GridManager : MonoBehaviour
             SetCurrentFieldPlaceable();
             OnSelectedFieldChange.Invoke(currentField.fieldVisual, cellSize);
         }
+    }
 
-        if (Keyboard.current.iKey.wasPressedThisFrame)
+    void ChangeLevel(bool next)
+    {
+        if (next)
         {
-            DisableCurrentRow(currentY);
-            currentY = (currentY + 1) % gridHeight;
-            EnableCurrentRow(currentY);
+            EnableNextLevel();
         }
-        if (Keyboard.current.kKey.wasPressedThisFrame)
+        else
         {
-            DisableCurrentRow(currentY);
-            currentY--;
-            if (currentY < 0)
-            {
-                currentY += gridHeight;
-            }
-            EnableCurrentRow(currentY);
+            EnablePreviousLevel();
         }
+    }
+
+    void EnablePreviousLevel()
+    {
+        DisableCurrentRow(currentY);
+        currentY--;
+        if (currentY < 0)
+        {
+            currentY += gridHeight;
+        }
+        EnableCurrentRow(currentY);
+    }
+
+    void EnableNextLevel()
+    {
+        DisableCurrentRow(currentY);
+        currentY = (currentY + 1) % gridHeight;
+        EnableCurrentRow(currentY);
+
     }
 
     private void SetCurrentGridCell(GridCell selectedGridCell)
@@ -299,6 +314,7 @@ public class GridManager : MonoBehaviour
         Vector3 positionInWorld;
         List<GridCell> occupiedGridCellList = new List<GridCell>();
         List<GridCell> neighborGridCellList = new List<GridCell>();
+        List<Vector3Int> gridDirList = new List<Vector3Int>();
 
         public GridCell(Grid<GridCell> grid, int x, int y, int z, Transform emptyGridObject)
         {
@@ -306,6 +322,7 @@ public class GridManager : MonoBehaviour
             _x = x;
             _y = y;
             _z = z;
+            SetGridDirList();
 
             float cellSize = grid.GetCellSize();
             positionInWorld = new Vector3(x, y, z) * cellSize;
@@ -322,36 +339,35 @@ public class GridManager : MonoBehaviour
             {
                 DisableForMouse();
             }
+
+        }
+
+        void SetGridDirList()
+        {
+            gridDirList.Add(new Vector3Int(1, 0, 0));
+            gridDirList.Add(new Vector3Int(-1, 0, 0));
+            gridDirList.Add(new Vector3Int(0, 1, 0));
+            gridDirList.Add(new Vector3Int(0, -1, 0));
+            gridDirList.Add(new Vector3Int(0, 0, 1));
+            gridDirList.Add(new Vector3Int(0, 0, -1));
         }
 
         private void UpdateNeighbors()
         {
-            for (int x = -1; x < 2; x++)
+            bool isUpdated = false;
+            foreach (var dir in gridDirList)
             {
-                for (int y = -1; y < 2; y++)
+                GridCell neighborGridCell = _grid.GetGridCell(new Vector3Int(_x - dir.x, _y - dir.y, _z - dir.z));
+                if (neighborGridCell != null)
                 {
-                    for (int z = -1; z < 2; z++)
-                    {
-                        if (x != 0 && (y != 0 || z != 0))
-                        {
-                            continue;
-                        }
-                        if (x == 0 && y == 0 && z == 0)
-                        {
-                            continue;
-                        }
-                        if (y != 0 && z != 0)
-                        {
-                            continue;
-                        }
-                        GridCell neighborGridCell = _grid.GetGridCell(new Vector3Int(_x - x, _y - y, _z - z));
-                        if (neighborGridCell != null)
-                        {
-                            SetNeighbor(this, neighborGridCell);
-                        }
-                    }
+                    SetNeighbor(this, neighborGridCell);
+                    isUpdated = true;
                 }
+            }
 
+            if (isUpdated)
+            {
+                // Instance.
             }
         }
 

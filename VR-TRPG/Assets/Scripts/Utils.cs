@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public static class Utils
 {
@@ -34,8 +33,8 @@ public static class Utils
     {
         int layerMask = 1 << 6;
         //layerMask = ~layerMask;
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Debug.DrawRay(Mouse.current.position.ReadValue(), ray.direction);
+        Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetMousePosition());
+        Debug.DrawRay(InputManager.Instance.GetMousePosition(), ray.direction);
         if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, layerMask))
         {
             EmptyGridObject emptyGridObject = raycastHit.collider.GetComponentInParent<EmptyGridObject>();
@@ -47,19 +46,5 @@ public static class Utils
             return emptyGridObject.index;
         }
         return -Vector3.one;
-        /*
-            RaycastHit[] hits;
-        hits = Physics.RaycastAll(ray, 999f, layerMask);
-
-        for (int i = hits.Length - 1; i >= 0; i--)
-        {
-            if (hits[i].collider.gameObject.CompareTag("FreeGrid"))
-            {
-                GameObject hitParent = hits[i].collider.transform.parent.gameObject;
-                return hitParent.GetComponent<FreeGrid>().GetIndex();
-            }
-        }
-        return Vector3Int.zero;
-        */
     }
 }
