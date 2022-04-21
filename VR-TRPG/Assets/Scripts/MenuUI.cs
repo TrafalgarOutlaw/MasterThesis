@@ -38,7 +38,6 @@ public class MenuUI : MonoBehaviour
         Time.timeScale = 1;
 
         editor.SetActive(false);
-        StartField.Instance.OnStartLevel();
     }
 
     public void LoadEditor()
@@ -46,6 +45,5 @@ public class MenuUI : MonoBehaviour
         Time.timeScale = 1;
         container.SetActive(false);
         editor.SetActive(true);
-        StartField.Instance.OnEndLevel();
     }
 }

@@ -20,6 +20,7 @@ public class GridManager : MonoBehaviour
     public OnGridEventQuaternion OnFieldRotationChange;
     public OnGridEventFieldVisual OnSelectedFieldChange;
     public OnGridEventInt OnIsFieldPlaceableChange;
+    public UnityEvent OnUpdateWalkableList;
 
     // Grid
     Grid<GridCell> grid;
@@ -51,6 +52,8 @@ public class GridManager : MonoBehaviour
     Transform levelObject;
     Vector2 mouseScrollValue;
     InputManager inputManager;
+    public List<PlayerCharacter> playerCharacterList = new List<PlayerCharacter>();
+
     void Awake()
     {
         // Set Singleton
@@ -205,6 +208,7 @@ public class GridManager : MonoBehaviour
         if (isCurrentFieldPlaceable)
         {
             PlaceField(currentField.pfField);
+            OnUpdateWalkableList.Invoke();
         }
     }
 
@@ -298,7 +302,7 @@ public class GridManager : MonoBehaviour
 
     public bool IsPlayerPlaced()
     {
-        return isPlayerSet;
+        return playerCharacterList.Count > 0;
     }
 
     public class GridCell
@@ -354,20 +358,13 @@ public class GridManager : MonoBehaviour
 
         private void UpdateNeighbors()
         {
-            bool isUpdated = false;
             foreach (var dir in gridDirList)
             {
                 GridCell neighborGridCell = _grid.GetGridCell(new Vector3Int(_x - dir.x, _y - dir.y, _z - dir.z));
                 if (neighborGridCell != null)
                 {
                     SetNeighbor(this, neighborGridCell);
-                    isUpdated = true;
                 }
-            }
-
-            if (isUpdated)
-            {
-                // Instance.
             }
         }
 
