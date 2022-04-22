@@ -50,7 +50,6 @@ public class GridManager : MonoBehaviour
 
     // Level
     Transform levelObject;
-    Vector2 mouseScrollValue;
     InputManager inputManager;
     public List<PlayerCharacter> playerCharacterList = new List<PlayerCharacter>();
 
@@ -78,6 +77,7 @@ public class GridManager : MonoBehaviour
         inputManager.OnDeletField.AddListener(TryDeleteFields);
         inputManager.OnRotateField.AddListener(RotateField);
         inputManager.OnChangeLevel.AddListener(ChangeLevel);
+        inputManager.OnChangeField.AddListener(ChangeField);
 
         anchor = GetGridCellCenter(Vector3.zero);
     }
@@ -89,26 +89,25 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
-        mouseScrollValue = inputManager.GetMouseScrollValue();
 
         GridCell selectedGridCell = GetGridObjectFromMouse();
         if (selectedGridCell != currentGridCell)
         {
             SetCurrentGridCell(selectedGridCell);
         }
+    }
 
-        if (mouseScrollValue.y != 0)
+    void ChangeField(float value)
+    {
+        fieldSOListIndex = (fieldSOListIndex + (int)Mathf.Clamp(value, -1f, 1f)) % fieldSOList.Count;
+        if (fieldSOListIndex < 0)
         {
-            fieldSOListIndex = (fieldSOListIndex + (int)Mathf.Clamp(mouseScrollValue.y, -1f, 1f)) % fieldSOList.Count;
-            if (fieldSOListIndex < 0)
-            {
-                fieldSOListIndex += fieldSOList.Count;
-            }
-            currentField = fieldSOList[fieldSOListIndex];
-
-            SetCurrentFieldPlaceable();
-            OnSelectedFieldChange.Invoke(currentField.fieldVisual, cellSize);
+            fieldSOListIndex += fieldSOList.Count;
         }
+        currentField = fieldSOList[fieldSOListIndex];
+
+        SetCurrentFieldPlaceable();
+        OnSelectedFieldChange.Invoke(currentField.fieldVisual, cellSize);
     }
 
     void ChangeLevel(bool next)

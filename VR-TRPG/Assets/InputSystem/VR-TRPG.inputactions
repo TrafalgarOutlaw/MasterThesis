@@ -951,7 +951,7 @@
             "id": "ac0f7f4b-1765-4e55-a3b8-0b3bcf1c2957",
             "actions": [
                 {
-                    "name": "ToggleRotationMode",
+                    "name": "RotationMode",
                     "type": "Button",
                     "id": "dbcd0a30-c4a6-4a12-8c16-a0c7a1294a76",
                     "expectedControlType": "Button",
@@ -967,6 +967,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "CameraMode",
+                    "type": "Button",
+                    "id": "b3bd3273-d8df-4681-a8ff-d9505aff1eee",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LevelMode",
+                    "type": "Button",
+                    "id": "a068bd5f-80f8-4513-97dc-e753e2154cb5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "InsertMode",
+                    "type": "Button",
+                    "id": "bf82ea46-5b56-4495-9fd2-62e3a8f014e3",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -977,7 +1004,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "ToggleRotationMode",
+                    "action": "RotationMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -1057,6 +1084,39 @@
                     "action": "RotateField",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "14c119b1-503f-4da6-8d49-8ee20798047e",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "CameraMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70cca0ec-ed67-418c-8f5d-b5db18f138a6",
+                    "path": "<Keyboard>/l",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "LevelMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4ebc184-c787-492b-a647-6de56082b1c6",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "InsertMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

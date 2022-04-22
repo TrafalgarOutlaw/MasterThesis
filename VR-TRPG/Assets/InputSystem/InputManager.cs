@@ -3,15 +3,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using System;
 
-[System.Serializable]
-public class RotateEvent : UnityEvent<Vector3Int>
-{
-}
+[System.Serializable] public class RotateEvent : UnityEvent<Vector3Int> { }
 
-[System.Serializable]
-public class BoolEvent : UnityEvent<bool>
-{
-}
+[System.Serializable] public class BoolEvent : UnityEvent<bool> { }
+[System.Serializable] public class FloatEvent : UnityEvent<float> { }
 
 public class InputManager : MonoBehaviour
 {
@@ -20,17 +15,30 @@ public class InputManager : MonoBehaviour
 
     public RotateEvent OnRotateField;
     public BoolEvent OnChangeLevel;
+    public FloatEvent OnChangeField;
 
     public UnityEvent OnPlaceField;
     public UnityEvent OnDeletField;
+
+    // UI Events
+    public UnityEvent OnInsertMode;
+    public UnityEvent OnRotateMode;
+    public UnityEvent OnLevelMode;
+    public UnityEvent OnCameraMode;
+
 
     VrtrpgActions vrtrpgActions;
 
     Mouse mouse;
     Keyboard keyboard;
+
+    Vector2 mouseScrollValue;
     private static InputManager _instance;
 
-    bool isRotating = true;
+    bool isRotateMode;
+    private bool isCameraMode;
+    private bool isInsertMode = true;
+    private bool isLevelMode;
 
     private void Awake()
     {
@@ -57,20 +65,59 @@ public class InputManager : MonoBehaviour
     {
         if (mouse.leftButton.wasPressedThisFrame)
         {
-            OnPlaceField.Invoke();
+            PlaceField();
         }
         if (mouse.rightButton.wasPressedThisFrame)
         {
-            OnDeletField.Invoke();
+            DeleteField();
         }
 
-        if (Keyboard.current.iKey.wasPressedThisFrame)
+        if (Keyboard.current.tKey.wasPressedThisFrame)
         {
-            OnChangeLevel.Invoke(true);
+            ChangeLevel(true);
         }
-        if (Keyboard.current.kKey.wasPressedThisFrame)
+        if (Keyboard.current.gKey.wasPressedThisFrame)
         {
-            OnChangeLevel.Invoke(false);
+            ChangeLevel(false);
+        }
+
+
+        mouseScrollValue = GetMouseScrollValue();
+        if (mouseScrollValue.y != 0)
+        {
+            ChangeField(mouseScrollValue.y);
+        }
+    }
+
+    private void ChangeField(float value)
+    {
+        if (isInsertMode)
+        {
+            OnChangeField.Invoke(value);
+        }
+    }
+
+    private void PlaceField()
+    {
+        if (isInsertMode)
+        {
+            OnPlaceField.Invoke();
+        }
+    }
+
+    private void DeleteField()
+    {
+        if (isInsertMode)
+        {
+            OnDeletField.Invoke();
+        }
+    }
+
+    private void ChangeLevel(bool next)
+    {
+        if (isLevelMode)
+        {
+            OnChangeLevel.Invoke(next);
         }
     }
 
@@ -83,17 +130,58 @@ public class InputManager : MonoBehaviour
     {
         return mouse.scroll.ReadValue();
     }
-    public void ToggleRotationMode(InputAction.CallbackContext context)
+
+    private void DisableAllModes()
+    {
+        isCameraMode = false;
+        isRotateMode = false;
+        isInsertMode = false;
+        isLevelMode = false;
+    }
+
+    public void CameraMode(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            isRotating = !isRotating;
+            DisableAllModes();
+            isCameraMode = true;
+            OnCameraMode.Invoke();
+        }
+    }
+
+    public void InsertMode(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            DisableAllModes();
+            isInsertMode = true;
+            OnInsertMode.Invoke();
+        }
+    }
+
+    public void RotateMode(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            DisableAllModes();
+            isRotateMode = true;
+            OnRotateMode.Invoke();
+        }
+    }
+
+    public void LevelMode(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            DisableAllModes();
+            isLevelMode = true;
+            OnLevelMode.Invoke();
         }
     }
 
     public void Rotate(InputAction.CallbackContext context)
     {
-        if (isRotating)
+        if (isRotateMode)
         {
             OnRotateField.Invoke(Vector3Int.FloorToInt(context.ReadValue<Vector3>()));
         }

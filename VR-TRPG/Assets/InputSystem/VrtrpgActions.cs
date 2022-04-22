@@ -973,7 +973,7 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
             ""id"": ""ac0f7f4b-1765-4e55-a3b8-0b3bcf1c2957"",
             ""actions"": [
                 {
-                    ""name"": ""ToggleRotationMode"",
+                    ""name"": ""RotationMode"",
                     ""type"": ""Button"",
                     ""id"": ""dbcd0a30-c4a6-4a12-8c16-a0c7a1294a76"",
                     ""expectedControlType"": ""Button"",
@@ -989,6 +989,33 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""CameraMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""b3bd3273-d8df-4681-a8ff-d9505aff1eee"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LevelMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""a068bd5f-80f8-4513-97dc-e753e2154cb5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InsertMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf82ea46-5b56-4495-9fd2-62e3a8f014e3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -999,7 +1026,7 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""ToggleRotationMode"",
+                    ""action"": ""RotationMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -1079,6 +1106,39 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
                     ""action"": ""RotateField"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""14c119b1-503f-4da6-8d49-8ee20798047e"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""CameraMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""70cca0ec-ed67-418c-8f5d-b5db18f138a6"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""LevelMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d4ebc184-c787-492b-a647-6de56082b1c6"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""InsertMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1172,8 +1232,11 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
         m_Camera_MouseY = m_Camera.FindAction("MouseY", throwIfNotFound: true);
         // Editor
         m_Editor = asset.FindActionMap("Editor", throwIfNotFound: true);
-        m_Editor_ToggleRotationMode = m_Editor.FindAction("ToggleRotationMode", throwIfNotFound: true);
+        m_Editor_RotationMode = m_Editor.FindAction("RotationMode", throwIfNotFound: true);
         m_Editor_RotateField = m_Editor.FindAction("RotateField", throwIfNotFound: true);
+        m_Editor_CameraMode = m_Editor.FindAction("CameraMode", throwIfNotFound: true);
+        m_Editor_LevelMode = m_Editor.FindAction("LevelMode", throwIfNotFound: true);
+        m_Editor_InsertMode = m_Editor.FindAction("InsertMode", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1452,14 +1515,20 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
     // Editor
     private readonly InputActionMap m_Editor;
     private IEditorActions m_EditorActionsCallbackInterface;
-    private readonly InputAction m_Editor_ToggleRotationMode;
+    private readonly InputAction m_Editor_RotationMode;
     private readonly InputAction m_Editor_RotateField;
+    private readonly InputAction m_Editor_CameraMode;
+    private readonly InputAction m_Editor_LevelMode;
+    private readonly InputAction m_Editor_InsertMode;
     public struct EditorActions
     {
         private @VrtrpgActions m_Wrapper;
         public EditorActions(@VrtrpgActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @ToggleRotationMode => m_Wrapper.m_Editor_ToggleRotationMode;
+        public InputAction @RotationMode => m_Wrapper.m_Editor_RotationMode;
         public InputAction @RotateField => m_Wrapper.m_Editor_RotateField;
+        public InputAction @CameraMode => m_Wrapper.m_Editor_CameraMode;
+        public InputAction @LevelMode => m_Wrapper.m_Editor_LevelMode;
+        public InputAction @InsertMode => m_Wrapper.m_Editor_InsertMode;
         public InputActionMap Get() { return m_Wrapper.m_Editor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1469,22 +1538,40 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_EditorActionsCallbackInterface != null)
             {
-                @ToggleRotationMode.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnToggleRotationMode;
-                @ToggleRotationMode.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnToggleRotationMode;
-                @ToggleRotationMode.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnToggleRotationMode;
+                @RotationMode.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotationMode;
+                @RotationMode.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotationMode;
+                @RotationMode.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotationMode;
                 @RotateField.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotateField;
                 @RotateField.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotateField;
                 @RotateField.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnRotateField;
+                @CameraMode.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnCameraMode;
+                @CameraMode.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnCameraMode;
+                @CameraMode.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnCameraMode;
+                @LevelMode.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnLevelMode;
+                @LevelMode.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnLevelMode;
+                @LevelMode.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnLevelMode;
+                @InsertMode.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnInsertMode;
+                @InsertMode.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnInsertMode;
+                @InsertMode.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnInsertMode;
             }
             m_Wrapper.m_EditorActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @ToggleRotationMode.started += instance.OnToggleRotationMode;
-                @ToggleRotationMode.performed += instance.OnToggleRotationMode;
-                @ToggleRotationMode.canceled += instance.OnToggleRotationMode;
+                @RotationMode.started += instance.OnRotationMode;
+                @RotationMode.performed += instance.OnRotationMode;
+                @RotationMode.canceled += instance.OnRotationMode;
                 @RotateField.started += instance.OnRotateField;
                 @RotateField.performed += instance.OnRotateField;
                 @RotateField.canceled += instance.OnRotateField;
+                @CameraMode.started += instance.OnCameraMode;
+                @CameraMode.performed += instance.OnCameraMode;
+                @CameraMode.canceled += instance.OnCameraMode;
+                @LevelMode.started += instance.OnLevelMode;
+                @LevelMode.performed += instance.OnLevelMode;
+                @LevelMode.canceled += instance.OnLevelMode;
+                @InsertMode.started += instance.OnInsertMode;
+                @InsertMode.performed += instance.OnInsertMode;
+                @InsertMode.canceled += instance.OnInsertMode;
             }
         }
     }
@@ -1563,7 +1650,10 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
     }
     public interface IEditorActions
     {
-        void OnToggleRotationMode(InputAction.CallbackContext context);
+        void OnRotationMode(InputAction.CallbackContext context);
         void OnRotateField(InputAction.CallbackContext context);
+        void OnCameraMode(InputAction.CallbackContext context);
+        void OnLevelMode(InputAction.CallbackContext context);
+        void OnInsertMode(InputAction.CallbackContext context);
     }
 }
