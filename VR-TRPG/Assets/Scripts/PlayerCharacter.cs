@@ -13,10 +13,9 @@ public class PlayerCharacter : MonoBehaviour
     void Start()
     {
         gridManager = GridManager.Instance;
-        currentGridCell = GridManager.Instance.GetGridCellFromPosition(transform.position);
+        currentGridCell = gridManager.GetGridCellFromPosition(transform.position);
         SetWalkableFields(currentGridCell, walkDistance);
 
-        gridManager.playerCharacterList.Add(this);
         gridManager.OnUpdateWalkableList.AddListener(ResetWalkableFieldsList);
     }
 
@@ -85,6 +84,5 @@ public class PlayerCharacter : MonoBehaviour
     private void OnDestroy()
     {
         ClearWalkableFieldsList();
-        gridManager.playerCharacterList.Remove(this);
     }
 }

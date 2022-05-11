@@ -51,7 +51,25 @@ public class GridManager : MonoBehaviour
     // Level
     Transform levelObject;
     InputManager inputManager;
-    public List<PlayerCharacter> playerCharacterList = new List<PlayerCharacter>();
+    [SerializeField] Transform pfSpectator;
+    Transform spectator;
+    bool isSpectator = false;
+
+
+    public void SetSpectator()
+    {
+        if (isSpectator)
+        {
+            DestroyImmediate(spectator.gameObject);
+            isSpectator = false;
+        }
+        else
+        {
+            Debug.Log("INSTANTIATE SPECTATOR");
+            spectator = Instantiate(pfSpectator, new Vector3(-2, 0, -2), Quaternion.identity);
+            isSpectator = true;
+        }
+    }
 
     void Awake()
     {
@@ -89,7 +107,6 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
-
         GridCell selectedGridCell = GetGridObjectFromMouse();
         if (selectedGridCell != currentGridCell)
         {
@@ -297,11 +314,6 @@ public class GridManager : MonoBehaviour
     public float GetCellSize()
     {
         return cellSize;
-    }
-
-    public bool IsPlayerPlaced()
-    {
-        return playerCharacterList.Count > 0;
     }
 
     public class GridCell

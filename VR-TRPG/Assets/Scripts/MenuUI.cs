@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using VRTRPG.XR;
 
 public class MenuUI : MonoBehaviour
 {
@@ -10,10 +11,14 @@ public class MenuUI : MonoBehaviour
 
     [SerializeField]
     GameObject editor;
+    int currentCamPos = 0;
+
+    public EditorCameraController editorCameraController;
+    private XRSystem _XRSystem;
 
     void Start()
     {
-
+        _XRSystem = XRSystem.Instance;
     }
 
     // Update is called once per frame
@@ -22,27 +27,27 @@ public class MenuUI : MonoBehaviour
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             container.SetActive(!container.activeSelf);
-            Time.timeScale = (Time.timeScale + 1) % 2;
         }
+
     }
 
     public void LoadLevel()
     {
-        if (!GridManager.Instance.IsPlayerPlaced())
+        if (!_XRSystem.IsControllerPlaced)
         {
-            Debug.Log("Please first place a player in level");
             return;
         }
 
         container.SetActive(false);
-        Time.timeScale = 1;
-
         editor.SetActive(false);
+
+        InputManager.Instance.DisableAllModes();
+        editorCameraController.Disable();
+        _XRSystem.DoAction();
     }
 
     public void LoadEditor()
     {
-        Time.timeScale = 1;
         container.SetActive(false);
         editor.SetActive(true);
     }

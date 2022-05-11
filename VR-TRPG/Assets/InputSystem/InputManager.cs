@@ -36,7 +36,7 @@ public class InputManager : MonoBehaviour
     private static InputManager _instance;
 
     bool isRotateMode;
-    private bool isCameraMode;
+    public bool isCameraMode;
     private bool isInsertMode = true;
     private bool isLevelMode;
 
@@ -131,7 +131,7 @@ public class InputManager : MonoBehaviour
         return mouse.scroll.ReadValue();
     }
 
-    private void DisableAllModes()
+    public void DisableAllModes()
     {
         isCameraMode = false;
         isRotateMode = false;

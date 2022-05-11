@@ -22,7 +22,7 @@ public class EditorCameraController : MonoBehaviour
         vrtrpgActions = new VrtrpgActions();
         vrtrpgActions.Camera.Enable();
 
-        vrtrpgActions.Camera.Activate.performed += Activate;
+        vrtrpgActions.Camera.Activate.performed += Toggle;
         vrtrpgActions.Camera.Look.started += StartLooking;
         vrtrpgActions.Camera.Look.canceled += EndLooking;
     }
@@ -37,9 +37,14 @@ public class EditorCameraController : MonoBehaviour
         isLooking = true;
     }
 
-    private void Activate(InputAction.CallbackContext obj)
+    public void Toggle(InputAction.CallbackContext obj)
     {
         isActive = !isActive;
+    }
+
+    public void Disable()
+    {
+        isActive = false;
     }
 
     private void Update()
