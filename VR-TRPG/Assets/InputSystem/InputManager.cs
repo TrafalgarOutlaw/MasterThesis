@@ -139,6 +139,12 @@ public class InputManager : MonoBehaviour
         isLevelMode = false;
     }
 
+    public void EnableCameraMode()
+    {
+        DisableAllModes();
+        isCameraMode = true;
+    }
+
     public void CameraMode(InputAction.CallbackContext context)
     {
         if (context.started)

@@ -42,9 +42,9 @@ public class EditorCameraController : MonoBehaviour
         isActive = !isActive;
     }
 
-    public void Disable()
+    public void Enable()
     {
-        isActive = false;
+        isActive = true;
     }
 
     private void Update()
