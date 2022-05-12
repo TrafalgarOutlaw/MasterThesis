@@ -10,9 +10,9 @@ namespace VRTRPG.XR
         public static XRSystem Instance { get; private set; }
         public bool IsControllerPlaced { get; private set; }
         List<XRController> controllerList = new List<XRController>();
-        private XRController currentController;
+        public XRController CurrentController { get; private set; }
         private int currentControllerIndex;
-        Camera camera;
+        new Camera camera;
 
         void Awake()
         {
@@ -22,6 +22,7 @@ namespace VRTRPG.XR
             }
             Instance = this;
         }
+
         void Start()
         {
             camera = Camera.main;
@@ -53,32 +54,33 @@ namespace VRTRPG.XR
             }
         }
 
-        internal void DoAction()
+        public void EnableControllerIndex(int i)
         {
-            EnableControllerIndex(0);
-        }
-
-        private void EnableControllerIndex(int i)
-        {
-            camera.transform.position = controllerList[i].GetXRAnchor().position;
-            currentController = controllerList[i];
+            camera.transform.position = controllerList[i].GetAnchorPosition();
+            CurrentController = controllerList[i];
             currentControllerIndex = i;
+
+            camera.transform.parent = CurrentController.transform;
         }
 
-        public void EnableNextControllerInList()
+        public bool EnableNextControllerInList()
         {
             if (currentControllerIndex + 1 < controllerList.Count)
             {
                 EnableControllerIndex(currentControllerIndex + 1);
+                return true;
             }
+            return false;
         }
 
-        public void EnablePreviousControllerInList()
+        public bool EnablePreviousControllerInList()
         {
             if (currentControllerIndex - 1 >= 0)
             {
                 EnableControllerIndex(currentControllerIndex - 1);
+                return true;
             }
+            return false;
         }
     }
 }

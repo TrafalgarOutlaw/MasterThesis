@@ -41,9 +41,9 @@ public class MenuUI : MonoBehaviour
         container.SetActive(false);
         editor.SetActive(false);
 
-        InputManager.Instance.EnableCameraMode();
+        InputManager.Instance.DisableAllModes();
         editorCameraController.Enable();
-        _XRSystem.DoAction();
+        ActionManager.Instance.LoadLevel();
     }
 
     public void LoadEditor()

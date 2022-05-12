@@ -7,6 +7,7 @@ namespace VRTRPG.XR
     public class XRController : MonoBehaviour
     {
         [SerializeField] Transform anchorTransform;
+        [SerializeField] bool isSpectator;
         XRSystem _XRSystem;
 
         void Start()
@@ -21,9 +22,18 @@ namespace VRTRPG.XR
             _XRSystem.RemoveController(this);
         }
 
-        public Transform GetXRAnchor()
+        public Vector3 GetAnchorPosition()
         {
-            return anchorTransform;
+            return anchorTransform.position;
+        }
+
+        public GameObject GetPlayerObject()
+        {
+            if (isSpectator)
+            {
+                return null;
+            }
+            return transform.parent.gameObject;
         }
     }
 }

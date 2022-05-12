@@ -20,7 +20,6 @@ public class GridManager : MonoBehaviour
     public OnGridEventQuaternion OnFieldRotationChange;
     public OnGridEventFieldVisual OnSelectedFieldChange;
     public OnGridEventInt OnIsFieldPlaceableChange;
-    public UnityEvent OnUpdateWalkableList;
 
     // Grid
     Grid<GridCell> grid;
@@ -65,7 +64,6 @@ public class GridManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("INSTANTIATE SPECTATOR");
             spectator = Instantiate(pfSpectator, new Vector3(-2, 0, -2), Quaternion.identity);
             isSpectator = true;
         }
@@ -224,7 +222,6 @@ public class GridManager : MonoBehaviour
         if (isCurrentFieldPlaceable)
         {
             PlaceField(currentField.pfField);
-            OnUpdateWalkableList.Invoke();
         }
     }
 
