@@ -141,9 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af53e484cbfc9c74b9f90bd76475e941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkIndicator: {fileID: 1289571637869510285, guid: 0dc82be364b668e4fa0938004bf0af6f,
-    type: 3}
-  characterTransform: {fileID: 7581163689758773374}
+  walkDistance: 4
 --- !u!1 &2304513684138392164
 GameObject:
   m_ObjectHideFlags: 0
@@ -4392,6 +4390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anchorTransform: {fileID: 8546389984429564791}
+  isSpectator: 0
 --- !u!1 &6284364594813455962
 GameObject:
   m_ObjectHideFlags: 0

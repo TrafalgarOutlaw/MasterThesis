@@ -24,11 +24,14 @@ public class Debugger : MonoBehaviour
         {
             if (_XRSystem.EnableNextControllerInList())
             {
-                movementSystem.EndMovePhase();
                 PlayerCharacter character = _XRSystem.CurrentController.GetPlayerObject()?.GetComponent<PlayerCharacter>();
                 if (character != null)
                 {
                     movementSystem.StartMovePhase(character);
+                }
+                else
+                {
+                    movementSystem.StartSelectionPhase();
                 }
             }
         }
@@ -37,7 +40,6 @@ public class Debugger : MonoBehaviour
         {
             if (_XRSystem.EnablePreviousControllerInList())
             {
-                movementSystem.EndMovePhase();
                 PlayerCharacter character = _XRSystem.CurrentController.GetPlayerObject()?.GetComponent<PlayerCharacter>();
                 if (character != null)
                 {
@@ -45,7 +47,7 @@ public class Debugger : MonoBehaviour
                 }
                 else
                 {
-
+                    movementSystem.StartSelectionPhase();
                 }
             }
         }

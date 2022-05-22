@@ -18,6 +18,7 @@ namespace VRTRPG.Movement
         List<GameObject> indicatorList = new List<GameObject>();
         List<GridManager.GridCell> walkableCellList = new List<GridManager.GridCell>();
         [SerializeField] MovementIndicator movementIndicator;
+        [SerializeField] SelectionIndicator selectionIndicator;
 
         void Awake()
         {
@@ -27,6 +28,7 @@ namespace VRTRPG.Movement
             }
             Instance = this;
         }
+
         void Start()
         {
             gridManager = GridManager.Instance;
@@ -34,22 +36,30 @@ namespace VRTRPG.Movement
 
         internal void TryWalk(Vector3 fieldPosition)
         {
-            Debug.Log("fieldpos:" + fieldPosition);
             GridManager.GridCell targetCell = gridManager.GetGridCellFromPosition(fieldPosition);
             if (walkableCellList.Contains(targetCell))
             {
-                // var targetField = targetCell.GetPlacedField().transform;
-                EndMovePhase();
-
                 currentCharacter.transform.position = fieldPosition;
-                Debug.Log("Moved to: " + fieldPosition);
-                // currentCharacter.transform.parent = targetField;
                 StartMovePhase(currentCharacter);
             }
         }
 
+        public void StartSelectionPhase()
+        {
+            EndSelectionPhase();
+            EndMovePhase();
+            selectionIndicator.enabled = true;
+        }
+
+        public void EndSelectionPhase()
+        {
+            selectionIndicator.enabled = false;
+        }
+
         public void StartMovePhase(PlayerCharacter playerCharacter)
         {
+            EndSelectionPhase();
+            EndMovePhase();
             currentCharacter = playerCharacter;
             currentGridCell = gridManager.GetGridCellFromPosition(playerCharacter.transform.position);
             SetWalkableFields(currentGridCell, playerCharacter.walkDistance);

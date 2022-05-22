@@ -915,7 +915,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 3.1e-44, w: 3.2e-44}
+  m_BoundingSphereOverride: {x: 4.5905e-41, y: 1.1184303e+19, z: 4.5905e-41, w: 9.403955e-38}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -2169,6 +2169,7 @@ GameObject:
   - component: {fileID: 1518846530}
   - component: {fileID: 1518846529}
   - component: {fileID: 1518846531}
+  - component: {fileID: 1518846532}
   m_Layer: 0
   m_Name: MovementSystem
   m_TagString: Untagged
@@ -2191,6 +2192,7 @@ MonoBehaviour:
   walkIndicator: {fileID: 1289571637869510285, guid: 0dc82be364b668e4fa0938004bf0af6f,
     type: 3}
   movementIndicator: {fileID: 1518846531}
+  selectionIndicator: {fileID: 1518846532}
 --- !u!4 &1518846530
 Transform:
   m_ObjectHideFlags: 0
@@ -2215,6 +2217,18 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cefb65aa2517ff54bb33cd44ab12503e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1518846532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518846528}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a93b87dcdb3643469c1b741578d5fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1648392248
