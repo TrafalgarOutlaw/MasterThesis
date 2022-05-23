@@ -1,0 +1,16 @@
+{
+    "name": "VRTRPG.XR",
+    "rootNamespace": "",
+    "references": [
+        "GUID:814a046e41cd6ff4f85bf2c212418d25"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

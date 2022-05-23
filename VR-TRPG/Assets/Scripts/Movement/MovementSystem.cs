@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VRTRPG.XR;
+using VRTRPG.Grid;
 
 namespace VRTRPG.Movement
 {
@@ -12,11 +12,11 @@ namespace VRTRPG.Movement
         List<PlayerCharacter> characterList = new List<PlayerCharacter>();
         private PlayerCharacter currentCharacter;
         private int currentCharacterIndex;
-        GridManager gridManager;
-        GridManager.GridCell currentGridCell;
+        GridSystem gridManager;
+        GridCell currentGridCell;
         [SerializeField] Transform walkIndicator;
         List<GameObject> indicatorList = new List<GameObject>();
-        List<GridManager.GridCell> walkableCellList = new List<GridManager.GridCell>();
+        List<GridCell> walkableCellList = new List<GridCell>();
         [SerializeField] MovementIndicator movementIndicator;
         [SerializeField] SelectionIndicator selectionIndicator;
 
@@ -31,12 +31,12 @@ namespace VRTRPG.Movement
 
         void Start()
         {
-            gridManager = GridManager.Instance;
+            gridManager = GridSystem.Instance;
         }
 
         internal void TryWalk(Vector3 fieldPosition)
         {
-            GridManager.GridCell targetCell = gridManager.GetGridCellFromPosition(fieldPosition);
+            GridCell targetCell = gridManager.GetGridCellFromPosition(fieldPosition);
             if (walkableCellList.Contains(targetCell))
             {
                 currentCharacter.transform.position = fieldPosition;
@@ -83,7 +83,7 @@ namespace VRTRPG.Movement
             indicatorList.Clear();
         }
 
-        void SetWalkableFields(GridManager.GridCell gridCell, int walkDistance)
+        void SetWalkableFields(GridCell gridCell, int walkDistance)
         {
             if (walkDistance <= 0)
             {
@@ -108,7 +108,7 @@ namespace VRTRPG.Movement
                         continue;
                     }
 
-                    var test = GridManager.Instance.GetGridCellFromIndex(cell.GetIndex() + Vector3Int.up);
+                    var test = GridSystem.Instance.GetGridCellFromIndex(cell.GetIndex() + Vector3Int.up);
                     if (test != null && test.GetPlacedField() != null)
                     {
                         if (test != null)
@@ -118,7 +118,7 @@ namespace VRTRPG.Movement
                         continue;
                     }
 
-                    var postiton = cell.GetWorldPosition() + (GridManager.Instance.GetCellSize() * .5f * Vector3.one);
+                    var postiton = cell.GetWorldPosition() + (GridSystem.Instance.GetCellSize() * .5f * Vector3.one);
                     if (cell != currentGridCell)
                     {
                         var indicator = Instantiate(walkIndicator, postiton, Quaternion.identity);

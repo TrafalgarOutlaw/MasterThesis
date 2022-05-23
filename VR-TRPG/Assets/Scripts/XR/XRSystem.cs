@@ -14,6 +14,10 @@ namespace VRTRPG.XR
         private int currentControllerIndex;
         new Camera camera;
 
+        [SerializeField] Transform pfSpectator;
+        Transform spectator;
+        bool isSpectator = false;
+
         void Awake()
         {
             if (Instance != null)
@@ -81,6 +85,20 @@ namespace VRTRPG.XR
                 return true;
             }
             return false;
+        }
+
+        public void SetSpectator()
+        {
+            if (isSpectator)
+            {
+                DestroyImmediate(spectator.gameObject);
+                isSpectator = false;
+            }
+            else
+            {
+                spectator = Instantiate(pfSpectator, new Vector3(-2, 0, -2), Quaternion.identity);
+                isSpectator = true;
+            }
         }
     }
 }

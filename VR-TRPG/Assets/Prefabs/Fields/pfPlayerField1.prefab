@@ -152,7 +152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2484073186549976837}
   m_Layer: 0
-  m_Name: Visual
+  m_Name: FieldVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4389,6 +4389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aa8b3dbd3d898f408cad6fe9511999f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: PlayerCharacter1
   anchorTransform: {fileID: 8546389984429564791}
   isSpectator: 0
 --- !u!1 &6284364594813455962

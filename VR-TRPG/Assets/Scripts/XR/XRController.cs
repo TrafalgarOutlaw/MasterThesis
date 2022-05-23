@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VRTRPG.Command;
 
 namespace VRTRPG.XR
 {
-    public class XRController : MonoBehaviour
+    public class XRController : MonoBehaviour, CommandUnit
     {
+        public string name;
         [SerializeField] Transform anchorTransform;
         [SerializeField] bool isSpectator;
         XRSystem _XRSystem;
@@ -15,10 +17,12 @@ namespace VRTRPG.XR
             _XRSystem = XRSystem.Instance;
 
             _XRSystem.AddController(this);
+            CommandSystem.Instance.AddCommandUnitToList(this, name);
         }
 
         private void OnDestroy()
         {
+            CommandSystem.Instance.RemoveCommandUnitFromList(this);
             _XRSystem.RemoveController(this);
         }
 
