@@ -1,144 +1,126 @@
 
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace VRTRPG.Grid
 {
-    public class GridCell
+    public class GridCell : AGridCell
     {
-        Grid<GridCell> _grid;
-        int _x;
-        int _y;
-        int _z;
-        Vector3Int index;
-        Transform _emptyGridObjectTransform;
-        EmptyGridObject _emptyGridObject;
-        Field _field;
-        Vector3 positionInWorld;
-        List<GridCell> occupiedGridCellList = new List<GridCell>();
-        List<GridCell> neighborGridCellList = new List<GridCell>();
-        List<Vector3Int> gridDirList = new List<Vector3Int>();
+        GridSystem _grid;
+        [SerializeField] Transform emptyGridObject;
+        [SerializeField] MeshRenderer emptyGridMeshRenderer;
+        [SerializeField] BoxCollider emptyGridBoxCollider;
 
-        public GridCell(Grid<GridCell> grid, int x, int y, int z, Transform emptyGridObject)
+        // Properties
+        public override Vector3Int Index { get; protected set; }
+        public override Vector3 WorldPosition { get; protected set; }
+        public override float CellSize { get; protected set; }
+        public override Vector3 CellCenter { get; protected set; }
+        public override List<Vector3Int> CellDirList { get; protected set; }
+        public override HashSet<AGridCell> NeighborCellSet { get; protected set; }
+        public override Field IncludedField { get; protected set; }
+
+
+        private void Awake()
+        {
+            CellDirList = new List<Vector3Int>();
+            NeighborCellSet = new HashSet<AGridCell>();
+        }
+
+        public override void Init(GridSystem grid, int x, int y, int z, float cellSize)
         {
             _grid = grid;
-            _x = x;
-            _y = y;
-            _z = z;
-            SetGridDirList();
+            CellSize = cellSize;
 
-            float cellSize = grid.GetCellSize();
-            positionInWorld = new Vector3(x, y, z) * cellSize;
-            index = new Vector3Int(_x, _y, _z);
+            Index = new Vector3Int(x, y, z);
+            WorldPosition = CellSize * (Vector3)Index;
+            transform.position = WorldPosition;
+            CellCenter = WorldPosition + new Vector3(.5f, -.5f, .5f) * cellSize;
 
-            _emptyGridObjectTransform = Object.Instantiate(emptyGridObject, positionInWorld, Quaternion.identity, GridSystem.Instance.gridGameObject);
-            _emptyGridObjectTransform.localScale *= cellSize;
-
-            _emptyGridObject = _emptyGridObjectTransform.GetComponent<EmptyGridObject>();
-            _emptyGridObject.SetIndex(new Vector3(x, y, z));
-
-            UpdateNeighbors();
-            if (y != 1)
-            {
-                DisableForMouse();
-            }
-
+            InitCellDirList();
+            transform.localScale *= CellSize;
         }
 
-        void SetGridDirList()
+        void InitCellDirList()
         {
-            gridDirList.Add(new Vector3Int(1, 0, 0));
-            gridDirList.Add(new Vector3Int(-1, 0, 0));
-            gridDirList.Add(new Vector3Int(0, 1, 0));
-            gridDirList.Add(new Vector3Int(0, -1, 0));
-            gridDirList.Add(new Vector3Int(0, 0, 1));
-            gridDirList.Add(new Vector3Int(0, 0, -1));
+            CellDirList.Add(Vector3Int.right);
+            CellDirList.Add(Vector3Int.left);
+            CellDirList.Add(Vector3Int.up);
+            CellDirList.Add(Vector3Int.down);
+            CellDirList.Add(Vector3Int.forward);
+            CellDirList.Add(Vector3Int.back);
         }
 
-        private void UpdateNeighbors()
+        // private void UpdateNeighbors()
+        // {
+        //     foreach (var dir in CellDirList)
+        //     {
+        //         IGridCell neighborGridCell = _grid.GetGridCell(new Vector3Int(_x - dir.x, _y - dir.y, _z - dir.z));
+        //         if (neighborGridCell != null)
+        //         {
+        //             SetNeighbor(this, neighborGridCell);
+        //         }
+        //     }
+        // }
+
+        public override bool CanBuild()
         {
-            foreach (var dir in gridDirList)
-            {
-                GridCell neighborGridCell = _grid.GetGridCell(new Vector3Int(_x - dir.x, _y - dir.y, _z - dir.z));
-                if (neighborGridCell != null)
-                {
-                    SetNeighbor(this, neighborGridCell);
-                }
-            }
+            return IncludedField == null;
         }
 
-        private void SetNeighbor(GridCell gridCell, GridCell neighborGridCell)
+        public override void SetNeighbor(AGridCell gridCell)
         {
-            gridCell.neighborGridCellList.Add(neighborGridCell);
-            neighborGridCell.neighborGridCellList.Add(gridCell);
+            NeighborCellSet.Add(gridCell);
+            gridCell.NeighborCellSet.Add(gridCell);
+        }
+        // public void SetNeighbor(GridCell gridCell, GridCell neighborGridCell)
+        // {
+        //     gridCell.NeighborCellSet.Add(neighborGridCell);
+        //     neighborGridCell.NeighborCellSet.Add(gridCell);
+        // }
+
+        public override void SetIncludedField(Field field)
+        {
+            IncludedField = field;
         }
 
-        public Field GetPlacedField()
+        public override void ClearIncludedField()
         {
-            return _field;
+            IncludedField = null;
         }
 
-        public Vector3Int GetIndex()
+        // void ClearOccupiedGridCellList()
+        // {
+        //     foreach (var cell in occupiedGridCellList)
+        //     {
+        //         cell._field = null;
+        //         cell.occupiedGridCellList = new List<GridCell>();
+        //     }
+        //     occupiedGridCellList = new List<GridCell>();
+        // }
+
+        public override void DisableRenderer()
         {
-            return new Vector3Int(_x, _y, _z);
+            emptyGridMeshRenderer.enabled = false;
         }
 
-        public void SetField(Field field, List<GridCell> occupyGridCellList)
+        public override void EnableRenderer()
         {
-            _field = field;
-            foreach (var cell in occupyGridCellList)
-            {
-                if (cell != this)
-                {
-                    occupiedGridCellList.Add(cell);
-                }
-            }
+            emptyGridMeshRenderer.enabled = true;
         }
 
-        public void ClearField()
+        public override void DisableCollider()
         {
-            _field = null;
-            ClearOccupiedGridCellList();
+            emptyGridBoxCollider.enabled = false;
+            DisableRenderer();
         }
 
-        void ClearOccupiedGridCellList()
+        public override void EnableCollider()
         {
-            foreach (var cell in occupiedGridCellList)
-            {
-                cell._field = null;
-                cell.occupiedGridCellList = new List<GridCell>();
-            }
-            occupiedGridCellList = new List<GridCell>();
+            emptyGridBoxCollider.enabled = true;
+            EnableRenderer();
         }
 
-        public bool CanBuild()
-        {
-            return _field == null;
-        }
-
-        internal void DisableForMouse()
-        {
-            _emptyGridObject.DisableForMouse();
-        }
-
-        internal void DisableRenderer()
-        {
-            _emptyGridObject.DisableRenderer();
-        }
-
-        internal void EnableRenderer()
-        {
-            _emptyGridObject.EnableRenderer();
-        }
-
-        public Vector3 GetWorldPosition()
-        {
-            return positionInWorld;
-        }
-
-        public List<GridCell> GetNeighborGridCellList()
-        {
-            return neighborGridCellList;
-        }
     }
 }

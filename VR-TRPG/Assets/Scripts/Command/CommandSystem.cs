@@ -13,6 +13,7 @@ namespace VRTRPG.Command
         // This instance
         static CommandSystem _instance;
         public static CommandSystem Instance { get { return _instance; } }
+        
         List<CommandUnit> commandUnitList = new List<CommandUnit>();
         Dictionary<CommandUnit, Transform> commandUnitSlotDict = new Dictionary<CommandUnit, Transform>();
         Dictionary<CommandUnit, string> commandUnitsNameDict = new Dictionary<CommandUnit, string>();
@@ -25,16 +26,9 @@ namespace VRTRPG.Command
                 Destroy(this.gameObject);
             }
             _instance = this;
-
-            // Debug.Log("hey from command system");
         }
 
-        void Update()
-        {
-            // GetAllCommandsFromQueue();
-        }
-
-        internal void SwapCommandUnits(int i1, int i2)
+        internal void SwapCommandUnitsInList(int i1, int i2)
         {
             CommandUnit tmp = commandUnitList[i1];
             commandUnitList[i1] = commandUnitList[i2];

@@ -24,7 +24,7 @@ namespace VRTRPG.Command
 
         private void SwapDragDrop(DragDrop dragDrop)
         {
-            CommandSystem.Instance.SwapCommandUnits(dragDrop.transform.parent.GetSiblingIndex(), transform.GetSiblingIndex());
+            CommandSystem.Instance.SwapCommandUnitsInList(dragDrop.transform.parent.GetSiblingIndex(), transform.GetSiblingIndex());
             currentDragDrop.ChangeSlot(dragDrop.transform.parent);
             dragDrop.ChangeSlot(transform);
         }

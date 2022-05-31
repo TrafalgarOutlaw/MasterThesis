@@ -11,45 +11,45 @@ public class Debugger : MonoBehaviour
     private MovementSystem movementSystem;
 
     // Start is called before the first frame update
-    void Start()
-    {
-        _XRSystem = XRSystem.Instance;
-        movementSystem = MovementSystem.Instance;
-    }
+    // void Start()
+    // {
+    //     _XRSystem = XRSystem.Instance;
+    //     movementSystem = MovementSystem.Instance;
+    // }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Keyboard.current.pKey.wasPressedThisFrame)
-        {
-            if (_XRSystem.EnableNextControllerInList())
-            {
-                PlayerCharacter character = _XRSystem.CurrentController.GetPlayerObject()?.GetComponent<PlayerCharacter>();
-                if (character != null)
-                {
-                    movementSystem.StartMovePhase(character);
-                }
-                else
-                {
-                    movementSystem.StartSelectionPhase();
-                }
-            }
-        }
+    // // Update is called once per frame
+    // void Update()
+    // {
+    //     if (Keyboard.current.pKey.wasPressedThisFrame)
+    //     {
+    //         if (_XRSystem.EnableNextControllerInList())
+    //         {
+    //             PlayerCharacter character = _XRSystem.CurrentController.GetPlayerObject()?.GetComponent<PlayerCharacter>();
+    //             if (character != null)
+    //             {
+    //                 movementSystem.StartMovePhase(character);
+    //             }
+    //             else
+    //             {
+    //                 movementSystem.StartSelectionPhase();
+    //             }
+    //         }
+    //     }
 
-        if (Keyboard.current.oKey.wasPressedThisFrame)
-        {
-            if (_XRSystem.EnablePreviousControllerInList())
-            {
-                PlayerCharacter character = _XRSystem.CurrentController.GetPlayerObject()?.GetComponent<PlayerCharacter>();
-                if (character != null)
-                {
-                    movementSystem.StartMovePhase(character);
-                }
-                else
-                {
-                    movementSystem.StartSelectionPhase();
-                }
-            }
-        }
-    }
+    //     if (Keyboard.current.oKey.wasPressedThisFrame)
+    //     {
+    //         if (_XRSystem.EnablePreviousControllerInList())
+    //         {
+    //             PlayerCharacter character = _XRSystem.CurrentController.GetPlayerObject()?.GetComponent<PlayerCharacter>();
+    //             if (character != null)
+    //             {
+    //                 movementSystem.StartMovePhase(character);
+    //             }
+    //             else
+    //             {
+    //                 movementSystem.StartSelectionPhase();
+    //             }
+    //         }
+    //     }
+    // }
 }

@@ -13,40 +13,40 @@ public class EditorUI : MonoBehaviour
 
     InputManager inputManager;
 
-    private void Start()
-    {
-        inputManager = InputManager.Instance;
-        inputManager.OnInsertMode.AddListener(SetInsertUI);
-        inputManager.OnCameraMode.AddListener(SetCameraUI);
-        inputManager.OnRotateMode.AddListener(SetRotateUI);
-        inputManager.OnLevelMode.AddListener(SetLevelUI);
-    }
+    // private void Start()
+    // {
+    //     inputManager = InputManager.Instance;
+    //     inputManager.OnInsertMode.AddListener(SetInsertUI);
+    //     inputManager.OnCameraMode.AddListener(SetCameraUI);
+    //     inputManager.OnRotateMode.AddListener(SetRotateUI);
+    //     inputManager.OnLevelMode.AddListener(SetLevelUI);
+    // }
 
-    private void SetLevelUI()
-    {
-        currenContainer.SetActive(false);
-        currenContainer = levelContainer;
-        currenContainer.SetActive(true);
-    }
+    // private void SetLevelUI()
+    // {
+    //     currenContainer.SetActive(false);
+    //     currenContainer = levelContainer;
+    //     currenContainer.SetActive(true);
+    // }
 
-    private void SetRotateUI()
-    {
-        currenContainer.SetActive(false);
-        currenContainer = rotateContainer;
-        currenContainer.SetActive(true);
-    }
+    // private void SetRotateUI()
+    // {
+    //     currenContainer.SetActive(false);
+    //     currenContainer = rotateContainer;
+    //     currenContainer.SetActive(true);
+    // }
 
-    private void SetCameraUI()
-    {
-        currenContainer.SetActive(false);
-        currenContainer = cameraContainer;
-        currenContainer.SetActive(true);
-    }
+    // private void SetCameraUI()
+    // {
+    //     currenContainer.SetActive(false);
+    //     currenContainer = cameraContainer;
+    //     currenContainer.SetActive(true);
+    // }
 
-    private void SetInsertUI()
-    {
-        currenContainer.SetActive(false);
-        currenContainer = insertContainer;
-        currenContainer.SetActive(true);
-    }
+    // private void SetInsertUI()
+    // {
+    //     currenContainer.SetActive(false);
+    //     currenContainer = insertContainer;
+    //     currenContainer.SetActive(true);
+    // }
 }

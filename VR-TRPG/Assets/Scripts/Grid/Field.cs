@@ -1,15 +1,40 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Field : MonoBehaviour
+namespace VRTRPG.Grid
 {
-    public bool isWalkable = true;
-    public void SetSize(float cellSize)
+    public class Field : MonoBehaviour
     {
-        foreach (Transform child in transform)
+        public int width = 1;
+        public int height = 1;
+        public int length = 1;
+
+        public bool isWalkable = true;
+        public Vector3 anchor;
+        public Transform visual;
+        private List<AGridCell> occupiedGridCellList;
+
+        public void SetSize(float cellSize)
         {
-            child.localScale = Vector3.Scale(child.localScale, new Vector3(cellSize, cellSize, cellSize));
+            foreach (Transform child in transform)
+            {
+                child.localScale = Vector3.Scale(child.localScale, new Vector3(cellSize, cellSize, cellSize));
+            }
+        }
+
+        internal void SetOccupiedGridCells(List<AGridCell> neededGridCellsList)
+        {
+            occupiedGridCellList = neededGridCellsList;
+        }
+
+        internal void ClearOccupiedGridCells()
+        {
+            foreach (AGridCell gridCell in occupiedGridCellList)
+            {
+                gridCell.ClearIncludedField();
+            }
         }
     }
 }

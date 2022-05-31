@@ -34,7 +34,7 @@ public class SelectionIndicator : MonoBehaviour
                     // camera.transform.position = character.transform.position;
                     // camera.transform.parent = character.transform;
                     // MovementSystem.Instance.TryWalk(fieldPosition);
-                    movementSystem.StartMovePhase(character);
+                    // movementSystem.StartMovePhase(character);
                 }
             }
         }

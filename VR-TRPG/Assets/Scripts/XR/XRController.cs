@@ -15,8 +15,9 @@ namespace VRTRPG.XR
         void Start()
         {
             _XRSystem = XRSystem.Instance;
-
             _XRSystem.AddController(this);
+
+            name += "\nXR";
             CommandSystem.Instance.AddCommandUnitToList(this, name);
         }
 

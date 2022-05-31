@@ -34,103 +34,103 @@ namespace VRTRPG.Movement
             gridManager = GridSystem.Instance;
         }
 
-        internal void TryWalk(Vector3 fieldPosition)
-        {
-            GridCell targetCell = gridManager.GetGridCellFromPosition(fieldPosition);
-            if (walkableCellList.Contains(targetCell))
-            {
-                currentCharacter.transform.position = fieldPosition;
-                StartMovePhase(currentCharacter);
-            }
-        }
+        // internal void TryWalk(Vector3 fieldPosition)
+        // {
+        //     GridCell targetCell = gridManager.GetGridCellFromPosition(fieldPosition);
+        //     if (walkableCellList.Contains(targetCell))
+        //     {
+        //         currentCharacter.transform.position = fieldPosition;
+        //         StartMovePhase(currentCharacter);
+        //     }
+        // }
 
-        public void StartSelectionPhase()
-        {
-            EndSelectionPhase();
-            EndMovePhase();
-            selectionIndicator.enabled = true;
-        }
+        // public void StartSelectionPhase()
+        // {
+        //     EndSelectionPhase();
+        //     EndMovePhase();
+        //     selectionIndicator.enabled = true;
+        // }
 
-        public void EndSelectionPhase()
-        {
-            selectionIndicator.enabled = false;
-        }
+        // public void EndSelectionPhase()
+        // {
+        //     selectionIndicator.enabled = false;
+        // }
 
-        public void StartMovePhase(PlayerCharacter playerCharacter)
-        {
-            EndSelectionPhase();
-            EndMovePhase();
-            currentCharacter = playerCharacter;
-            currentGridCell = gridManager.GetGridCellFromPosition(playerCharacter.transform.position);
-            SetWalkableFields(currentGridCell, playerCharacter.walkDistance);
+        // public void StartMovePhase(PlayerCharacter playerCharacter)
+        // {
+        //     EndSelectionPhase();
+        //     EndMovePhase();
+        //     currentCharacter = playerCharacter;
+        //     currentGridCell = gridManager.GetGridCellFromPosition(playerCharacter.transform.position);
+        //     SetWalkableFields(currentGridCell, playerCharacter.walkDistance);
 
-            movementIndicator.enabled = true;
-        }
+        //     movementIndicator.enabled = true;
+        // }
 
-        public void EndMovePhase()
-        {
-            ClearWalkableFieldsList();
-            movementIndicator.enabled = false;
-        }
+        // public void EndMovePhase()
+        // {
+        //     ClearWalkableFieldsList();
+        //     movementIndicator.enabled = false;
+        // }
 
-        void ClearWalkableFieldsList()
-        {
-            foreach (var indicator in indicatorList)
-            {
-                Destroy(indicator);
-            }
-            walkableCellList.Clear();
-            indicatorList.Clear();
-        }
+        // void ClearWalkableFieldsList()
+        // {
+        //     foreach (var indicator in indicatorList)
+        //     {
+        //         Destroy(indicator);
+        //     }
+        //     walkableCellList.Clear();
+        //     indicatorList.Clear();
+        // }
 
-        void SetWalkableFields(GridCell gridCell, int walkDistance)
-        {
-            if (walkDistance <= 0)
-            {
-                return;
-            }
-            walkDistance--;
+        // void SetWalkableFields(GridCell gridCell, int walkDistance)
+        // {
+        //     if (walkDistance <= 0)
+        //     {
+        //         return;
+        //     }
+        //     walkDistance--;
 
-            if (gridCell != null)
-            {
-                var list = gridCell.GetNeighborGridCellList();
+        //     if (gridCell != null)
+        //     {
+        //         var list = gridCell.GetNeighborGridCellList();
 
-                foreach (var cell in list)
-                {
-                    if (cell.GetIndex() == (gridCell.GetIndex() + Vector3Int.down))
-                    {
-                        SetWalkableFields(cell, walkDistance);
-                        continue;
-                    }
+        //         foreach (var cell in list)
+        //         {
+        //             if (cell.GetIndex() == (gridCell.GetIndex() + Vector3Int.down))
+        //             {
+        //                 SetWalkableFields(cell, walkDistance);
+        //                 continue;
+        //             }
 
-                    if (cell.GetPlacedField() == null || !cell.GetPlacedField().isWalkable)
-                    {
-                        continue;
-                    }
+        //             if (cell.GetPlacedField() == null || !cell.GetPlacedField().isWalkable)
+        //             {
+        //                 continue;
+        //             }
 
-                    var test = GridSystem.Instance.GetGridCellFromIndex(cell.GetIndex() + Vector3Int.up);
-                    if (test != null && test.GetPlacedField() != null)
-                    {
-                        if (test != null)
-                        {
-                            SetWalkableFields(test, walkDistance);
-                        }
-                        continue;
-                    }
+        //             var test = GridSystem.Instance.GetGridCellFromIndex(cell.GetIndex() + Vector3Int.up);
+        //             if (test != null && test.GetIncludedField() != null)
+        //             {
+        //                 if (test != null)
+        //                 {
+        //                     SetWalkableFields(test, walkDistance);
+        //                 }
+        //                 continue;
+        //             }
 
-                    var postiton = cell.GetWorldPosition() + (GridSystem.Instance.GetCellSize() * .5f * Vector3.one);
-                    if (cell != currentGridCell)
-                    {
-                        var indicator = Instantiate(walkIndicator, postiton, Quaternion.identity);
-                        walkableCellList.Add(cell);
-                        indicatorList.Add(indicator.gameObject);
-                        SetWalkableFields(cell, walkDistance);
-                    }
+        //             var postiton = cell.GetWorldPosition() + (GridSystem.Instance.GetCellSize() * .5f * Vector3.one);
+        //             if (cell != currentGridCell)
+        //             {
+        //                 var indicator = Instantiate(walkIndicator, postiton, Quaternion.identity);
+        //                 walkableCellList.Add(cell);
+        //                 indicatorList.Add(indicator.gameObject);
+        //                 SetWalkableFields(cell, walkDistance);
+        //             }
 
-                }
+        //         }
 
-            }
-        }
+        //     }
+        // }
 
     }
 }

@@ -15,7 +15,7 @@ public class InputManager : MonoBehaviour
 
     public RotateEvent OnRotateField;
     public BoolEvent OnChangeLevel;
-    public FloatEvent OnChangeField;
+    public FloatEvent OnSelectedFieldChanged;
 
     public UnityEvent OnPlaceField;
     public UnityEvent OnDeletField;
@@ -93,7 +93,7 @@ public class InputManager : MonoBehaviour
     {
         if (isInsertMode)
         {
-            OnChangeField.Invoke(value);
+            OnSelectedFieldChanged.Invoke(value);
         }
     }
 
