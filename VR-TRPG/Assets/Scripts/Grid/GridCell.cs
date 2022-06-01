@@ -17,8 +17,10 @@ namespace VRTRPG.Grid
         public override Vector3 WorldPosition { get; protected set; }
         public override float CellSize { get; protected set; }
         public override Vector3 CellCenter { get; protected set; }
+        public override Vector3 CellTopSide { get; protected set; }
         public override List<Vector3Int> CellDirList { get; protected set; }
-        public override HashSet<AGridCell> NeighborCellSet { get; protected set; }
+
+        public HashSet<AGridCell> NeighborCellSet { get; private set; }
         public override Field IncludedField { get; protected set; }
 
 
@@ -37,6 +39,7 @@ namespace VRTRPG.Grid
             WorldPosition = CellSize * (Vector3)Index;
             transform.position = WorldPosition;
             CellCenter = WorldPosition + new Vector3(.5f, -.5f, .5f) * cellSize;
+            CellTopSide = WorldPosition + new Vector3(.5f, 0, .5f) * cellSize;
 
             InitCellDirList();
             transform.localScale *= CellSize;
@@ -52,18 +55,6 @@ namespace VRTRPG.Grid
             CellDirList.Add(Vector3Int.back);
         }
 
-        // private void UpdateNeighbors()
-        // {
-        //     foreach (var dir in CellDirList)
-        //     {
-        //         IGridCell neighborGridCell = _grid.GetGridCell(new Vector3Int(_x - dir.x, _y - dir.y, _z - dir.z));
-        //         if (neighborGridCell != null)
-        //         {
-        //             SetNeighbor(this, neighborGridCell);
-        //         }
-        //     }
-        // }
-
         public override bool CanBuild()
         {
             return IncludedField == null;
@@ -72,7 +63,17 @@ namespace VRTRPG.Grid
         public override void SetNeighbor(AGridCell gridCell)
         {
             NeighborCellSet.Add(gridCell);
-            gridCell.NeighborCellSet.Add(gridCell);
+            gridCell.UpdateNeighbor(this);
+        }
+
+        public override void UpdateNeighbor(AGridCell gridCell)
+        {
+            NeighborCellSet.Add(gridCell);
+        }
+
+        public override HashSet<AGridCell> GetNeighbor()
+        {
+            return NeighborCellSet;
         }
         // public void SetNeighbor(GridCell gridCell, GridCell neighborGridCell)
         // {

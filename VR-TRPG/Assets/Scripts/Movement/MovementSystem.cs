@@ -9,16 +9,23 @@ namespace VRTRPG.Movement
     public class MovementSystem : MonoBehaviour
     {
         public static MovementSystem Instance { get; private set; }
-        List<PlayerCharacter> characterList = new List<PlayerCharacter>();
-        private PlayerCharacter currentCharacter;
+        List<Walker> characterList = new List<Walker>();
+        private Walker currentCharacter;
         private int currentCharacterIndex;
-        GridSystem gridManager;
+        GridSystem gridSystem;
         GridCell currentGridCell;
         [SerializeField] Transform walkIndicator;
-        List<GameObject> indicatorList = new List<GameObject>();
-        List<GridCell> walkableCellList = new List<GridCell>();
+
+
+        // List<GridCell> walkableCellList = new List<GridCell>();
         [SerializeField] MovementIndicator movementIndicator;
-        [SerializeField] SelectionIndicator selectionIndicator;
+        // [SerializeField] SelectionIndicator selectionIndicator;
+
+        //---------------------------------------------------
+        [SerializeField] Transform movementIndicatorContainer;
+        List<Walker> walkerList = new List<Walker>();
+        List<Transform> indicatorList = new List<Transform>();
+        public Walker debugWalker;
 
         void Awake()
         {
@@ -31,18 +38,64 @@ namespace VRTRPG.Movement
 
         void Start()
         {
-            gridManager = GridSystem.Instance;
+            gridSystem = GridSystem.Instance;
         }
 
-        // internal void TryWalk(Vector3 fieldPosition)
+        // internal void Subscribe(Walker walker, AGridCell cell)
         // {
-        //     GridCell targetCell = gridManager.GetGridCellFromPosition(fieldPosition);
-        //     if (walkableCellList.Contains(targetCell))
-        //     {
-        //         currentCharacter.transform.position = fieldPosition;
-        //         StartMovePhase(currentCharacter);
-        //     }
+        //     walkableList.Add(walker, cell);
+        //     SetWalkableFields(walker);
+        //     ShowWalkeableFields();
         // }
+
+        public void StartDebug()
+        {
+            if (walkerList.Count == 0) return;
+
+            debugWalker = walkerList[0];
+            ShowWalkableFields(debugWalker);
+        }
+
+
+        public void ClearIndicator()
+        {
+            indicatorList.ForEach(indicator => Destroy(indicator.gameObject));
+            indicatorList.Clear();
+        }
+
+        internal void AddWalker(Walker walker)
+        {
+            walkerList.Add(walker);
+        }
+
+        private void ShowWalkableFields(Walker walker)
+        {
+            HashSet<AGridCell> walkableCellSet = walker.GetWalkableFields();
+            foreach (var cell in walkableCellSet)
+            {
+                Transform moveIndicator = Instantiate(walkIndicator, cell.CellTopSide, Quaternion.identity, movementIndicatorContainer);
+                moveIndicator.localScale *= cell.CellSize;
+
+                indicatorList.Add(moveIndicator);
+            }
+        }
+
+        public void RemoveWalker(Walker walker)
+        {
+            walkerList.Remove(walker);
+        }
+
+        public bool CanWalkTo(Walker walker, AGridCell cell)
+        {
+            return walker.GetWalkableFields().Contains(cell);
+        }
+
+        public void WalkTo(Walker walker, AGridCell cell)
+        {
+            walker.transform.position = cell.WorldPosition;
+            walker.CurrentCell = cell;
+            ClearIndicator();
+        }
 
         // public void StartSelectionPhase()
         // {
@@ -73,15 +126,6 @@ namespace VRTRPG.Movement
         //     movementIndicator.enabled = false;
         // }
 
-        // void ClearWalkableFieldsList()
-        // {
-        //     foreach (var indicator in indicatorList)
-        //     {
-        //         Destroy(indicator);
-        //     }
-        //     walkableCellList.Clear();
-        //     indicatorList.Clear();
-        // }
 
         // void SetWalkableFields(GridCell gridCell, int walkDistance)
         // {

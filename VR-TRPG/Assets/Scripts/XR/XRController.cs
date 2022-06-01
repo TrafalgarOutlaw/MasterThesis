@@ -7,7 +7,7 @@ namespace VRTRPG.XR
 {
     public class XRController : MonoBehaviour, CommandUnit
     {
-        public string name;
+        // public string name;
         [SerializeField] Transform anchorTransform;
         [SerializeField] bool isSpectator;
         XRSystem _XRSystem;

@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using VRTRPG.Movement;
 
 public class MovementIndicator : MonoBehaviour
 {
     new Camera camera;
-    private Mouse mouse;
     private int mouseColliderLayerMask;
 
     // Start is called before the first frame update

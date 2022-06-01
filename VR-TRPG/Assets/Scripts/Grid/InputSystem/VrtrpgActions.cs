@@ -1016,6 +1016,15 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MovementMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""06005ea0-14cf-4df0-b504-dfebd346d9a5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1139,6 +1148,45 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
                     ""action"": ""InsertMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5d36c002-d021-40b8-9299-fe319fe34eb4"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MovementMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Debugger"",
+            ""id"": ""cde9743c-644f-4e9c-b883-a74ae883dd37"",
+            ""actions"": [
+                {
+                    ""name"": ""MovementMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""0bea0cb0-593f-4204-964a-a0b2168527c1"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ecf1e0c9-c83c-459f-a212-c032d2b2f5ba"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""MovementMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1237,6 +1285,10 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
         m_Editor_CameraMode = m_Editor.FindAction("CameraMode", throwIfNotFound: true);
         m_Editor_LevelMode = m_Editor.FindAction("LevelMode", throwIfNotFound: true);
         m_Editor_InsertMode = m_Editor.FindAction("InsertMode", throwIfNotFound: true);
+        m_Editor_MovementMode = m_Editor.FindAction("MovementMode", throwIfNotFound: true);
+        // Debugger
+        m_Debugger = asset.FindActionMap("Debugger", throwIfNotFound: true);
+        m_Debugger_MovementMode = m_Debugger.FindAction("MovementMode", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1520,6 +1572,7 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Editor_CameraMode;
     private readonly InputAction m_Editor_LevelMode;
     private readonly InputAction m_Editor_InsertMode;
+    private readonly InputAction m_Editor_MovementMode;
     public struct EditorActions
     {
         private @VrtrpgActions m_Wrapper;
@@ -1529,6 +1582,7 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
         public InputAction @CameraMode => m_Wrapper.m_Editor_CameraMode;
         public InputAction @LevelMode => m_Wrapper.m_Editor_LevelMode;
         public InputAction @InsertMode => m_Wrapper.m_Editor_InsertMode;
+        public InputAction @MovementMode => m_Wrapper.m_Editor_MovementMode;
         public InputActionMap Get() { return m_Wrapper.m_Editor; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1553,6 +1607,9 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
                 @InsertMode.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnInsertMode;
                 @InsertMode.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnInsertMode;
                 @InsertMode.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnInsertMode;
+                @MovementMode.started -= m_Wrapper.m_EditorActionsCallbackInterface.OnMovementMode;
+                @MovementMode.performed -= m_Wrapper.m_EditorActionsCallbackInterface.OnMovementMode;
+                @MovementMode.canceled -= m_Wrapper.m_EditorActionsCallbackInterface.OnMovementMode;
             }
             m_Wrapper.m_EditorActionsCallbackInterface = instance;
             if (instance != null)
@@ -1572,10 +1629,46 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
                 @InsertMode.started += instance.OnInsertMode;
                 @InsertMode.performed += instance.OnInsertMode;
                 @InsertMode.canceled += instance.OnInsertMode;
+                @MovementMode.started += instance.OnMovementMode;
+                @MovementMode.performed += instance.OnMovementMode;
+                @MovementMode.canceled += instance.OnMovementMode;
             }
         }
     }
     public EditorActions @Editor => new EditorActions(this);
+
+    // Debugger
+    private readonly InputActionMap m_Debugger;
+    private IDebuggerActions m_DebuggerActionsCallbackInterface;
+    private readonly InputAction m_Debugger_MovementMode;
+    public struct DebuggerActions
+    {
+        private @VrtrpgActions m_Wrapper;
+        public DebuggerActions(@VrtrpgActions wrapper) { m_Wrapper = wrapper; }
+        public InputAction @MovementMode => m_Wrapper.m_Debugger_MovementMode;
+        public InputActionMap Get() { return m_Wrapper.m_Debugger; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(DebuggerActions set) { return set.Get(); }
+        public void SetCallbacks(IDebuggerActions instance)
+        {
+            if (m_Wrapper.m_DebuggerActionsCallbackInterface != null)
+            {
+                @MovementMode.started -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnMovementMode;
+                @MovementMode.performed -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnMovementMode;
+                @MovementMode.canceled -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnMovementMode;
+            }
+            m_Wrapper.m_DebuggerActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @MovementMode.started += instance.OnMovementMode;
+                @MovementMode.performed += instance.OnMovementMode;
+                @MovementMode.canceled += instance.OnMovementMode;
+            }
+        }
+    }
+    public DebuggerActions @Debugger => new DebuggerActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -1655,5 +1748,10 @@ public partial class @VrtrpgActions : IInputActionCollection2, IDisposable
         void OnCameraMode(InputAction.CallbackContext context);
         void OnLevelMode(InputAction.CallbackContext context);
         void OnInsertMode(InputAction.CallbackContext context);
+        void OnMovementMode(InputAction.CallbackContext context);
+    }
+    public interface IDebuggerActions
+    {
+        void OnMovementMode(InputAction.CallbackContext context);
     }
 }

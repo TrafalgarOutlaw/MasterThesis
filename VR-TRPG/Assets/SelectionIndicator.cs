@@ -28,7 +28,7 @@ public class SelectionIndicator : MonoBehaviour
             int i = 0;
             if (Physics.Raycast(ray, out RaycastHit rayCastHit, 999f, ~i))
             {
-                PlayerCharacter character = rayCastHit.collider.transform.root.gameObject.GetComponentInChildren<PlayerCharacter>();
+                Walker character = rayCastHit.collider.transform.root.gameObject.GetComponentInChildren<Walker>();
                 if (character != null)
                 {
                     // camera.transform.position = character.transform.position;

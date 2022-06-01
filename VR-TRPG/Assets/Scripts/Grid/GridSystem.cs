@@ -60,6 +60,12 @@ namespace VRTRPG.Grid
                         gridCellComponent.Init(this, x, y, z, cellSize);
                         gridCellArray[x, y, z] = gridCellComponent;
                         SetGridCellNeighbors(gridCellComponent);
+                        // print("NEIGHBORS FROM: " + gridCellComponent.name);
+                        // foreach (var cell in gridCellComponent.NeighborCellSet)
+                        // {
+
+                        //     print("\t " + cell.name);
+                        // }
                     }
                 }
             }

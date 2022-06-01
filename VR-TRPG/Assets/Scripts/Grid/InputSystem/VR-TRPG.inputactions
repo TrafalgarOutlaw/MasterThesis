@@ -1119,6 +1119,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Debugger",
+            "id": "cde9743c-644f-4e9c-b883-a74ae883dd37",
+            "actions": [
+                {
+                    "name": "MovementMode",
+                    "type": "Button",
+                    "id": "0bea0cb0-593f-4204-964a-a0b2168527c1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MouseClick",
+                    "type": "Button",
+                    "id": "4bedc334-75ef-4cb1-946a-66245790f84a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ecf1e0c9-c83c-459f-a212-c032d2b2f5ba",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "MovementMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b543e1b0-41b2-47b0-98b9-68b3c80a6ca3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "MouseClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

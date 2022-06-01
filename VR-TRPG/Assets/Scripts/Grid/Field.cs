@@ -11,7 +11,7 @@ namespace VRTRPG.Grid
         public int height = 1;
         public int length = 1;
 
-        public bool isWalkable = true;
+        public bool isWalkable;// = true;
         public Vector3 anchor;
         public Transform visual;
         private List<AGridCell> occupiedGridCellList;
@@ -22,6 +22,11 @@ namespace VRTRPG.Grid
             {
                 child.localScale = Vector3.Scale(child.localScale, new Vector3(cellSize, cellSize, cellSize));
             }
+        }
+
+        public List<AGridCell> GetOccupiedGridCells()
+        {
+            return occupiedGridCellList;
         }
 
         internal void SetOccupiedGridCells(List<AGridCell> neededGridCellsList)

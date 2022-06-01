@@ -162,6 +162,7 @@ namespace VRTRPG.Grid
             field.SetSize(_cellSize);
             field.SetOccupiedGridCells(neededGridCellsList);
 
+
             foreach (AGridCell gridCell in neededGridCellsList)
             {
                 gridCell.SetIncludedField(field);
