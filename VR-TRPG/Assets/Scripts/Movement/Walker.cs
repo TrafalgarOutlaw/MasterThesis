@@ -18,9 +18,11 @@ namespace VRTRPG.Movement
         void Start()
         {
             movementSystem = MovementSystem.Instance;
-            CurrentCell = currentField.GetOccupiedGridCells()[0];
-
             movementSystem.AddWalker(this);
+
+            currentField = FieldSystem.Instance.selectedGridCell.IncludedField;
+            CurrentCell = currentField.GetOccupiedGridCells()[0];
+            transform.parent = currentField.transform;
         }
 
         public HashSet<AGridCell> GetWalkableFields()

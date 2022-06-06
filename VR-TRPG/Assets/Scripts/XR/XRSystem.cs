@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.XR.CoreUtils;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace VRTRPG.XR
 {
@@ -9,14 +11,20 @@ namespace VRTRPG.XR
     {
         public static XRSystem Instance { get; private set; }
         public bool IsControllerPlaced { get; private set; }
-        List<XRController> controllerList = new List<XRController>();
-        public XRController CurrentController { get; private set; }
+        List<XRUnit> controllerList = new List<XRUnit>();
+        public XRUnit CurrentController { get; private set; }
         private int currentControllerIndex;
-        new Camera camera;
+
 
         [SerializeField] Transform pfSpectator;
         Transform spectator;
         bool isSpectator = false;
+
+        //_________________________________
+
+        List<XRUnit> xrUnitList = new List<XRUnit>();
+        private XRUnit debugXRUnit;
+        public LocomotionSystem locosys;
 
         void Awake()
         {
@@ -29,7 +37,6 @@ namespace VRTRPG.XR
 
         void Start()
         {
-            camera = Camera.main;
         }
 
         // Update is called once per frame
@@ -38,53 +45,41 @@ namespace VRTRPG.XR
 
         }
 
-        public List<XRController> GetControllerList()
+        internal void AddUnit(XRUnit unit)
         {
-            return controllerList;
+            xrUnitList.Add(unit);
         }
 
-        public void AddController(XRController controller)
+        internal void RemoveUnit(XRUnit unit)
         {
-            controllerList.Add(controller);
-            IsControllerPlaced = true;
+            xrUnitList.Remove(unit);
         }
 
-        public void RemoveController(XRController controller)
+        public void SelectUnit(XRUnit unit)
         {
-            controllerList.Remove(controller);
-            if (controllerList.Count <= 0)
-            {
-                IsControllerPlaced = false;
-            }
+            unit.xrOrigin.gameObject.SetActive(true);
+            debugXRUnit.DisableVisual();
+            locosys.xrOrigin = unit.xrOrigin;
         }
 
-        public void EnableControllerIndex(int i)
+        private void DeselectUnit()
         {
-            camera.transform.position = controllerList[i].GetAnchorPosition();
-            CurrentController = controllerList[i];
-            currentControllerIndex = i;
-
-            camera.transform.parent = CurrentController.transform;
+            debugXRUnit.xrOrigin.gameObject.SetActive(false);
+            debugXRUnit.EnableVisual();
+            debugXRUnit = null;
         }
 
-        public bool EnableNextControllerInList()
+        public bool StartDebug()
         {
-            if (currentControllerIndex + 1 < controllerList.Count)
-            {
-                EnableControllerIndex(currentControllerIndex + 1);
-                return true;
-            }
-            return false;
+            if (xrUnitList.Count == 0) { print("NO XRUnits"); return false; }
+            debugXRUnit = xrUnitList[0];
+            SelectUnit(debugXRUnit);
+            return true;
         }
 
-        public bool EnablePreviousControllerInList()
+        public void EndDebug()
         {
-            if (currentControllerIndex - 1 >= 0)
-            {
-                EnableControllerIndex(currentControllerIndex - 1);
-                return true;
-            }
-            return false;
+            DeselectUnit();
         }
 
         public void SetSpectator()

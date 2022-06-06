@@ -12,6 +12,7 @@ namespace VRTRPG.Grid
         public int length = 1;
 
         public bool isWalkable;// = true;
+        public bool isCharacter;
         public Vector3 anchor;
         public Transform visual;
         private List<AGridCell> occupiedGridCellList;

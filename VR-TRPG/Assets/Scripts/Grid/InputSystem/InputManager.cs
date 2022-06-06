@@ -125,6 +125,7 @@ namespace VRTRPG.Grid
 
         public Vector3 GetMousePosition()
         {
+            // print(Mouse.current.position.ReadValue());
             return Mouse.current.position.ReadValue();
         }
 

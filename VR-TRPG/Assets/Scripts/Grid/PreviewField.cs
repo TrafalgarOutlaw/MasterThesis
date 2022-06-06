@@ -17,6 +17,7 @@ namespace VRTRPG.Grid
         private Vector3Int moveStartPosition;
         float rotationDuration;
         private int _layerMask;
+        public Vector3 offset;
 
         // __________________________________________
         public Transform previewFieldTransform;
@@ -31,27 +32,34 @@ namespace VRTRPG.Grid
             // grid.OnSelectedGridCellChange.AddListener(UpdatePreviewFieldPosition);
         }
 
-        public void InitPreviewField(Transform visual, float cellSize)
+        public void InitPreviewField(Transform visual, float cellSize, Vector3 position)
         {
+            offset = visual.position;
             previewFieldTransform = Instantiate(visual, Vector3.zero, Quaternion.identity, transform);
             previewFieldTransform.gameObject.SetActive(true);
             previewFieldTransform.localScale *= cellSize;
+            // previewFieldTransform.position = position;
             _cellSize = cellSize;
         }
 
         public void ChangePreviewField(Transform visual)
         {
-            Vector3 previewFieldPosition = previewFieldTransform.position;
+            Vector3 previewFieldPosition = previewFieldTransform.position - GetOffset();
             Destroy(previewFieldTransform.gameObject);
-            InitPreviewField(visual, _cellSize);
+            InitPreviewField(visual, _cellSize, visual.position);
             UpdatePreviewFieldPosition(previewFieldPosition);
         }
 
         public void UpdatePreviewFieldPosition(Vector3 cellWorldPosition)
         {
             // if (previewFieldTransform == null) return;
-            previewFieldTransform.position = cellWorldPosition;
+            previewFieldTransform.position = cellWorldPosition + GetOffset();
             // SetLayerRecusrive(previewFieldTransform.gameObject, field.IsFieldPlaceable(neededGridCellsIndices) ? 11 : 12);
+        }
+
+        Vector3 GetOffset()
+        {
+            return _cellSize * offset;
         }
 
         void OnEnable()

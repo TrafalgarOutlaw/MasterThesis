@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using VRTRPG.Movement;
 using VRTRPG.Grid;
+using VRTRPG.XR;
 
 namespace VRTRPG.Debugger
 {
@@ -14,10 +15,13 @@ namespace VRTRPG.Debugger
 
         VrtrpgActions vrtrpgActions;
         private MovementSystem movementSystem;
-
+        private XRSystem xrSystem;
         private Mouse mouse;
         private Keyboard keyboard;
         bool isMovementDebug = false;
+        bool isXRDebug = false;
+        public GameObject editorCamera;
+
 
         void Awake()
         {
@@ -27,6 +31,7 @@ namespace VRTRPG.Debugger
         void Start()
         {
             movementSystem = MovementSystem.Instance;
+            xrSystem = XRSystem.Instance;
         }
 
         void OnEnable()
@@ -58,6 +63,31 @@ namespace VRTRPG.Debugger
                     inputSystem.SetActive(true);
                     fieldSystem.SetActive(true);
                     movementSystem.ClearIndicator();
+                    // vrtrpgActions.Editor.Enable();
+                }
+            }
+        }
+
+        public void ToggleXRDebug(InputAction.CallbackContext context)
+        {
+            if (context.started)
+            {
+                isXRDebug = !isXRDebug;
+                if (isXRDebug)
+                {
+                    if (!xrSystem.StartDebug()) { isXRDebug = false; return; }
+                    // vrtrpgActions.Editor.Disable();
+                    inputSystem.SetActive(false);
+                    fieldSystem.SetActive(false);
+                    editorCamera.SetActive(false);
+                }
+                else
+                {
+                    inputSystem.SetActive(true);
+                    fieldSystem.SetActive(true);
+                    // movementSystem.ClearIndicator();
+                    xrSystem.EndDebug();
+                    editorCamera.SetActive(true);
                     // vrtrpgActions.Editor.Enable();
                 }
             }

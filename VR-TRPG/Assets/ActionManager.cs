@@ -23,10 +23,4 @@ public class ActionManager : MonoBehaviour
         _XRSystem = XRSystem.Instance;
         movementSystem = MovementSystem.Instance;
     }
-
-    public void LoadLevel()
-    {
-        _XRSystem.EnableControllerIndex(0);
-        // movementSystem.StartMovePhase(_XRSystem.CurrentController.GetPlayerObject().GetComponent<PlayerCharacter>());
-    }
 }

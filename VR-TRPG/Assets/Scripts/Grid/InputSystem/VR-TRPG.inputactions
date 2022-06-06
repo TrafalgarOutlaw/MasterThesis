@@ -1134,6 +1134,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "XRMode",
+                    "type": "Button",
+                    "id": "8c3bd31f-bec5-4846-9b67-957defb7681d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "MouseClick",
                     "type": "Button",
                     "id": "4bedc334-75ef-4cb1-946a-66245790f84a",
@@ -1163,6 +1172,17 @@
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "MouseClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1040e399-d6df-424b-874e-a46fb61c00c3",
+                    "path": "<Keyboard>/x",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "XRMode",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

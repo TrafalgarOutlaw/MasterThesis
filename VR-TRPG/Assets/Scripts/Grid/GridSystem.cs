@@ -134,7 +134,7 @@ namespace VRTRPG.Grid
             // Vector3 worldPosition = Utils.GetMouseWorldPosition();
             int layerMask = 1 << 6;
             //layerMask = ~layerMask;
-            Ray ray = editorCamera.ScreenPointToRay(InputManager.Instance.GetMousePosition());
+            Ray ray = Camera.main.ScreenPointToRay(InputManager.Instance.GetMousePosition());
             if (Physics.Raycast(ray, out RaycastHit raycastHit, 999f, layerMask))
             {
                 AGridCell detectedGridCell = raycastHit.collider.GetComponentInParent<AGridCell>();

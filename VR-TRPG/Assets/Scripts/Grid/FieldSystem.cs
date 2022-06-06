@@ -43,7 +43,7 @@ namespace VRTRPG.Grid
         [SerializeField] Transform fieldsContainer;
         InputManager inputManager;
         private float _cellSize;
-        AGridCell selectedGridCell;
+        public AGridCell selectedGridCell;
 
         void Awake()
         {
@@ -66,7 +66,7 @@ namespace VRTRPG.Grid
             selectedGridCell = grid.GetGridCell(Vector3.zero);
 
             selectedField = fieldList[fieldListIndex];
-            previewField.InitPreviewField(selectedField.visual, _cellSize);
+            previewField.InitPreviewField(selectedField.visual, _cellSize, selectedField.visual.position);
             SetPreviewLayer(previewField.previewFieldTransform.gameObject);
 
             inputManager.OnPlaceField.AddListener(TryPlaceField);
@@ -142,7 +142,7 @@ namespace VRTRPG.Grid
             return neededGridCellsIndexList.TrueForAll(index =>
             {
                 AGridCell gridCell = grid.GetGridCell(index);
-                return gridCell != null && gridCell.CanBuild();
+                return gridCell != null && (selectedField.isCharacter ? gridCell.IncludedField != null && gridCell.IncludedField.isWalkable : gridCell.CanBuild());
             });
         }
 
@@ -163,9 +163,13 @@ namespace VRTRPG.Grid
             field.SetOccupiedGridCells(neededGridCellsList);
 
 
-            foreach (AGridCell gridCell in neededGridCellsList)
+            if (!field.isCharacter)
             {
-                gridCell.SetIncludedField(field);
+                foreach (AGridCell gridCell in neededGridCellsList)
+                {
+                    gridCell.SetIncludedField(field);
+                }
+
             }
         }
 
