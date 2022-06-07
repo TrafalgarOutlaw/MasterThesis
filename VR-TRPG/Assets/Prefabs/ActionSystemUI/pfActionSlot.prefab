@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2663881853568429386}
   - component: {fileID: 2663881853568429384}
   - component: {fileID: 2663881853568429387}
-  - component: {fileID: 2663881853568429385}
+  - component: {fileID: 8895411670814543905}
   m_Layer: 5
-  m_Name: pfCommandSlot
+  m_Name: pfActionSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2663881853568429385
+--- !u!114 &8895411670814543905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2663881853568429389}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a042900c4f606f34b8c03fa9a843da80, type: 3}
+  m_Script: {fileID: 11500000, guid: d2e4543bc9cc02b4dbc93c53c3449ab0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentDragDropTransform: {fileID: 2663881854094431681}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 2663881854094431695}
   - component: {fileID: 2663881854094431694}
   m_Layer: 5
-  m_Name: CommandDragDrop
+  m_Name: ActionDragDrop
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

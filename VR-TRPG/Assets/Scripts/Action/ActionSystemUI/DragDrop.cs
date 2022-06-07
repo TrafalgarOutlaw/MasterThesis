@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace VRTRPG.Command
+namespace VRTRPG.Action
 {
     public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
     {
@@ -43,8 +43,8 @@ namespace VRTRPG.Command
         {
             transform.parent = slot;
             rectTransform.anchoredPosition = Vector2.zero;
-            CommandSlot commandSlot = slot.GetComponent<CommandSlot>();
-            commandSlot.SetDragDrop(this);
+            ActionSlot actionSlot = slot.GetComponent<ActionSlot>();
+            actionSlot.SetDragDrop(this);
         }
 
         public void SetText(string name)

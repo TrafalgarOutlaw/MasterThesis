@@ -1,12 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace VRTRPG.Command
+namespace VRTRPG.Action
 {
-    public class CommandSlot : MonoBehaviour, IDropHandler
+    public class ActionSlot : MonoBehaviour, IDropHandler
     {
         [SerializeField] Transform currentDragDropTransform;
         [SerializeField] DragDrop currentDragDrop;
@@ -24,7 +23,7 @@ namespace VRTRPG.Command
 
         private void SwapDragDrop(DragDrop dragDrop)
         {
-            CommandSystem.Instance.SwapCommandUnitsInList(dragDrop.transform.parent.GetSiblingIndex(), transform.GetSiblingIndex());
+            ActionSystem.Instance.SwapActionsInList(dragDrop.transform.parent.GetSiblingIndex(), transform.GetSiblingIndex());
             currentDragDrop.ChangeSlot(dragDrop.transform.parent);
             dragDrop.ChangeSlot(transform);
         }
