@@ -1167,6 +1167,15 @@ namespace VRTRPG.Grid
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""ActionMode"",
+                    ""type"": ""Button"",
+                    ""id"": ""78a0ee25-6aa0-4bb6-90d4-48287ffa4c20"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""MouseClick"",
                     ""type"": ""Button"",
                     ""id"": ""4bedc334-75ef-4cb1-946a-66245790f84a"",
@@ -1207,6 +1216,17 @@ namespace VRTRPG.Grid
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""XRMode"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a4b2f9a4-4094-424c-b986-3a2880aad490"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""ActionMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1311,6 +1331,7 @@ namespace VRTRPG.Grid
             m_Debugger = asset.FindActionMap("Debugger", throwIfNotFound: true);
             m_Debugger_MovementMode = m_Debugger.FindAction("MovementMode", throwIfNotFound: true);
             m_Debugger_XRMode = m_Debugger.FindAction("XRMode", throwIfNotFound: true);
+            m_Debugger_ActionMode = m_Debugger.FindAction("ActionMode", throwIfNotFound: true);
             m_Debugger_MouseClick = m_Debugger.FindAction("MouseClick", throwIfNotFound: true);
         }
 
@@ -1657,6 +1678,7 @@ namespace VRTRPG.Grid
         private IDebuggerActions m_DebuggerActionsCallbackInterface;
         private readonly InputAction m_Debugger_MovementMode;
         private readonly InputAction m_Debugger_XRMode;
+        private readonly InputAction m_Debugger_ActionMode;
         private readonly InputAction m_Debugger_MouseClick;
         public struct DebuggerActions
         {
@@ -1664,6 +1686,7 @@ namespace VRTRPG.Grid
             public DebuggerActions(@VrtrpgActions wrapper) { m_Wrapper = wrapper; }
             public InputAction @MovementMode => m_Wrapper.m_Debugger_MovementMode;
             public InputAction @XRMode => m_Wrapper.m_Debugger_XRMode;
+            public InputAction @ActionMode => m_Wrapper.m_Debugger_ActionMode;
             public InputAction @MouseClick => m_Wrapper.m_Debugger_MouseClick;
             public InputActionMap Get() { return m_Wrapper.m_Debugger; }
             public void Enable() { Get().Enable(); }
@@ -1680,6 +1703,9 @@ namespace VRTRPG.Grid
                     @XRMode.started -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnXRMode;
                     @XRMode.performed -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnXRMode;
                     @XRMode.canceled -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnXRMode;
+                    @ActionMode.started -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnActionMode;
+                    @ActionMode.performed -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnActionMode;
+                    @ActionMode.canceled -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnActionMode;
                     @MouseClick.started -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnMouseClick;
                     @MouseClick.performed -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnMouseClick;
                     @MouseClick.canceled -= m_Wrapper.m_DebuggerActionsCallbackInterface.OnMouseClick;
@@ -1693,6 +1719,9 @@ namespace VRTRPG.Grid
                     @XRMode.started += instance.OnXRMode;
                     @XRMode.performed += instance.OnXRMode;
                     @XRMode.canceled += instance.OnXRMode;
+                    @ActionMode.started += instance.OnActionMode;
+                    @ActionMode.performed += instance.OnActionMode;
+                    @ActionMode.canceled += instance.OnActionMode;
                     @MouseClick.started += instance.OnMouseClick;
                     @MouseClick.performed += instance.OnMouseClick;
                     @MouseClick.canceled += instance.OnMouseClick;
@@ -1784,6 +1813,7 @@ namespace VRTRPG.Grid
         {
             void OnMovementMode(InputAction.CallbackContext context);
             void OnXRMode(InputAction.CallbackContext context);
+            void OnActionMode(InputAction.CallbackContext context);
             void OnMouseClick(InputAction.CallbackContext context);
         }
     }

@@ -16,9 +16,9 @@ namespace VRTRPG.XR
         private int currentControllerIndex;
 
 
-        [SerializeField] Transform pfSpectator;
+        [SerializeField] Transform pfSummoner;
         Transform spectator;
-        bool isSpectator = false;
+        bool isSummoner = false;
 
         //_________________________________
 
@@ -82,17 +82,17 @@ namespace VRTRPG.XR
             DeselectUnit();
         }
 
-        public void SetSpectator()
+        public void SetSummoner()
         {
-            if (isSpectator)
+            if (isSummoner)
             {
                 DestroyImmediate(spectator.gameObject);
-                isSpectator = false;
+                isSummoner = false;
             }
             else
             {
-                spectator = Instantiate(pfSpectator, new Vector3(-2, 0, -2), Quaternion.identity);
-                isSpectator = true;
+                spectator = Instantiate(pfSummoner, new Vector3(-50, 0, -50), Quaternion.identity);
+                isSummoner = true;
             }
         }
     }

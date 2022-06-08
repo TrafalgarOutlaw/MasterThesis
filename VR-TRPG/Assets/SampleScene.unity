@@ -910,7 +910,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30ca794619eef964195b3d7b6304d52b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnActionListChanged:
+  OnAddActionUnit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeleteActionUnit:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActionOrderChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &705507993
@@ -1077,6 +1083,7 @@ MonoBehaviour:
   - {fileID: 3057324184302344673, guid: 0cd56e15c93aa8a49b7a1455613e246f, type: 3}
   - {fileID: 3057324184302344673, guid: 68abcbebbab357b408709ac439800716, type: 3}
   - {fileID: 3057324184302344673, guid: ca585002af5e4b647bd523d771b4d72f, type: 3}
+  - {fileID: 3407942116700102458, guid: 647bef51528efde47a38cc7d7491b1ae, type: 3}
   previewField: {fileID: 1189067424}
   fieldsContainer: {fileID: 2613113}
   selectedGridCell: {fileID: 0}
@@ -2047,6 +2054,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 8c3bd31f-bec5-4846-9b67-957defb7681d
     m_ActionName: Debugger/XRMode[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1237807163}
+        m_TargetAssemblyTypeName: VRTRPG.Debugger.Debugger, Debugger
+        m_MethodName: ToggleActionDebug
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 78a0ee25-6aa0-4bb6-90d4-48287ffa4c20
+    m_ActionName: Debugger/ActionMode[/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Debugger
@@ -2672,7 +2695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55e0474404ca52648b2245883f347186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pfSpectator: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
+  pfSummoner: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
     type: 3}
   locosys: {fileID: 1608170850}
 --- !u!4 &1435616209
@@ -3337,7 +3360,7 @@ GameObject:
   - component: {fileID: 1786642459}
   - component: {fileID: 1786642460}
   m_Layer: 5
-  m_Name: ToggleSpectatorUI
+  m_Name: ToggleSummonerUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3412,8 +3435,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1435616208}
-        m_TargetAssemblyTypeName: VRTRPG.XR.XRSystem, Assembly-CSharp
-        m_MethodName: SetSpectator
+        m_TargetAssemblyTypeName: VRTRPG.XR.XRSystem, XR
+        m_MethodName: SetSummoner
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3729,7 +3752,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Activate Spectator
+  m_Text: Activate Summoner
 --- !u!222 &1886588793
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using VRTRPG.Movement;
 using VRTRPG.Grid;
 using VRTRPG.XR;
+using VRTRPG.Action;
 
 namespace VRTRPG.Debugger
 {
@@ -16,6 +17,7 @@ namespace VRTRPG.Debugger
         VrtrpgActions vrtrpgActions;
         private MovementSystem movementSystem;
         private XRSystem xrSystem;
+        private ActionSystem actionSystem;
         private Mouse mouse;
         private Keyboard keyboard;
         bool isMovementDebug = false;
@@ -32,6 +34,7 @@ namespace VRTRPG.Debugger
         {
             movementSystem = MovementSystem.Instance;
             xrSystem = XRSystem.Instance;
+            actionSystem = ActionSystem.Instance;
         }
 
         void OnEnable()
@@ -91,6 +94,11 @@ namespace VRTRPG.Debugger
                     // vrtrpgActions.Editor.Enable();
                 }
             }
+        }
+
+        public void ToggleActionDebug(InputAction.CallbackContext context)
+        {
+            if (context.started) { actionSystem.DoNextAction(); }
         }
 
         public void GetCellUnderMouse(InputAction.CallbackContext context)

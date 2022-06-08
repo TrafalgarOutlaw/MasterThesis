@@ -11,54 +11,43 @@ namespace VRTRPG.Action
         [SerializeField] Transform actionSystemUIContainer;
         [SerializeField] Transform pfActionSlot;
 
-        Dictionary<IActionable, Transform> actionDict = new Dictionary<IActionable, Transform>();
+        Dictionary<AActionUnit, Transform> actionUnitDict = new Dictionary<AActionUnit, Transform>();
 
         // Start is called before the first frame update
         void Start()
         {
             actionSystem = ActionSystem.Instance;
-            print(actionSystem);
 
-            actionSystem.OnActionListChanged.AddListener(UpdateSlots);
+            actionSystem.OnAddActionUnit.AddListener(CreateActionSlot);
+            actionSystem.OnDeleteActionUnit.AddListener(DeleteActionSlot);
             actionSystem.OnActionOrderChanged.AddListener(SwapSlots);
         }
 
-        void UpdateSlots(IActionable action)
-        {
-            if (actionDict.ContainsKey(action))
-            {
-                DeleteActionSlot(action);
-            }
-            else
-            {
-                CreateActionSlot(action);
-            }
-        }
-
-        void CreateActionSlot(IActionable action)
+        void CreateActionSlot(AActionUnit actionUnit)
         {
             Transform actionSlotTransform = Instantiate(pfActionSlot, actionSystemUIContainer.position, Quaternion.identity, actionSystemUIContainer);
 
-            actionDict.Add(action, actionSlotTransform);
+            actionUnitDict.Add(actionUnit, actionSlotTransform);
 
             if (actionSlotTransform.TryGetComponent<ActionSlot>(out ActionSlot actionSlot))
             {
                 DragDrop dragDrop = actionSlot.GetCurrentDragDrop();
-                dragDrop.SetText(action.GetActionName());
+                dragDrop.SetText(actionUnit.actionUnitName);
             }
+
         }
 
-        private void SwapSlots(IActionable action1, IActionable action2)
+        void DeleteActionSlot(AActionUnit actionUnit)
         {
-            Transform tmp = actionDict[action1];
-            actionDict[action1] = actionDict[action2];
-            actionDict[action2] = tmp;
+            Destroy(actionUnitDict[actionUnit].gameObject);
+            actionUnitDict.Remove(actionUnit);
         }
 
-        void DeleteActionSlot(IActionable action)
+        private void SwapSlots(AActionUnit action1, AActionUnit action2)
         {
-            Destroy(actionDict[action].gameObject);
-            actionDict.Remove(action);
+            Transform tmp = actionUnitDict[action1];
+            actionUnitDict[action1] = actionUnitDict[action2];
+            actionUnitDict[action2] = tmp;
         }
     }
 }

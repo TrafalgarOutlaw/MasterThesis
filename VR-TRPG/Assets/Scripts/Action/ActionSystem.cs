@@ -6,16 +6,23 @@ using UnityEngine.Events;
 
 namespace VRTRPG.Action
 {
-    [System.Serializable] public class ActionListEvent : UnityEvent<IActionable> { }
-    [System.Serializable] public class ActionOrderEvent : UnityEvent<IActionable, IActionable> { }
+    [System.Serializable] public class ActionUnitEvent : UnityEvent<AActionUnit> { }
+    [System.Serializable] public class ActionOrderEvent : UnityEvent<AActionUnit, AActionUnit> { }
     public class ActionSystem : MonoBehaviour
     {
-        public ActionListEvent OnActionListChanged;
+        public ActionUnitEvent OnAddActionUnit;
+        public ActionUnitEvent OnDeleteActionUnit;
         public ActionOrderEvent OnActionOrderChanged;
 
         public static ActionSystem Instance { get; private set; }
-        List<IActionable> actionList = new List<IActionable>();
+        List<AActionUnit> actionUnitList = new List<AActionUnit>();
         private int namePostfix = 0;
+
+        private enum State
+        {
+            PlayerTurn,
+            Waiting,
+        }
 
         void Awake()
         {
@@ -27,29 +34,40 @@ namespace VRTRPG.Action
             Instance = this;
         }
 
-        internal void RegisterAction(IActionable action)
+        internal void RegisterAction(AActionUnit actionUnit)
         {
-            actionList.Add(action);
-            action.SetActionName(action.GetActionName() + namePostfix.ToString());
-            namePostfix++;
+            actionUnitList.Add(actionUnit);
 
-            OnActionListChanged.Invoke(action);
+            OnAddActionUnit.Invoke(actionUnit);
         }
 
-        internal void Deregister(IActionable action)
+        internal void Deregister(AActionUnit actionUnit)
         {
-            actionList.Remove(action);
+            actionUnitList.Remove(actionUnit);
 
-            OnActionListChanged.Invoke(action);
+            OnDeleteActionUnit.Invoke(actionUnit);
         }
 
         internal void SwapActionsInList(int i1, int i2)
         {
-            OnActionOrderChanged.Invoke(actionList[i1], actionList[i2]);
+            OnActionOrderChanged.Invoke(actionUnitList[i1], actionUnitList[i2]);
 
-            IActionable tmp = actionList[i1];
-            actionList[i1] = actionList[i2];
-            actionList[i2] = tmp;
+            AActionUnit tmp = actionUnitList[i1];
+            actionUnitList[i1] = actionUnitList[i2];
+            actionUnitList[i2] = tmp;
+        }
+
+        public void DoNextAction()
+        {
+            if (actionUnitList.Count == 0) return;
+
+            actionUnitList[0].DoAction();
+        }
+
+        public void EndAction()
+        {
+            OnDeleteActionUnit.Invoke(actionUnitList[0]);
+            actionUnitList.RemoveAt(0);
         }
     }
 }
