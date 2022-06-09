@@ -253,7 +253,7 @@ Animator:
   m_GameObject: {fileID: 6236565847305886334}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: e2958561779b1a748a4246b9d0c0b309, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2f06c6c5024af0e4a9d685a382679b06, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -4184,7 +4184,6 @@ GameObject:
   - component: {fileID: 1034117323334168669}
   - component: {fileID: 3407942116700102458}
   - component: {fileID: 3525012255607244904}
-  - component: {fileID: 8800723003143856391}
   - component: {fileID: 6528458063584987068}
   m_Layer: 0
   m_Name: pfEnemyWalker
@@ -4242,18 +4241,6 @@ MonoBehaviour:
   currentField: {fileID: 0}
   walkDistance: 4
   fallDistance: 2
---- !u!114 &8800723003143856391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7736343748923671125}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c924d4e100949741b19500b0b1002df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6528458063584987068
 MonoBehaviour:
   m_ObjectHideFlags: 0
