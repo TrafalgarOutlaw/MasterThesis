@@ -17,14 +17,6 @@ namespace VRTRPG.Grid
         public Transform visual;
         private List<AGridCell> occupiedGridCellList;
 
-        public void SetSize(float cellSize)
-        {
-            foreach (Transform child in transform)
-            {
-                child.localScale = Vector3.Scale(child.localScale, new Vector3(cellSize, cellSize, cellSize));
-            }
-        }
-
         public List<AGridCell> GetOccupiedGridCells()
         {
             return occupiedGridCellList;

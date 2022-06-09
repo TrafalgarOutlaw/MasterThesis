@@ -1060,7 +1060,7 @@ GameObject:
   - component: {fileID: 789435524}
   - component: {fileID: 789435523}
   m_Layer: 0
-  m_Name: FieldSystem
+  m_Name: PlaceSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1078,15 +1078,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b62c368caf86781448c11a0713cd35ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fieldList:
-  - {fileID: 3407942116700102458, guid: d0c81483471c8904c935cd2ffde2afb8, type: 3}
-  - {fileID: 3057324184302344673, guid: 0cd56e15c93aa8a49b7a1455613e246f, type: 3}
-  - {fileID: 3057324184302344673, guid: 68abcbebbab357b408709ac439800716, type: 3}
-  - {fileID: 3057324184302344673, guid: ca585002af5e4b647bd523d771b4d72f, type: 3}
-  - {fileID: 3407942116700102458, guid: 647bef51528efde47a38cc7d7491b1ae, type: 3}
-  previewField: {fileID: 1189067424}
+  placeableList:
+  - {fileID: 1263435399409181772, guid: d0c81483471c8904c935cd2ffde2afb8, type: 3}
   fieldsContainer: {fileID: 2613113}
-  selectedGridCell: {fileID: 0}
+  currentGridCell: {fileID: 0}
 --- !u!4 &789435524
 Transform:
   m_ObjectHideFlags: 0
@@ -2724,7 +2719,6 @@ GameObject:
   - component: {fileID: 1518846530}
   - component: {fileID: 1518846529}
   - component: {fileID: 1518846531}
-  - component: {fileID: 1518846532}
   m_Layer: 0
   m_Name: MovementSystem
   m_TagString: Untagged
@@ -2774,18 +2768,6 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cefb65aa2517ff54bb33cd44ab12503e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1518846532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518846528}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a93b87dcdb3643469c1b741578d5fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1608170847
@@ -3144,6 +3126,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 8c3bd31f-bec5-4846-9b67-957defb7681d
     m_ActionName: Debugger/XRMode[/Keyboard/x]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 78a0ee25-6aa0-4bb6-90d4-48287ffa4c20
+    m_ActionName: Debugger/ActionMode[/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Editor

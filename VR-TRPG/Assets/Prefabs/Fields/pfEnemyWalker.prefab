@@ -4183,7 +4183,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1034117323334168669}
   - component: {fileID: 3407942116700102458}
-  - component: {fileID: 3525012255607244904}
   - component: {fileID: 6528458063584987068}
   m_Layer: 0
   m_Name: pfEnemyWalker
@@ -4226,21 +4225,6 @@ MonoBehaviour:
   isCharacter: 1
   anchor: {x: 0, y: 0, z: 0}
   visual: {fileID: 6236565847306291394}
---- !u!114 &3525012255607244904
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7736343748923671125}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7b0ae4acae148a0428ee840824d3a476, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentField: {fileID: 0}
-  walkDistance: 4
-  fallDistance: 2
 --- !u!114 &6528458063584987068
 MonoBehaviour:
   m_ObjectHideFlags: 0

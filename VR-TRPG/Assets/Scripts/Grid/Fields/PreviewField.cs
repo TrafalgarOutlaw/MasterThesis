@@ -42,25 +42,7 @@ namespace VRTRPG.Grid
             _cellSize = cellSize;
         }
 
-        public void ChangePreviewField(Transform visual)
-        {
-            Vector3 previewFieldPosition = previewFieldTransform.position - GetOffset();
-            Destroy(previewFieldTransform.gameObject);
-            InitPreviewField(visual, _cellSize, visual.position);
-            UpdatePreviewFieldPosition(previewFieldPosition);
-        }
 
-        public void UpdatePreviewFieldPosition(Vector3 cellWorldPosition)
-        {
-            // if (previewFieldTransform == null) return;
-            previewFieldTransform.position = cellWorldPosition + GetOffset();
-            // SetLayerRecusrive(previewFieldTransform.gameObject, field.IsFieldPlaceable(neededGridCellsIndices) ? 11 : 12);
-        }
-
-        Vector3 GetOffset()
-        {
-            return _cellSize * offset;
-        }
 
         void OnEnable()
         {

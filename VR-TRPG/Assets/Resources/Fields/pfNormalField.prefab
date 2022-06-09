@@ -105,6 +105,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4009555894648600840}
+  - component: {fileID: 6992445804663065985}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -127,6 +128,18 @@ Transform:
   m_Father: {fileID: 8073743801296197193}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6992445804663065985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2940717174552040831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f20d55b8d888da418b1fbef4c926492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6284364594813455962
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,6 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8073743801296197193}
   - component: {fileID: 3057324184302344673}
+  - component: {fileID: 6574603570032153967}
   m_Layer: 0
   m_Name: pfNormalField
   m_TagString: Untagged
@@ -175,5 +189,22 @@ MonoBehaviour:
   height: 1
   length: 1
   isWalkable: 1
+  isCharacter: 0
   anchor: {x: 0, y: 0, z: 0}
   visual: {fileID: 4009555894648600840}
+--- !u!114 &6574603570032153967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6284364594813455962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4748684de12eaaa4ca4b6ad15ab3fb76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 1
+  height: 1
+  length: 1
+  visual: {fileID: 6992445804663065985}

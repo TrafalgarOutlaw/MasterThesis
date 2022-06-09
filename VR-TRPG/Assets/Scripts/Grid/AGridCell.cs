@@ -13,7 +13,7 @@ namespace VRTRPG.Grid
         public abstract Vector3 CellCenter { get; protected set; }
         public abstract Vector3 CellTopSide { get; protected set; }
         public abstract List<Vector3Int> CellDirList { get; protected set; }
-        public abstract Field IncludedField { get; protected set; }
+        public abstract List<GameObject> IncludedGameobjects { get; protected set; }
 
         public abstract void Init(GridSystem grid, int x, int y, int z, float cellSize);
         public abstract bool CanBuild();

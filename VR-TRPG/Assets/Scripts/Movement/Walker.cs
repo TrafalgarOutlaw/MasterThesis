@@ -20,7 +20,7 @@ namespace VRTRPG.Movement
             movementSystem = MovementSystem.Instance;
             movementSystem.AddWalker(this);
 
-            currentField = FieldSystem.Instance.selectedGridCell.IncludedField;
+            //currentField = PlaceSystem.Instance.currentGridCell.IncludedGameobjects;
             CurrentCell = currentField.GetOccupiedGridCells()[0];
             transform.parent = currentField.transform;
         }
@@ -45,8 +45,8 @@ namespace VRTRPG.Movement
 
             AGridCell cellAbove = GridSystem.Instance.GetGridCell(gridCell.Index + Vector3Int.up);
             if ((cellAbove != null && !cellAbove.CanBuild())
-                || gridCell.IncludedField == null
-                || !gridCell.IncludedField.isWalkable
+                || gridCell.IncludedGameobjects == null
+                //|| !gridCell.IncludedGameobjects.isWalkable
                 || gridCell.Index.y != CurrentCell.Index.y
                 || gridCell == CurrentCell)
             {

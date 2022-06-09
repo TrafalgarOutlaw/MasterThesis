@@ -9,7 +9,6 @@ namespace VRTRPG.XR
         XRSystem xrSystem;
         public XROrigin xrOrigin;
         [SerializeField] GameObject visual;
-        [SerializeField] bool isSpectator;
 
         void Start()
         {
@@ -33,15 +32,6 @@ namespace VRTRPG.XR
         public void DisableVisual()
         {
             visual.SetActive(false);
-        }
-
-        public GameObject GetPlayerObject()
-        {
-            if (isSpectator)
-            {
-                return null;
-            }
-            return transform.parent.gameObject;
         }
     }
 }

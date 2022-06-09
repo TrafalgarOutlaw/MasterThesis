@@ -91,7 +91,7 @@ namespace VRTRPG.XR
             }
             else
             {
-                spectator = Instantiate(pfSummoner, new Vector3(-50, 0, -50), Quaternion.identity);
+                spectator = Instantiate(pfSummoner, new Vector3(-100, 0, -100), Quaternion.identity);
                 isSummoner = true;
             }
         }

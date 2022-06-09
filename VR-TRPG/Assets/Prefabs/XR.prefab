@@ -95,7 +95,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xrOrigin: {fileID: 0}
   visual: {fileID: 0}
-  isSpectator: 0
 --- !u!1 &4790936993340307180
 GameObject:
   m_ObjectHideFlags: 0

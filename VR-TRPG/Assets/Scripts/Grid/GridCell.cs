@@ -21,13 +21,14 @@ namespace VRTRPG.Grid
         public override List<Vector3Int> CellDirList { get; protected set; }
 
         public HashSet<AGridCell> NeighborCellSet { get; private set; }
-        public override Field IncludedField { get; protected set; }
+        public override List<GameObject> IncludedGameobjects { get; protected set; }
 
 
         private void Awake()
         {
             CellDirList = new List<Vector3Int>();
             NeighborCellSet = new HashSet<AGridCell>();
+            IncludedGameobjects = new List<GameObject>();
         }
 
         public override void Init(GridSystem grid, int x, int y, int z, float cellSize)
@@ -57,7 +58,7 @@ namespace VRTRPG.Grid
 
         public override bool CanBuild()
         {
-            return IncludedField == null;
+            return IncludedGameobjects.Count == 0;
         }
 
         public override void SetNeighbor(AGridCell gridCell)
@@ -83,12 +84,12 @@ namespace VRTRPG.Grid
 
         public override void SetIncludedField(Field field)
         {
-            IncludedField = field;
+            //IncludedGameobjects = field;
         }
 
         public override void ClearIncludedField()
         {
-            IncludedField = null;
+            IncludedGameobjects = null;
         }
 
         // void ClearOccupiedGridCellList()
