@@ -27,7 +27,7 @@ namespace VRTRPG.Grid
         List<APlaceable> placeableList;
         int placeableListIndex = 0;
         APlaceable currentPlaceable;
-        PlaceableVisual currentVisual;
+        public PlaceableVisual currentVisual;
 
 
         // Insert into gridCells

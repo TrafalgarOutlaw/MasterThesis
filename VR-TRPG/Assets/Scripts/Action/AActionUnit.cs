@@ -6,7 +6,6 @@ namespace VRTRPG.Action
 {
     public abstract class AActionUnit : MonoBehaviour
     {
-        public abstract void DoAction();
 
         protected ActionSystem actionSystem;
         public string actionUnitName;
@@ -14,8 +13,6 @@ namespace VRTRPG.Action
         void Start()
         {
             actionSystem = ActionSystem.Instance;
-
-            print("REGISTER FROM " + actionUnitName);
             actionSystem.RegisterAction(this);
         }
 
@@ -23,5 +20,10 @@ namespace VRTRPG.Action
         {
             actionSystem.Deregister(this);
         }
+
+        // Abstract
+        public abstract void DoAction();
+        public abstract void EndAction();
+        public abstract bool IsXR { get; protected set; }
     }
 }

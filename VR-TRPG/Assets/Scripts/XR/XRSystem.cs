@@ -23,7 +23,7 @@ namespace VRTRPG.XR
         //_________________________________
 
         List<XRUnit> xrUnitList = new List<XRUnit>();
-        private XRUnit debugXRUnit;
+        private XRUnit currentXRUnit;
         public LocomotionSystem locosys;
 
         void Awake()
@@ -57,23 +57,23 @@ namespace VRTRPG.XR
 
         public void SelectUnit(XRUnit unit)
         {
+            currentXRUnit = unit;
             unit.xrOrigin.gameObject.SetActive(true);
-            debugXRUnit.DisableVisual();
+            unit.DisableVisual();
             locosys.xrOrigin = unit.xrOrigin;
         }
 
-        private void DeselectUnit()
+        public void DeselectUnit()
         {
-            debugXRUnit.xrOrigin.gameObject.SetActive(false);
-            debugXRUnit.EnableVisual();
-            debugXRUnit = null;
+            currentXRUnit.xrOrigin.gameObject.SetActive(false);
+            currentXRUnit.EnableVisual();
+            currentXRUnit = null;
         }
 
         public bool StartDebug()
         {
             if (xrUnitList.Count == 0) { print("NO XRUnits"); return false; }
-            debugXRUnit = xrUnitList[0];
-            SelectUnit(debugXRUnit);
+            SelectUnit(xrUnitList[0]);
             return true;
         }
 

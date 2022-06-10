@@ -15,7 +15,7 @@ namespace VRTRPG.Action
         public ActionOrderEvent OnActionOrderChanged;
 
         public static ActionSystem Instance { get; private set; }
-        List<AActionUnit> actionUnitList = new List<AActionUnit>();
+        public List<AActionUnit> actionUnitList = new List<AActionUnit>();
         private int namePostfix = 0;
 
         private enum State
@@ -37,14 +37,12 @@ namespace VRTRPG.Action
         internal void RegisterAction(AActionUnit actionUnit)
         {
             actionUnitList.Add(actionUnit);
-
             OnAddActionUnit.Invoke(actionUnit);
         }
 
         internal void Deregister(AActionUnit actionUnit)
         {
             actionUnitList.Remove(actionUnit);
-
             OnDeleteActionUnit.Invoke(actionUnit);
         }
 
@@ -68,6 +66,23 @@ namespace VRTRPG.Action
         {
             OnDeleteActionUnit.Invoke(actionUnitList[0]);
             actionUnitList.RemoveAt(0);
+        }
+
+        public bool StartDebug()
+        {
+            if (actionUnitList.Count == 0
+                || !actionUnitList[0].IsXR)
+            {
+                print("CANT DEBUG ACTIONS");
+                return false;
+            }
+            actionUnitList[0].DoAction();
+            return true;
+        }
+
+        public void EndDebug()
+        {
+            actionUnitList[0].EndAction();
         }
     }
 }

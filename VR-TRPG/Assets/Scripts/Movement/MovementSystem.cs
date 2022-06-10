@@ -9,23 +9,18 @@ namespace VRTRPG.Movement
     public class MovementSystem : MonoBehaviour
     {
         public static MovementSystem Instance { get; private set; }
-        List<Walker> characterList = new List<Walker>();
-        private Walker currentCharacter;
-        private int currentCharacterIndex;
         GridSystem gridSystem;
-        GridCell currentGridCell;
+
+        public void StartMovePhase()
+        {
+            throw new NotImplementedException();
+        }
+
         [SerializeField] Transform walkIndicator;
-
-
-        // List<GridCell> walkableCellList = new List<GridCell>();
-        [SerializeField] MovementIndicator movementIndicator;
-        // [SerializeField] SelectionIndicator selectionIndicator;
-
-        //---------------------------------------------------
         [SerializeField] Transform movementIndicatorContainer;
-        List<Walker> walkerList = new List<Walker>();
+        List<WalkerMoveUnit> walkerList = new List<WalkerMoveUnit>();
         List<Transform> indicatorList = new List<Transform>();
-        public Walker debugWalker;
+        public WalkerMoveUnit debugWalker;
 
         void Awake()
         {
@@ -63,12 +58,12 @@ namespace VRTRPG.Movement
             indicatorList.Clear();
         }
 
-        internal void AddWalker(Walker walker)
+        internal void AddWalker(WalkerMoveUnit walker)
         {
             walkerList.Add(walker);
         }
 
-        private void ShowWalkableFields(Walker walker)
+        public void ShowWalkableFields(WalkerMoveUnit walker)
         {
             HashSet<AGridCell> walkableCellSet = walker.GetWalkableFields();
             foreach (var cell in walkableCellSet)
@@ -80,17 +75,17 @@ namespace VRTRPG.Movement
             }
         }
 
-        public void RemoveWalker(Walker walker)
+        public void RemoveWalker(WalkerMoveUnit walker)
         {
             walkerList.Remove(walker);
         }
 
-        public bool CanWalkTo(Walker walker, AGridCell cell)
+        public bool CanWalkTo(WalkerMoveUnit walker, AGridCell cell)
         {
             return walker.GetWalkableFields().Contains(cell);
         }
 
-        public void WalkTo(Walker walker, AGridCell cell)
+        public void WalkTo(WalkerMoveUnit walker, AGridCell cell)
         {
             walker.transform.position = cell.WorldPosition;
             walker.CurrentCell = cell;

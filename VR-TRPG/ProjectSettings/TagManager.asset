@@ -16,7 +16,7 @@ TagManager:
   - EmptyGrid
   - EmptyGridBlocked
   - 
-  - 
+  - Selectable
   - 
   - GhostPlaceable
   - GhostNotPlaceable

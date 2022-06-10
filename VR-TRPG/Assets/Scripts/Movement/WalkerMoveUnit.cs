@@ -6,7 +6,7 @@ using VRTRPG.Grid;
 
 namespace VRTRPG.Movement
 {
-    public class Walker : MonoBehaviour
+    public class WalkerMoveUnit : MonoBehaviour
     {
         private MovementSystem movementSystem;
         [SerializeField] Field currentField;
@@ -23,6 +23,12 @@ namespace VRTRPG.Movement
             //currentField = PlaceSystem.Instance.currentGridCell.IncludedGameobjects;
             CurrentCell = currentField.GetOccupiedGridCells()[0];
             transform.parent = currentField.transform;
+        }
+
+        public void ShowWalkableFields()
+        {
+            print("Show walkable fields");
+            // movementSystem.ShowWalkableFields(this);
         }
 
         public HashSet<AGridCell> GetWalkableFields()

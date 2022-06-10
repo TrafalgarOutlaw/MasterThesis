@@ -12,7 +12,7 @@ namespace VRTRPG.Debugger
     public class Debugger : MonoBehaviour
     {
         public GameObject inputSystem;
-        public GameObject fieldSystem;
+        public GameObject placeSystem;
 
         VrtrpgActions vrtrpgActions;
         private MovementSystem movementSystem;
@@ -22,6 +22,7 @@ namespace VRTRPG.Debugger
         private Keyboard keyboard;
         bool isMovementDebug = false;
         bool isXRDebug = false;
+        bool isActionDebug = false;
         public GameObject editorCamera;
 
 
@@ -58,13 +59,13 @@ namespace VRTRPG.Debugger
                 {
                     // vrtrpgActions.Editor.Disable();
                     inputSystem.SetActive(false);
-                    fieldSystem.SetActive(false);
+                    placeSystem.SetActive(false);
                     movementSystem.StartDebug();
                 }
                 else
                 {
                     inputSystem.SetActive(true);
-                    fieldSystem.SetActive(true);
+                    placeSystem.SetActive(true);
                     movementSystem.ClearIndicator();
                     // vrtrpgActions.Editor.Enable();
                 }
@@ -81,13 +82,13 @@ namespace VRTRPG.Debugger
                     if (!xrSystem.StartDebug()) { isXRDebug = false; return; }
                     // vrtrpgActions.Editor.Disable();
                     inputSystem.SetActive(false);
-                    fieldSystem.SetActive(false);
+                    placeSystem.SetActive(false);
                     editorCamera.SetActive(false);
                 }
                 else
                 {
                     inputSystem.SetActive(true);
-                    fieldSystem.SetActive(true);
+                    placeSystem.SetActive(true);
                     // movementSystem.ClearIndicator();
                     xrSystem.EndDebug();
                     editorCamera.SetActive(true);
@@ -98,7 +99,28 @@ namespace VRTRPG.Debugger
 
         public void ToggleActionDebug(InputAction.CallbackContext context)
         {
-            if (context.started) { actionSystem.DoNextAction(); }
+            if (context.started)
+            {
+                isActionDebug = !isActionDebug;
+                if (isActionDebug)
+                {
+                    if (!actionSystem.StartDebug()) { isActionDebug = false; return; }
+                    inputSystem.SetActive(false);
+                    placeSystem.SetActive(false);
+                    placeSystem.GetComponent<PlaceSystem>().currentVisual.gameObject.SetActive(false);
+                    editorCamera.SetActive(false);
+                }
+                else
+                {
+                    inputSystem.SetActive(true);
+                    placeSystem.SetActive(true);
+                    placeSystem.GetComponent<PlaceSystem>().currentVisual.gameObject.SetActive(true);
+                    // movementSystem.ClearIndicator();
+                    actionSystem.EndDebug();
+                    editorCamera.SetActive(true);
+                    // vrtrpgActions.Editor.Enable();
+                }
+            }
         }
 
         public void GetCellUnderMouse(InputAction.CallbackContext context)
@@ -114,7 +136,7 @@ namespace VRTRPG.Debugger
                     if (Physics.Raycast(ray, out hit, 999f, layerMask))
                     {
                         var cell = hit.collider.gameObject.transform.parent.GetComponent<AGridCell>();
-                        Walker walker = movementSystem.debugWalker;
+                        WalkerMoveUnit walker = movementSystem.debugWalker;
                         if (movementSystem.CanWalkTo(walker, cell))
                         {
                             movementSystem.WalkTo(walker, cell);
