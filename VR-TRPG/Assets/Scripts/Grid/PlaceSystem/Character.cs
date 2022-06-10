@@ -13,7 +13,7 @@ namespace VRTRPG.Grid
                 AGridCell gridCell = GridSystem.Instance.GetGridCell(index);
 
                 // Needs a grid
-                if (gridCell == null ) return false;
+                if (gridCell == null) return false;
 
                 // Needs a field on grid
                 Field field = null;
@@ -25,25 +25,6 @@ namespace VRTRPG.Grid
 
                 return field.isWalkable;
             });
-        }
-
-        internal override void SetOccupiedGridCells(List<AGridCell> neededGridCells)
-        {
-            occupiedGridCells = neededGridCells;
-
-            neededGridCells.ForEach(cell =>
-            {
-                cell.IncludedGameobjects.Add(this.gameObject);
-            });
-
-            //if (!field.isCharacter)
-            //{
-            //    foreach (AGridCell gridCell in neededGridCellsList)
-            //    {
-            //        gridCell.SetIncludedField(field);
-            //    }
-            //
-            //}
         }
     }
 }

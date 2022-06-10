@@ -53,64 +53,40 @@ namespace VRTRPG.Grid
 
             APlaceable[] placeables = Resources.FindObjectsOfTypeAll<APlaceable>();
             print("PLACEABLES: " + placeables.Length);
-            //foreach(var item in placeables)
-            //{
-            //    print("\t" + item.name);
-            //}
             placeableList = new List<APlaceable>(placeables);
         }
 
         void Start()
         {
-
             inputManager = InputManager.Instance;
             grid = GridSystem.Instance;
             _cellSize = grid.GetCellSize();
 
-            // inputManager.OnRotateField.AddListener(RotateField);
 
             currentGridCell = grid.GetGridCell(Vector3.zero);
             currentPlaceable = placeableList[placeableListIndex];
             InitVisual();
 
-            //previewField.InitPreviewField(selectedField.visual, _cellSize, selectedField.visual.position);
-            //SetPreviewLayer(previewField.previewFieldTransform.gameObject);
-
             inputManager.OnPlaceField.AddListener(TryPlaceField);
             inputManager.OnSelectedFieldChanged.AddListener(ChangeField);
             inputManager.OnDeletField.AddListener(TryDeletePlaceable);
             grid.OnSelectedGridCellChange.AddListener(ChangeVisualPosition);
-            // grid.OnSelectedGridCellChange.AddListener(UpdatePreviewFieldPosition);
-
         }
 
         void InitVisual()
         {
-            Transform visualTransform = Instantiate(currentPlaceable.getVisual().transform, Vector3.zero, Quaternion.identity, transform);
-            SetSize(visualTransform);
-            
+            Transform visualTransform = Instantiate(currentPlaceable.GetVisual().transform, currentPlaceable.GetVisualLocalPosition(), currentPlaceable.GetVisualLocalRotation(), currentGridCell.transform);
+
             currentVisual = visualTransform.GetComponent<PlaceableVisual>();
             List<Vector3Int> neededSpace = currentPlaceable.GetNeededSpace(currentVisual.transform, currentGridCell.Index);
             currentVisual.SetLayer(currentPlaceable.IsPlaceable(neededSpace));
         }
 
-        public void SetSize(Transform transform)
-        {
-            //transform.localScale = Vector3.Scale(transform.localScale, new Vector3(_cellSize, _cellSize, _cellSize));
-
-            //foreach (Transform child in transform)
-            //{
-            //    print("CHILDS: " + child.name);
-            //    print("\tCHILDSCALE: " + child.localScale);
-            //    print("\tCellsize: " + _cellSize);
-            //    child.localScale = Vector3.Scale(child.localScale, new Vector3(_cellSize, _cellSize, _cellSize));
-            //}
-        }
-
         void ChangeVisualPosition(Vector3 cellWorldPosition, AGridCell gridCell)
         {
             currentGridCell = gridCell;
-            currentVisual.UpdatePosition(cellWorldPosition);
+            currentVisual.transform.parent = currentGridCell.transform;
+            currentVisual.transform.localPosition = currentPlaceable.GetVisualLocalPosition();
             List<Vector3Int> neededSpace = currentPlaceable.GetNeededSpace(currentVisual.transform, currentGridCell.Index);
             currentVisual.SetLayer(currentPlaceable.IsPlaceable(neededSpace));
         }
@@ -132,7 +108,6 @@ namespace VRTRPG.Grid
         public void TryPlaceField()
         {
             List<Vector3Int> neededSpace = currentPlaceable.GetNeededSpace(currentVisual.transform, currentGridCell.Index);
-            //if (!IsFieldPlaceable(neededSpace)) return;
             if (!currentPlaceable.IsPlaceable(neededSpace)) return;
 
             List<AGridCell> neededGridCells = GetNeededGridCells(neededSpace);
@@ -141,9 +116,12 @@ namespace VRTRPG.Grid
 
         public void PlaceField(List<AGridCell> neededGridCellsList)
         {
-            Transform placeableTransform = Instantiate(currentPlaceable.transform, currentVisual.transform.position, Quaternion.identity, neededGridCellsList[0].transform);
+            Transform placeableTransform = Instantiate(currentPlaceable.transform, Vector3.zero, Quaternion.identity, neededGridCellsList[0].transform);
+
+            // Hack because cant find bug why position is (0,-1,0)
+            placeableTransform.localPosition = Vector3.zero;
+
             APlaceable placedObject = placeableTransform.GetComponent<APlaceable>();
-            SetSize(placeableTransform);
             placedObject.SetOccupiedGridCells(neededGridCellsList);
         }
 
@@ -170,7 +148,7 @@ namespace VRTRPG.Grid
             //    currentGridCell.IncludedGameobjects.ClearOccupiedGridCells();
             //    Destroy(field.gameObject);
             //    SetPreviewLayer(previewField.previewFieldTransform.gameObject);
-            
+
         }
 
         // public void RotateField(Vector3Int dir)

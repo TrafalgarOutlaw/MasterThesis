@@ -31,7 +31,7 @@ namespace VRTRPG.Grid
         {
             foreach (AGridCell gridCell in occupiedGridCellList)
             {
-                gridCell.ClearIncludedField();
+                gridCell.RemoveIncludedObject();
             }
         }
     }

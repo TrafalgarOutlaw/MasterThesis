@@ -87,7 +87,7 @@ namespace VRTRPG.Grid
             //IncludedGameobjects = field;
         }
 
-        public override void ClearIncludedField()
+        public override void RemoveIncludedObject()
         {
             IncludedGameobjects = null;
         }

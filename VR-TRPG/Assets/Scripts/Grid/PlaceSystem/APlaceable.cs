@@ -16,12 +16,22 @@ namespace VRTRPG.Grid
 
         void Start()
         {
-            gridSystem = GridSystem.Instance;    
+            gridSystem = GridSystem.Instance;
         }
 
-        public PlaceableVisual getVisual()
+        public PlaceableVisual GetVisual()
         {
             return visual;
+        }
+
+        public Vector3 GetVisualLocalPosition()
+        {
+            return visual.transform.localPosition;
+        }
+
+        public Quaternion GetVisualLocalRotation()
+        {
+            return visual.transform.localRotation;
         }
 
         public List<Vector3Int> GetNeededSpace(Transform transform, Vector3Int gridIndex)
@@ -47,8 +57,26 @@ namespace VRTRPG.Grid
             return neededSpace;
         }
 
+
+        internal void SetOccupiedGridCells(List<AGridCell> neededGridCells)
+        {
+            occupiedGridCells = neededGridCells;
+
+            neededGridCells.ForEach(cell =>
+            {
+                cell.IncludedGameobjects.Add(this.gameObject);
+            });
+        }
+
+        void OnDestroy()
+        {
+            occupiedGridCells.ForEach(cell =>
+            {
+                cell.IncludedGameobjects.Remove(gameObject);
+            });
+        }
+
         // Abstract
         public abstract bool IsPlaceable(List<Vector3Int> neededSpace);
-        internal abstract void SetOccupiedGridCells(List<AGridCell> neededGridCells);
     }
 }

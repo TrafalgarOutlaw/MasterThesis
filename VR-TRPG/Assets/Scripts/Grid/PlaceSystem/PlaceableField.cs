@@ -16,15 +16,5 @@ namespace VRTRPG.Grid
                 return (gridCell != null && gridCell.CanBuild());
             });
         }
-
-        internal override void SetOccupiedGridCells(List<AGridCell> neededGridCells)
-        {
-            occupiedGridCells = neededGridCells;
-
-            neededGridCells.ForEach(cell =>
-            {
-                cell.IncludedGameobjects.Add(this.gameObject);
-            });
-        }
     }
 }

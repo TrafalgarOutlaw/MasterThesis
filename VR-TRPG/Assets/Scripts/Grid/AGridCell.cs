@@ -21,7 +21,7 @@ namespace VRTRPG.Grid
         public abstract void SetNeighbor(AGridCell gridCell);
         public abstract void UpdateNeighbor(AGridCell gridCell);
         public abstract void SetIncludedField(Field field);
-        public abstract void ClearIncludedField();
+        public abstract void RemoveIncludedObject();
         public abstract void DisableRenderer();
         public abstract void EnableRenderer();
         public abstract void DisableCollider();

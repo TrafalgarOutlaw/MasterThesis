@@ -209,8 +209,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6236565847306291394}
   - component: {fileID: 6236565847315566862}
+  - component: {fileID: 309387868590526748}
   m_Layer: 0
-  m_Name: PlayerVisual
+  m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -262,6 +263,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &309387868590526748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6236565847305886334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f20d55b8d888da418b1fbef4c926492, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6236565847305888032
 GameObject:
   m_ObjectHideFlags: 0
@@ -4182,7 +4195,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1034117323334168669}
-  - component: {fileID: 3407942116700102458}
+  - component: {fileID: 5792804671018487505}
   - component: {fileID: 6528458063584987068}
   m_Layer: 0
   m_Name: pfEnemyWalker
@@ -4206,7 +4219,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3407942116700102458
+--- !u!114 &5792804671018487505
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4215,16 +4228,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7736343748923671125}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fac2658b97fff54092df27b64289b00, type: 3}
+  m_Script: {fileID: 11500000, guid: 24d1f011a7e564a43aea9077fef7d7da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   width: 1
   height: 1
   length: 1
-  isWalkable: 0
-  isCharacter: 1
-  anchor: {x: 0, y: 0, z: 0}
-  visual: {fileID: 6236565847306291394}
+  visual: {fileID: 309387868590526748}
 --- !u!114 &6528458063584987068
 MonoBehaviour:
   m_ObjectHideFlags: 0

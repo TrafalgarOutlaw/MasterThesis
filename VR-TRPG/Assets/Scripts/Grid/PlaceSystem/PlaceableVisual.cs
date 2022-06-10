@@ -14,15 +14,8 @@ namespace VRTRPG.Grid
         {
             gridSystem = GridSystem.Instance;
 
-            print("OFFSET");
-            print("\tPos:" + transform.position);
             offset = transform.position * gridSystem.GetCellSize();
-            transform.localScale *= gridSystem.GetCellSize();
-        }
-
-        public void UpdatePosition(Vector3 cellWorldPosition)
-        {
-            transform.position = cellWorldPosition + offset;
+            // transform.localScale *= gridSystem.GetCellSize();
         }
 
         public void SetLayer(bool isPlaceable)
@@ -31,12 +24,12 @@ namespace VRTRPG.Grid
             //if (IsFieldPlaceable(neededGridCellsIndice)) { SetLayerRecusrive(targetGameObject, 11); }
             //else { SetLayerRecusrive(targetGameObject, 12); }
             if (isPlaceable) SetLayerRecusrive(gameObject, 11);
-            else SetLayerRecusrive(gameObject, 12); 
+            else SetLayerRecusrive(gameObject, 12);
         }
 
         void SetLayerRecusrive(GameObject go, int layer)
         {
-           go.layer = layer;
+            go.layer = layer;
             foreach (Transform child in go.transform)
             {
                 SetLayerRecusrive(child.gameObject, layer);
