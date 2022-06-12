@@ -10,20 +10,21 @@ namespace VRTRPG.Action
         protected ActionSystem actionSystem;
         public string actionUnitName;
 
-        void Start()
+        public void Start()
         {
+            print("START FROM:  " + name);
             actionSystem = ActionSystem.Instance;
-            actionSystem.RegisterAction(this);
         }
 
         void OnDestroy()
         {
-            actionSystem.Deregister(this);
+            actionSystem.RemoveAction(this);
         }
 
         // Abstract
+        public abstract void SelectUnit();
         public abstract void DoAction();
         public abstract void EndAction();
-        public abstract bool IsXR { get; protected set; }
+        public abstract bool IsXRDebug { get; protected set; }
     }
 }

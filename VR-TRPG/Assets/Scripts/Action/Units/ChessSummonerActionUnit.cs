@@ -1,43 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VRTRPG.Movement;
+using VRTRPG.XR;
 
 namespace VRTRPG.Action
 {
-    public class EnemyWalkerActionUnit : AActionUnit
+    public class ChessSummonerActionUnit : AActionUnit
     {
-        [SerializeField] EnemyWalkerMoveUnit enemyMoveable;
         public override bool IsXRDebug { get; protected set; }
+        [SerializeField] XRUnit xRUnit;
+        private XRSystem xrSystem;
 
         void Awake()
         {
-            IsXRDebug = false;
+            IsXRDebug = true;
         }
 
         new void Start()
         {
+            print("START FROM CHESS SUMMONER");
             base.Start();
+            xrSystem = XRSystem.Instance;
             actionSystem.PushAction(this);
         }
 
         public override void DoAction()
         {
-            print("ACTION FROM ENEMY WALKER");
-            enemyMoveable.DoRandomMove();
-            EndAction();
+            // MovementSystem.Instance.StartMovePhase();
+            print("Action from Summoner");
+            xrSystem.SelectUnit(xRUnit);
+            // actionSystem.EndAction();
         }
 
         public override void EndAction()
         {
+            // xrSystem.DeselectUnit();
             actionSystem.RemoveAction(this);
-            actionSystem.PushAction(this);
+            actionSystem.InsertAction(1, this);
             actionSystem.EndActionPhase();
         }
 
         public override void SelectUnit()
         {
-            actionSystem.PushAction(this);
+            actionSystem.InsertAction(1, this);
         }
     }
 }

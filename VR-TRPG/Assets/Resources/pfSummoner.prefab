@@ -3877,10 +3877,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8663670572653964451}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d77700a4fdea574f81590353e8e3bd7, type: 3}
+  m_Script: {fileID: 11500000, guid: 51607cbf36ace6945b2105e6080f12ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  actionUnitName: Summoner
+  actionUnitName: Chess Summoner
   xRUnit: {fileID: 8743146350342995756}
 --- !u!1 &8853382778350825267
 GameObject:
@@ -4318,6 +4318,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ValidColorGradient.m_NumColorKeys
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 552248459385259191, guid: 23eed3b1b1f775a48bc16bf457e592c3,
+        type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 868771036148017617, guid: 23eed3b1b1f775a48bc16bf457e592c3,
+        type: 3}
+      propertyPath: m_Parameters.widthMultiplier
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 1262284721261143859, guid: 23eed3b1b1f775a48bc16bf457e592c3,
         type: 3}

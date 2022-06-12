@@ -139,7 +139,7 @@ namespace VRTRPG.Debugger
                         WalkerMoveUnit walker = movementSystem.debugWalker;
                         if (movementSystem.CanWalkTo(walker, cell))
                         {
-                            movementSystem.WalkTo(walker, cell);
+                            // movementSystem.WalkTo(walker, cell);
                             movementSystem.StartDebug();
                         }
                     }

@@ -6,7 +6,6 @@ namespace VRTRPG.Grid
 {
     public class Character : APlaceable
     {
-
         public override bool IsPlaceable(List<Vector3Int> neededSpace)
         {
             return neededSpace.TrueForAll(index =>

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4887338104845898700}
   - component: {fileID: 4858669401860940500}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: HoverIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,6 +90,102 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4801255161529857049}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &5624108513183105759
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 343147386604750454}
+  - component: {fileID: 5534116792768320474}
+  - component: {fileID: 8534342070284429291}
+  - component: {fileID: 5160694456387012457}
+  m_Layer: 0
+  m_Name: SelectionIndicator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &343147386604750454
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624108513183105759}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5, y: -0.5, z: 0.5}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
+  m_Children: []
+  m_Father: {fileID: 1034117323334168669}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &5534116792768320474
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624108513183105759}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &8534342070284429291
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624108513183105759}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 1e078ab1fea8af540a7970086c8cc5a8, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &5160694456387012457
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5624108513183105759}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
@@ -4316,6 +4412,7 @@ Transform:
   m_Children:
   - {fileID: 6236565847306291394}
   - {fileID: 8147542674427888983}
+  - {fileID: 343147386604750454}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4362,7 +4459,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionUnitName: Walker
   xRUnit: {fileID: 0}
-  indicator: {fileID: 4801255161529857049}
+  hoverIndicator: {fileID: 4801255161529857049}
+  selectionIndicator: {fileID: 5624108513183105759}
+  walkerMoveUnit: {fileID: 430717075882721164}
 --- !u!114 &430717075882721164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4375,7 +4474,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b0ae4acae148a0428ee840824d3a476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentField: {fileID: 0}
   walkDistance: 4
   fallDistance: 2
 --- !u!114 &3232917614816177798
@@ -4404,7 +4502,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6972277440169720034}
         m_TargetAssemblyTypeName: VRTRPG.Action.WalkerActionUnit, Action
-        m_MethodName: ActivateIndicator
+        m_MethodName: ActivateHoverIndicator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4419,7 +4517,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6972277440169720034}
         m_TargetAssemblyTypeName: VRTRPG.Action.WalkerActionUnit, Action
-        m_MethodName: DeactivateIndicator
+        m_MethodName: DeactivateHoverIndicator
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4438,9 +4536,9 @@ MonoBehaviour:
   m_FirstSelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 430717075882721164}
-        m_TargetAssemblyTypeName: VRTRPG.Movement.WalkerMoveUnit, Movement
-        m_MethodName: ShowWalkableFields
+      - m_Target: {fileID: 6972277440169720034}
+        m_TargetAssemblyTypeName: VRTRPG.Action.WalkerActionUnit, Action
+        m_MethodName: SelectUnit
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

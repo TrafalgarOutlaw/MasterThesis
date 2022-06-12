@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit;
 using VRTRPG.Grid;
 
 namespace VRTRPG.Movement
@@ -17,10 +19,10 @@ namespace VRTRPG.Movement
         }
 
         [SerializeField] Transform walkIndicator;
-        [SerializeField] Transform movementIndicatorContainer;
         List<WalkerMoveUnit> walkerList = new List<WalkerMoveUnit>();
         List<Transform> indicatorList = new List<Transform>();
         public WalkerMoveUnit debugWalker;
+        private AMoveable currentMoveable;
 
         void Awake()
         {
@@ -48,12 +50,13 @@ namespace VRTRPG.Movement
             if (walkerList.Count == 0) return;
 
             debugWalker = walkerList[0];
-            ShowWalkableFields(debugWalker);
+            // ShowWalkableFields(debugWalker);
         }
 
 
         public void ClearIndicator()
         {
+            currentMoveable = null;
             indicatorList.ForEach(indicator => Destroy(indicator.gameObject));
             indicatorList.Clear();
         }
@@ -63,15 +66,25 @@ namespace VRTRPG.Movement
             walkerList.Add(walker);
         }
 
-        public void ShowWalkableFields(WalkerMoveUnit walker)
+        public void MoveTo(AGridCell cell)
         {
+            currentMoveable.MoveTo(cell);
+        }
+
+        public void ShowWalkableFields(WalkerMoveUnit walker, UnityAction<SelectExitEventArgs> selectCallback)
+        {
+            ClearIndicator();
+            currentMoveable = walker;
             HashSet<AGridCell> walkableCellSet = walker.GetWalkableFields();
             foreach (var cell in walkableCellSet)
             {
-                Transform moveIndicator = Instantiate(walkIndicator, cell.CellTopSide, Quaternion.identity, movementIndicatorContainer);
-                moveIndicator.localScale *= cell.CellSize;
-
+                Transform moveIndicator = Instantiate(walkIndicator, cell.CellTopSide, Quaternion.identity, cell.transform);
                 indicatorList.Add(moveIndicator);
+
+                if (moveIndicator.TryGetComponent<WalkIndicator>(out WalkIndicator indicator))
+                {
+                    indicator.SetSelectCallback(selectCallback);
+                }
             }
         }
 
@@ -85,11 +98,16 @@ namespace VRTRPG.Movement
             return walker.GetWalkableFields().Contains(cell);
         }
 
-        public void WalkTo(WalkerMoveUnit walker, AGridCell cell)
+        public void WalkTo(AMoveable moveable, AGridCell cell)
         {
-            walker.transform.position = cell.WorldPosition;
-            walker.CurrentCell = cell;
+            moveable.transform.position = cell.WorldPosition;
+            // moveable.CurrentCell = cell;
             ClearIndicator();
+        }
+
+        public void SetCurrentMoveable(AMoveable moveable)
+        {
+            currentMoveable = moveable;
         }
 
         // public void StartSelectionPhase()

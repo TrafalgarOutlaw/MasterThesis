@@ -2,40 +2,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VRTRPG.XR;
+using VRTRPG.Movement;
+using UnityEngine.XR.Interaction.Toolkit;
+using VRTRPG.Grid;
 
 namespace VRTRPG.Action
 {
     public class WalkerActionUnit : AActionUnit
     {
-        public override bool IsXR { get; protected set; }
+        public override bool IsXRDebug { get; protected set; }
         [SerializeField] XRUnit xRUnit;
-        [SerializeField] GameObject indicator;
+        [SerializeField] GameObject hoverIndicator;
+        [SerializeField] GameObject selectionIndicator;
+        [SerializeField] WalkerMoveUnit walkerMoveUnit;
+        private MovementSystem movementSystem;
 
         void Awake()
         {
-            IsXR = true;
+            IsXRDebug = false;
+        }
+
+        new void Start()
+        {
+            base.Start();
+            movementSystem = MovementSystem.Instance;
         }
 
         public override void DoAction()
         {
-            print("Action from walker");
             XRSystem.Instance.SelectUnit(xRUnit);
         }
 
         public override void EndAction()
         {
-            XRSystem.Instance.DeselectUnit();
+            actionSystem.CurrentAction.EndAction();
         }
 
-
-        public void ActivateIndicator()
+        public void ActivateHoverIndicator()
         {
-            indicator.SetActive(true);
+            hoverIndicator.SetActive(true);
         }
 
-        public void DeactivateIndicator()
+        public void ActivateSelectionIndicator()
         {
-            indicator.SetActive(false);
+            selectionIndicator.SetActive(true);
+            DeactivateHoverIndicator();
+        }
+
+        public void DeactivateHoverIndicator()
+        {
+            hoverIndicator.SetActive(false);
+        }
+
+        public void DeactivateSelectionIndicator()
+        {
+            hoverIndicator.SetActive(false);
+            selectionIndicator.SetActive(false);
+        }
+
+        public override void SelectUnit()
+        {
+            // actionSystem.InsertAction(1, this);
+            ActivateSelectionIndicator();
+            movementSystem.ShowWalkableFields(walkerMoveUnit, (SelectExitEventArgs callback) =>
+            {
+                MoveToIndicator(callback.interactableObject.transform);
+            });
+        }
+
+        public void MoveToIndicator(Transform transform)
+        {
+            if (!transform.parent.TryGetComponent<AGridCell>(out AGridCell cell)) return;
+            MovementSystem.Instance.MoveTo(cell);
+            DeactivateSelectionIndicator();
+            EndAction();
         }
     }
 }

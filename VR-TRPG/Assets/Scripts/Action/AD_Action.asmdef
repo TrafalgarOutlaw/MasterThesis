@@ -3,8 +3,10 @@
     "rootNamespace": "VRTRPG.Action",
     "references": [
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:b47837de019a68c4aaa7de06565a78f1",
         "GUID:661d3676f19366a4aaedca2bd5da46a5",
-        "GUID:b47837de019a68c4aaa7de06565a78f1"
+        "GUID:fe685ec1767f73d42b749ea8045bfe43",
+        "GUID:0da11b3f97acd564193faf35e310a6b4"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

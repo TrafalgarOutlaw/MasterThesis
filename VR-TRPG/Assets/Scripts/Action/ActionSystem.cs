@@ -16,7 +16,7 @@ namespace VRTRPG.Action
 
         public static ActionSystem Instance { get; private set; }
         public List<AActionUnit> actionUnitList = new List<AActionUnit>();
-        private int namePostfix = 0;
+        public AActionUnit CurrentAction { get; private set; }
 
         private enum State
         {
@@ -34,16 +34,31 @@ namespace VRTRPG.Action
             Instance = this;
         }
 
-        internal void RegisterAction(AActionUnit actionUnit)
+        internal void PushAction(AActionUnit actionUnit)
         {
             actionUnitList.Add(actionUnit);
             OnAddActionUnit.Invoke(actionUnit);
         }
 
-        internal void Deregister(AActionUnit actionUnit)
+        internal void InsertAction(int index, AActionUnit actionUnit)
         {
-            actionUnitList.Remove(actionUnit);
-            OnDeleteActionUnit.Invoke(actionUnit);
+            if (index < actionUnitList.Count)
+            {
+                actionUnitList.Insert(index, actionUnit);
+                OnAddActionUnit.Invoke(actionUnit);
+            }
+            else
+            {
+                PushAction(actionUnit);
+            }
+        }
+
+        internal void RemoveAction(AActionUnit actionUnit)
+        {
+            if (actionUnitList.Remove(actionUnit))
+            {
+                OnDeleteActionUnit.Invoke(actionUnit);
+            }
         }
 
         internal void SwapActionsInList(int i1, int i2)
@@ -55,29 +70,32 @@ namespace VRTRPG.Action
             actionUnitList[i2] = tmp;
         }
 
-        public void DoNextAction()
+        public void StartActionPhase()
         {
-            if (actionUnitList.Count == 0) return;
+            CurrentAction = actionUnitList[0];
+            if (CurrentAction == null) return;
 
-            actionUnitList[0].DoAction();
+            CurrentAction.DoAction();
         }
 
-        public void EndAction()
+        public void EndActionPhase()
         {
-            OnDeleteActionUnit.Invoke(actionUnitList[0]);
-            actionUnitList.RemoveAt(0);
+            print("END ACTION");
+            actionUnitList.RemoveAll(unit => unit == null);
+            StartActionPhase();
         }
 
         public bool StartDebug()
         {
-            if (actionUnitList.Count == 0
-                || !actionUnitList[0].IsXR)
-            {
-                print("CANT DEBUG ACTIONS");
-                return false;
-            }
-            actionUnitList[0].DoAction();
-            return true;
+            StartActionPhase();
+            return CurrentAction != null;
+            // if (actionUnitList.Count == 0
+            //     || !actionUnitList[0].IsXRDebug)
+            // {
+            //     print("CANT DEBUG ACTIONS");
+            //     return false;
+            // }
+            // actionUnitList[0].DoAction();
         }
 
         public void EndDebug()

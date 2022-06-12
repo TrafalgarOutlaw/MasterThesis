@@ -1,8 +1,9 @@
 {
     "name": "Movement",
-    "rootNamespace": "VRTRPG",
+    "rootNamespace": "VRTRPG.Movement",
     "references": [
-        "GUID:0da11b3f97acd564193faf35e310a6b4"
+        "GUID:0da11b3f97acd564193faf35e310a6b4",
+        "GUID:fe685ec1767f73d42b749ea8045bfe43"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

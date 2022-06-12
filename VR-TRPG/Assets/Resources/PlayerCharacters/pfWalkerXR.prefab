@@ -4250,6 +4250,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionUnitName: WalkerXR
   xRUnit: {fileID: 6124194197460535310}
+  hoverIndicator: {fileID: 0}
+  selectionIndicator: {fileID: 0}
 --- !u!1001 &7976311674407033927
 PrefabInstance:
   m_ObjectHideFlags: 0

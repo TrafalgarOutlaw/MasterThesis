@@ -65,7 +65,7 @@ namespace VRTRPG.Grid
 
         private void Update()
         {
-            if (mouse.leftButton.wasPressedThisFrame)
+            if (mouse.leftButton.isPressed)
             {
                 PlaceField();
             }

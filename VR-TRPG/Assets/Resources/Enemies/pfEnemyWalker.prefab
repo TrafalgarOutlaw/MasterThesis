@@ -4198,6 +4198,7 @@ GameObject:
   - component: {fileID: 5792804671018487505}
   - component: {fileID: 6528458063584987068}
   - component: {fileID: 7451315159232882448}
+  - component: {fileID: 6580461606125409344}
   m_Layer: 0
   m_Name: pfEnemyWalker
   m_TagString: Untagged
@@ -4249,6 +4250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actionUnitName: EnemyWalker
+  enemyMoveable: {fileID: 6580461606125409344}
 --- !u!65 &7451315159232882448
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4262,3 +4264,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0.5, y: 0.5, z: 0.5}
+--- !u!114 &6580461606125409344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736343748923671125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d3d59b7929e8b445bf006cd4997ef11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,22 +5,14 @@ using VRTRPG.Grid;
 
 namespace VRTRPG.Movement
 {
-    public class WalkerMoveUnit : AMoveable
+    public class EnemyWalkerMoveUnit : AMoveable
     {
-        bool isJumpable = false;
-
         public override int walkDistance { get; protected set; }
 
         new void Start()
         {
             base.Start();
-            walkDistance = 4;
-        }
-
-        public void ShowWalkableFields()
-        {
-            movementSystem.ClearIndicator();
-            // movementSystem.ShowWalkableFields(this);
+            walkDistance = 1;
         }
 
         public HashSet<AGridCell> GetWalkableFields()
@@ -37,6 +28,8 @@ namespace VRTRPG.Movement
             }
             return walkableCells;
         }
+
+
 
         private List<AGridCell> GetWalkableFieldsRecursive(AGridCell gridCell, int walkDistance)
         {
@@ -74,12 +67,17 @@ namespace VRTRPG.Movement
         {
             transform.position = cell.transform.position;
             transform.parent = cell.transform;
-            movementSystem.ClearIndicator();
         }
 
-        void OnDestroy()
+
+        public void DoRandomMove()
         {
-            movementSystem.RemoveWalker(this);
+            var walkableFields = GetWalkableFields();
+            int index = Random.Range(0, walkableFields.Count);
+            AGridCell[] array = new AGridCell[walkableFields.Count];
+            walkableFields.CopyTo(array);
+            var randomCell = array[index];
+            MoveTo(randomCell);
         }
     }
 }

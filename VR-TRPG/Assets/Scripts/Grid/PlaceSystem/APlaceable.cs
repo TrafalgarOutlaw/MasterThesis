@@ -57,7 +57,6 @@ namespace VRTRPG.Grid
             return neededSpace;
         }
 
-
         internal void SetOccupiedGridCells(List<AGridCell> neededGridCells)
         {
             occupiedGridCells = neededGridCells;

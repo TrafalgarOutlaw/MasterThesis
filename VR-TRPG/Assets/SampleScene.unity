@@ -348,8 +348,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
+        type: 3}
       propertyPath: m_LocalPosition.x
-      value: -20
+      value: -33.8
       objectReference: {fileID: 0}
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
@@ -359,7 +374,7 @@ PrefabInstance:
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -20
+      value: -46.2
       objectReference: {fileID: 0}
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
@@ -1001,7 +1016,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   actionUnitList:
-  - {fileID: 1517942534}
+  - {fileID: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,7 +1091,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1.8335876e+31, y: NaN, z: 2.7485018e+20, w: 2.619894}
+  m_BoundingSphereOverride: {x: 0, y: -1106.6562, z: 8.21e-43, w: 0}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -3094,18 +3109,6 @@ Transform:
   m_Father: {fileID: 238932507}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1517942534 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8463235635408438186, guid: a8464f26eafd91f4795d08ef1c2db740,
-    type: 3}
-  m_PrefabInstance: {fileID: 116873122}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d77700a4fdea574f81590353e8e3bd7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1518846528
 GameObject:
   m_ObjectHideFlags: 0
@@ -3136,9 +3139,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5391e93bae441e94ba447e74ae0a72d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkIndicator: {fileID: 1289571637869510285, guid: 0dc82be364b668e4fa0938004bf0af6f,
+  walkIndicator: {fileID: 8598939042379461060, guid: 5fc22128e32c8824db648654dfbf1b25,
     type: 3}
-  movementIndicatorContainer: {fileID: 2145165433}
   debugWalker: {fileID: 0}
 --- !u!4 &1518846530
 Transform:
