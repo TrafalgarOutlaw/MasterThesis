@@ -364,7 +364,7 @@ PrefabInstance:
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -33.8
+      value: 13.2
       objectReference: {fileID: 0}
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
@@ -1015,8 +1015,7 @@ MonoBehaviour:
   OnActionOrderChanged:
     m_PersistentCalls:
       m_Calls: []
-  actionUnitList:
-  - {fileID: 0}
+  actionUnitList: []
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1091,7 +1090,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: -1106.6562, z: 8.21e-43, w: 0}
+  m_BoundingSphereOverride: {x: -1, y: 8, z: 9, w: -12}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
