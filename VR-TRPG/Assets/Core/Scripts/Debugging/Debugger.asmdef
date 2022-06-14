@@ -1,0 +1,22 @@
+{
+    "name": "Debugger",
+    "rootNamespace": "VRTRPG",
+    "references": [
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:0da11b3f97acd564193faf35e310a6b4",
+        "GUID:b47837de019a68c4aaa7de06565a78f1",
+        "GUID:661d3676f19366a4aaedca2bd5da46a5",
+        "GUID:60df0efdde470e84080072a0c9f5743b",
+        "GUID:397af56bfaaec1c44812668a28e55fc6",
+        "GUID:751ba51d1103c38438ab75554bdd46fb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

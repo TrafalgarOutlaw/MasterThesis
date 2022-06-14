@@ -1,0 +1,17 @@
+{
+    "name": "AD_Place",
+    "rootNamespace": "VRTRPG.Place",
+    "references": [
+        "GUID:0da11b3f97acd564193faf35e310a6b4",
+        "GUID:751ba51d1103c38438ab75554bdd46fb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
