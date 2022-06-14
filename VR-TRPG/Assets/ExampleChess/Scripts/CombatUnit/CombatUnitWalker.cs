@@ -8,7 +8,6 @@ namespace VRTRPG.Chess.CombatUnit
 {
     public class CombatUnitWalker : ACombatable
     {
-
         new void Start()
         {
             base.Start();
@@ -23,8 +22,6 @@ namespace VRTRPG.Chess.CombatUnit
         public override HashSet<ACombatable> GetAvailableTarget()
         {
             HashSet<ACombatable> availableTargets = new HashSet<ACombatable>();
-            CurrentCell = transform.parent.GetComponent<AGridCell>();
-
 
             foreach (var cell in CurrentCell.GetNeighbor())
             {
@@ -39,7 +36,33 @@ namespace VRTRPG.Chess.CombatUnit
 
         List<ACombatable> GetAvailableTargetRecursive(AGridCell gridCell, int attackDistance)
         {
-            return null;
+            List<ACombatable> availableTargets = new List<ACombatable>();
+            ACombatable combatable = null;
+
+            if (attackDistance <= 0) return availableTargets;
+            if (gridCell == CurrentCell) return availableTargets;
+
+            gridCell.IncludedGameobjects.ForEach(go =>
+            {
+                combatable = go.GetComponent<ACombatable>();
+                if (combatable != null && !combatable.IsPlayerTeam)
+                {
+                    print("FOUND: " + gridCell.Index);
+                    availableTargets.Add(combatable);
+                }
+            });
+
+            foreach (var cel in gridCell.GetNeighbor())
+            {
+                availableTargets.AddRange(GetAvailableTargetRecursive(gridCell, attackDistance - 1));
+            }
+            return availableTargets;
+        }
+
+        public override void DoCombat()
+        {
+            CurrentCell = transform.parent.GetComponent<AGridCell>();
+            combatSystem.ShowAvailableTargets();
         }
 
         public override void Attack(VRTRPG.Grid.AGridCell cell)

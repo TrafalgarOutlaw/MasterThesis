@@ -46,7 +46,7 @@ namespace VRTRPG.Movement
             Field field = null;
 
             if ((cellAbove != null && !cellAbove.CanBuild())
-                || gridCell.IncludedGameobjects == null
+                || (gridCell.IncludedGameobjects == null || gridCell.IncludedGameobjects.Count == 0)
                 || !gridCell.IncludedGameobjects.Exists(go =>
                 {
                     if (go.TryGetComponent<Field>(out field))

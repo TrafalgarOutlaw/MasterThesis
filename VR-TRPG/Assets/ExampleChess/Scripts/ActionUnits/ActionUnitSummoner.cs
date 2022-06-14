@@ -16,6 +16,7 @@ namespace VRTRPG.Chess.ActionUnit
         [SerializeField] GameObject selectIndicator;
         private XRSystem xrSystem;
         private MovementSystem movementSystem;
+        private CombatSystem combatSystem;
 
         // WIP: Remove Ienmuerator in production
         new IEnumerator Start()
@@ -25,6 +26,7 @@ namespace VRTRPG.Chess.ActionUnit
             actionSystem.PushActionUnit(this);
             xrSystem = XRSystem.Instance;
             movementSystem = MovementSystem.Instance;
+            combatSystem = CombatSystem.Instance;
         }
 
         public override void DoAction()
@@ -45,6 +47,11 @@ namespace VRTRPG.Chess.ActionUnit
             {
                 ActivateHover(args.interactableObject.transform);
             }
+
+            if (args.interactableObject.transform.TryGetComponent<ACombatable>(out ACombatable combatable))
+            {
+                ActivateHover(args.interactableObject.transform);
+            }
         }
 
         void ActivateHover(Transform parent)
@@ -58,6 +65,11 @@ namespace VRTRPG.Chess.ActionUnit
         new public void OnHoverExit(HoverExitEventArgs args)
         {
             if (args.interactableObject.transform.TryGetComponent<AGridMoveable>(out AGridMoveable moveable))
+            {
+                DeactivateHover();
+            }
+
+            if (args.interactableObject.transform.TryGetComponent<ACombatable>(out ACombatable combatable))
             {
                 DeactivateHover();
             }
@@ -82,8 +94,9 @@ namespace VRTRPG.Chess.ActionUnit
             if (args.interactableObject.transform.TryGetComponent<ACombatable>(out ACombatable combatable))
             {
                 DeactivateHover();
-                print("combatable player found ");
-                print(combatable.name);
+                ActivateSelect(args.interactableObject.transform);
+
+                combatSystem.StartCombatPhase(combatable);
             }
         }
 
@@ -106,6 +119,21 @@ namespace VRTRPG.Chess.ActionUnit
             if (args.interactableObject.transform.TryGetComponent<MovementIndicator>(out MovementIndicator movementIndicator))
             {
                 movementSystem.MoveTo(movementIndicator.transform.parent.GetComponent<AGridCell>());
+                movementSystem.EndMovePhase();
+                combatSystem.EndCombatPhase();
+                DeactivateSelect();
+                EndAction();
+            }
+
+            if (args.interactableObject.transform.TryGetComponent<CombatIndicator>(out CombatIndicator combatIndicator))
+            {
+                AGridCell cell = combatIndicator.transform.parent.GetComponent<AGridCell>();
+                GameObject targetObject = cell.IncludedGameobjects.Find(go =>
+                {
+                    return go.GetComponent<ACombatable>() != null;
+                });
+                combatSystem.AttackUnit(targetObject.GetComponent<ACombatable>());
+                combatSystem.EndCombatPhase();
                 movementSystem.EndMovePhase();
                 DeactivateSelect();
                 EndAction();

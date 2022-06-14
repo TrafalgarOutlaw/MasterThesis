@@ -1,14 +1,10 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.XR.Interaction.Toolkit;
-using VRTRPG.Grid;
 
-namespace VRTRPG.Movement
+namespace VRTRPG.Combat
 {
-    public class MovementIndicator : MonoBehaviour
+    public class CombatIndicator : MonoBehaviour
     {
         Material startMaterial;
         [SerializeField] Material hoverMaterial;

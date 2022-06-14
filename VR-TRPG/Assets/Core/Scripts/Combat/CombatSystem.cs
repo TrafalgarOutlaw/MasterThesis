@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ namespace VRTRPG.Combat
 {
     public class CombatSystem : MonoBehaviour
     {
+        [SerializeField] Transform pfTargetIndicator;
+        List<Transform> indicatorList = new List<Transform>();
         public static CombatSystem Instance { get; private set; }
         GridSystem gridSystem;
         private ACombatable CurrentCombatable;
@@ -30,7 +33,38 @@ namespace VRTRPG.Combat
             if (combatable != null && CurrentCombatable == combatable) return;
 
             CurrentCombatable = combatable;
-            HashSet<ACombatable> availableTargets = combatable.GetAvailableTarget();
+            ClearIndicators();
+
+            combatable.DoCombat();
+        }
+
+        public void EndCombatPhase()
+        {
+            CurrentCombatable = null;
+            ClearIndicators();
+        }
+
+        public void AttackUnit(ACombatable target)
+        {
+            print(CurrentCombatable.name + " attacks " + target.name);
+        }
+
+        private void ClearIndicators()
+        {
+            indicatorList.ForEach(indicator => Destroy(indicator.gameObject));
+            indicatorList.Clear();
+        }
+
+        public void ShowAvailableTargets()
+        {
+            List<ACombatable> availableTargets = new List<ACombatable>(CurrentCombatable.GetAvailableTarget());
+
+            availableTargets.ForEach(target =>
+            {
+                AGridCell cell = target.GetCurrentCell();
+                Transform targetIndicator = Instantiate(pfTargetIndicator, cell.CellTopSide, Quaternion.identity, cell.transform);
+                indicatorList.Add(targetIndicator);
+            });
         }
     }
 }

@@ -13,6 +13,11 @@ namespace VRTRPG.Chess.CombatUnit
             throw new System.NotImplementedException();
         }
 
+        public override void DoCombat()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override HashSet<ACombatable> GetAvailableTarget()
         {
             throw new System.NotImplementedException();

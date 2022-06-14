@@ -51,11 +51,7 @@ namespace VRTRPG.Chess.MoveableUnit
                 })
                 || gridCell.IncludedGameobjects.Exists(go =>
                 {
-                    if (go.GetComponent<AGridMoveable>() != null)
-                    {
-                        return true;
-                    }
-                    return false;
+                    return go.GetComponent<AGridMoveable>() != null;
                 })
                 || gridCell.Index.y != CurrentCell.Index.y
                 || gridCell == CurrentCell)

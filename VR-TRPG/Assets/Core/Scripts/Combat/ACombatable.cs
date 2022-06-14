@@ -34,9 +34,15 @@ namespace VRTRPG.Combat
             health -= damageAmount;
         }
 
+        public AGridCell GetCurrentCell()
+        {
+            return transform.parent.GetComponent<AGridCell>();
+        }
+
         // Abstract
         public abstract HashSet<ACombatable> GetAvailableTarget();
         public abstract void StartCombatPhase();
         public abstract void Attack(AGridCell cell);
+        public abstract void DoCombat();
     }
 }
