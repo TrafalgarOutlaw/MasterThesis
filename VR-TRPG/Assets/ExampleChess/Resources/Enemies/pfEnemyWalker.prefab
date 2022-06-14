@@ -4199,6 +4199,8 @@ GameObject:
   - component: {fileID: 5792804671018487505}
   - component: {fileID: -6704020665638079021}
   - component: {fileID: 349593001302616985}
+  - component: {fileID: 9064140107803143596}
+  - component: {fileID: -6309672182665300111}
   m_Layer: 0
   m_Name: pfEnemyWalker
   m_TagString: Untagged
@@ -4232,8 +4234,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0.5, y: 0.5, z: 0.5}
+  m_Size: {x: 0.59, y: 1, z: 0.47}
+  m_Center: {x: 0.4819183, y: 0.5, z: 0.5}
 --- !u!114 &5792804671018487505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4262,10 +4264,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978f472a1e9a9584b957ad90a8ad194b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverIndicator: {fileID: 0}
-  selectionIndicator: {fileID: 0}
   actionUnitName: EnemyWalker
-  enemyMoveable: {fileID: 0}
+  moveableUnitEnemyWalker: {fileID: 0}
 --- !u!114 &349593001302616985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4278,3 +4278,93 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3d59b7929e8b445bf006cd4997ef11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &9064140107803143596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736343748923671125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306a3a8c18472c2418fd087960177d54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-6309672182665300111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7736343748923671125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 0}
+  m_Colliders: []
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 4
+  m_SelectMode: 0
+  m_CustomReticle: {fileID: 0}
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnFirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnLastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []

@@ -5,6 +5,7 @@ using VRTRPG.Action;
 using VRTRPG.XR;
 using VRTRPG.Movement;
 using VRTRPG.Grid;
+using VRTRPG.Combat;
 
 namespace VRTRPG.Chess.ActionUnit
 {
@@ -76,6 +77,13 @@ namespace VRTRPG.Chess.ActionUnit
                 ActivateSelect(args.interactableObject.transform);
 
                 movementSystem.StartMovePhase(moveable);
+            }
+
+            if (args.interactableObject.transform.TryGetComponent<ACombatable>(out ACombatable combatable))
+            {
+                DeactivateHover();
+                print("combatable player found ");
+                print(combatable.name);
             }
         }
 

@@ -25,7 +25,7 @@ namespace VRTRPG.Movement
         public override HashSet<AGridCell> GetAvailableCells()
         {
             HashSet<AGridCell> walkableCells = new HashSet<AGridCell>();
-            CurrentCell = transform.parent.GetComponent<AGridCell>();
+            // CurrentCell = transform.parent.GetComponent<AGridCell>();
             foreach (var cell in CurrentCell.GetNeighbor())
             {
                 GetAvailableCellsRecursive(cell, walkDistance).ForEach(value =>
@@ -55,6 +55,14 @@ namespace VRTRPG.Movement
                     }
                     return false;
                 })
+                || gridCell.IncludedGameobjects.Exists(go =>
+                {
+                    if (go.GetComponent<AGridMoveable>() != null)
+                    {
+                        return true;
+                    }
+                    return false;
+                })
                 || gridCell.Index.y != CurrentCell.Index.y
                 || gridCell == CurrentCell)
             {
@@ -70,8 +78,12 @@ namespace VRTRPG.Movement
 
         public override void MoveTo(AGridCell cell)
         {
+            CurrentCell.IncludedGameobjects.Remove(gameObject);
+
             transform.position = cell.transform.position;
             transform.parent = cell.transform;
+            CurrentCell = transform.parent.GetComponent<AGridCell>();
+            CurrentCell.IncludedGameobjects.Add(gameObject);
         }
 
         public override void DoMove()

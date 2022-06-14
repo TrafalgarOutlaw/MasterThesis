@@ -18,7 +18,6 @@ namespace VRTRPG.Movement
             {
                 print("CANT FIND CURRENT CELL");
             }
-
         }
 
         // Abstract

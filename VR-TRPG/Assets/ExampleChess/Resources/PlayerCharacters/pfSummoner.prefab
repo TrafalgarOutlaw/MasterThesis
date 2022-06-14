@@ -4553,7 +4553,7 @@ PrefabInstance:
     - target: {fileID: 1262284721261143859, guid: 23eed3b1b1f775a48bc16bf457e592c3,
         type: 3}
       propertyPath: m_InteractionLayers.m_Bits
-      value: 4294967295
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1262284721261143859, guid: 23eed3b1b1f775a48bc16bf457e592c3,
         type: 3}
@@ -4753,7 +4753,7 @@ PrefabInstance:
     - target: {fileID: 5880517486372611010, guid: 23eed3b1b1f775a48bc16bf457e592c3,
         type: 3}
       propertyPath: m_InteractionLayers.m_Bits
-      value: 4294967295
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5880517486372611010, guid: 23eed3b1b1f775a48bc16bf457e592c3,
         type: 3}

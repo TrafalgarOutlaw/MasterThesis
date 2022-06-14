@@ -20,7 +20,8 @@ namespace VRTRPG.Grid
         public abstract HashSet<AGridCell> GetNeighbor();
         public abstract void SetNeighbor(AGridCell gridCell);
         public abstract void UpdateNeighbor(AGridCell gridCell);
-        public abstract void RemoveIncludedObject();
+        public abstract void RemoveIncludedObject(GameObject go);
+        public abstract void RemoveAllIncludedObjects();
         public abstract void DisableRenderer();
         public abstract void EnableRenderer();
         public abstract void DisableCollider();

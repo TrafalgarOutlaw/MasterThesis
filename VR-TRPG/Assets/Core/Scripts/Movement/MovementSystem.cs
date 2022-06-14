@@ -44,11 +44,6 @@ namespace VRTRPG.Movement
             ClearIndicators();
         }
 
-        public AGridMoveable GetCurrentMoveable()
-        {
-            return currentMoveable;
-        }
-
         void ClearIndicators()
         {
             indicatorList.ForEach(indicator => Destroy(indicator.gameObject));

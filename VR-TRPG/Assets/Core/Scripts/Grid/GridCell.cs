@@ -82,9 +82,13 @@ namespace VRTRPG.Grid
         //     neighborGridCell.NeighborCellSet.Add(gridCell);
         // }
 
-        public override void RemoveIncludedObject()
+        public override void RemoveAllIncludedObjects()
         {
-            IncludedGameobjects = null;
+            IncludedGameobjects.ForEach(go =>
+            {
+                Destroy(go);
+            });
+            IncludedGameobjects.Clear();
         }
 
         // void ClearOccupiedGridCellList()
@@ -119,5 +123,9 @@ namespace VRTRPG.Grid
             EnableRenderer();
         }
 
+        public override void RemoveIncludedObject(GameObject go)
+        {
+            IncludedGameobjects.Remove(go);
+        }
     }
 }

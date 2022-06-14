@@ -1,0 +1,16 @@
+{
+    "name": "AD_Combat",
+    "rootNamespace": "VRTRPG.Combat",
+    "references": [
+        "GUID:0da11b3f97acd564193faf35e310a6b4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

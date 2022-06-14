@@ -20,7 +20,6 @@ namespace VRTRPG.Chess.MoveableUnit
         public override HashSet<AGridCell> GetAvailableCells()
         {
             HashSet<AGridCell> walkableCells = new HashSet<AGridCell>();
-            CurrentCell = transform.parent.GetComponent<AGridCell>();
             foreach (var cell in CurrentCell.GetNeighbor())
             {
                 GetMoveableCellsRecursive(cell, walkDistance).ForEach(value =>
@@ -50,6 +49,14 @@ namespace VRTRPG.Chess.MoveableUnit
                     }
                     return false;
                 })
+                || gridCell.IncludedGameobjects.Exists(go =>
+                {
+                    if (go.GetComponent<AGridMoveable>() != null)
+                    {
+                        return true;
+                    }
+                    return false;
+                })
                 || gridCell.Index.y != CurrentCell.Index.y
                 || gridCell == CurrentCell)
             {
@@ -65,8 +72,11 @@ namespace VRTRPG.Chess.MoveableUnit
 
         public override void MoveTo(AGridCell cell)
         {
+            CurrentCell.IncludedGameobjects.Remove(gameObject);
             transform.position = cell.transform.position;
             transform.parent = cell.transform;
+            CurrentCell = transform.parent.GetComponent<AGridCell>();
+            CurrentCell.IncludedGameobjects.Add(gameObject);
         }
 
         public override void DoMove()

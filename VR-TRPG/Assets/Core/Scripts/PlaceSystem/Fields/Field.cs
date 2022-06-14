@@ -32,7 +32,7 @@ namespace VRTRPG.Place
         {
             foreach (AGridCell gridCell in occupiedGridCellList)
             {
-                gridCell.RemoveIncludedObject();
+                gridCell.RemoveAllIncludedObjects();
             }
         }
     }
