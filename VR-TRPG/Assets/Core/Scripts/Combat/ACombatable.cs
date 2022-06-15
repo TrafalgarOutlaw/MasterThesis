@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using VRTRPG.Grid;
 
 namespace VRTRPG.Combat
 {
     public abstract class ACombatable : MonoBehaviour
     {
+        public UnityEvent OnHealthChanged;
+
         protected int health = 100;
         protected int attackDistance = 1;
+        public int damageAmount = 20;
         protected CombatSystem combatSystem;
         protected AGridCell CurrentCell;
         public bool IsPlayerTeam { get; protected set; }
@@ -32,6 +36,8 @@ namespace VRTRPG.Combat
         public void Damage(int damageAmount)
         {
             health -= damageAmount;
+            if (health <= 0) Destroy(this.gameObject);
+            OnHealthChanged.Invoke();
         }
 
         public AGridCell GetCurrentCell()

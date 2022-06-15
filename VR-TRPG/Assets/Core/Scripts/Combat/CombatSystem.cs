@@ -47,6 +47,7 @@ namespace VRTRPG.Combat
         public void AttackUnit(ACombatable target)
         {
             print(CurrentCombatable.name + " attacks " + target.name);
+            target.Damage(CurrentCombatable.damageAmount);
         }
 
         private void ClearIndicators()
