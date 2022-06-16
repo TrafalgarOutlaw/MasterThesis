@@ -9,12 +9,36 @@ namespace VRTRPG.Movement
 {
     public class MoveableUnitWalker : AGridMoveable
     {
+        private bool isMoving = false;
+        private Vector3 startPosition;
+        private Vector3 targetPosition;
+        private Vector3 targetDir;
+        private float startTime;
+        [SerializeField] Animator animator;
+        [SerializeField] Transform visualTransform;
+        [SerializeField] float movementSpeed;
+
         public override int walkDistance { get; protected set; }
 
         new void Start()
         {
             base.Start();
             walkDistance = 4;
+        }
+
+        void Update()
+        {
+            if (isMoving)
+            {
+                if (Vector3.Distance(transform.localPosition, targetPosition) < .1f)
+                {
+                    visualTransform.position.Scale(new Vector3(1, 0, 1));
+                    animator.SetBool("IsWalking", false);
+                    isMoving = false;
+                    return;
+                }
+                transform.localPosition += targetDir * Time.deltaTime * movementSpeed;
+            }
         }
 
         public override void StartMovePhase()
@@ -80,8 +104,19 @@ namespace VRTRPG.Movement
         {
             CurrentCell.RemoveIncludedObject(gameObject);
 
-            transform.position = cell.transform.position;
+            animator.SetBool("IsWalking", true);
+            isMoving = true;
             transform.parent = cell.transform;
+            startPosition = transform.localPosition;
+            targetPosition = Vector3.zero;
+            targetDir = targetPosition - startPosition;
+
+
+            animator.speed = movementSpeed;
+
+            targetDir = targetDir.normalized;
+            visualTransform.LookAt(cell.WorldPosition);
+
             CurrentCell = transform.parent.GetComponent<AGridCell>();
             CurrentCell.IncludedGameobjects.Add(gameObject);
         }
