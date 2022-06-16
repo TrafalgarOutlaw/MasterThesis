@@ -13,7 +13,6 @@ namespace VRTRPG.Place
         [SerializeField] protected int length = 1;
 
         [SerializeField] protected Visual visual;
-        protected List<AGridCell> occupiedGridCells;
 
         void Start()
         {
@@ -60,7 +59,6 @@ namespace VRTRPG.Place
 
         internal void SetOccupiedGridCells(List<AGridCell> neededGridCells)
         {
-            occupiedGridCells = neededGridCells;
 
             neededGridCells.ForEach(cell =>
             {
@@ -70,10 +68,7 @@ namespace VRTRPG.Place
 
         void OnDestroy()
         {
-            occupiedGridCells.ForEach(cell =>
-            {
-                cell.IncludedGameobjects.Remove(gameObject);
-            });
+            transform.parent.GetComponent<AGridCell>().RemoveIncludedObject(gameObject);
         }
 
         // Abstract

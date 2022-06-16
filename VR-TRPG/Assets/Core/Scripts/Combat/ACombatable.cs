@@ -48,7 +48,7 @@ namespace VRTRPG.Combat
         // Abstract
         public abstract HashSet<ACombatable> GetAvailableTarget();
         public abstract void StartCombatPhase();
-        public abstract void Attack(AGridCell cell);
-        public abstract void DoCombat();
+        public abstract void StartCombat();
+        public abstract void DoCombat(ACombatable target);
     }
 }

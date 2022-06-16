@@ -46,7 +46,10 @@ namespace VRTRPG.Movement
 
         void ClearIndicators()
         {
-            indicatorList.ForEach(indicator => Destroy(indicator.gameObject));
+            indicatorList.ForEach(indicatorTransform =>
+            {
+                Destroy(indicatorTransform.gameObject);
+            });
             indicatorList.Clear();
         }
 

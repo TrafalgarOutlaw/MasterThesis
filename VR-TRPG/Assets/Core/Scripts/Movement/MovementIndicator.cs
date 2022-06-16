@@ -13,6 +13,7 @@ namespace VRTRPG.Movement
         Material startMaterial;
         [SerializeField] Material hoverMaterial;
         [SerializeField] MeshRenderer meshRenderer;
+        [SerializeField] XRSimpleInteractable xRSimpleInteractable;
 
         void Start()
         {

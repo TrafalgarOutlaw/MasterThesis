@@ -112,6 +112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hoverMaterial: {fileID: 2100000, guid: 1e078ab1fea8af540a7970086c8cc5a8, type: 2}
   meshRenderer: {fileID: 6148752451972237944}
+  xRSimpleInteractable: {fileID: 4270447778256583721}
 --- !u!114 &4270447778256583721
 MonoBehaviour:
   m_ObjectHideFlags: 0

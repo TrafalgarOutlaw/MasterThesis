@@ -47,7 +47,6 @@ namespace VRTRPG.Chess.CombatUnit
                 combatable = go.GetComponent<ACombatable>();
                 if (combatable != null && !combatable.IsPlayerTeam)
                 {
-                    print("FOUND: " + gridCell.Index);
                     availableTargets.Add(combatable);
                 }
             });
@@ -59,15 +58,15 @@ namespace VRTRPG.Chess.CombatUnit
             return availableTargets;
         }
 
-        public override void DoCombat()
+        public override void StartCombat()
         {
             CurrentCell = transform.parent.GetComponent<AGridCell>();
             combatSystem.ShowAvailableTargets();
         }
 
-        public override void Attack(VRTRPG.Grid.AGridCell cell)
+        public override void DoCombat(ACombatable target)
         {
-            throw new System.NotImplementedException();
+            target.Damage(damageAmount);
         }
     }
 }

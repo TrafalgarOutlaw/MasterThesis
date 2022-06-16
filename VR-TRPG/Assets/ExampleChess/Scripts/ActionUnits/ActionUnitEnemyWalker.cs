@@ -3,6 +3,7 @@ using VRTRPG.Action;
 using VRTRPG.Movement;
 using VRTRPG.Grid;
 using System.Collections.Generic;
+using VRTRPG.Combat;
 
 namespace VRTRPG.Chess.ActionUnit
 {
@@ -10,19 +11,27 @@ namespace VRTRPG.Chess.ActionUnit
     {
         [SerializeField] AGridMoveable moveableUnitEnemyWalker;
         MovementSystem movementSystem;
+        private CombatSystem combatSystem;
         AGridMoveable moveable;
+        private ACombatable combatable;
 
         new void Start()
         {
             base.Start();
             actionSystem.PushActionUnit(this);
             movementSystem = MovementSystem.Instance;
+            combatSystem = CombatSystem.Instance;
             moveable = GetComponent<AGridMoveable>();
+            combatable = GetComponent<ACombatable>();
         }
 
         public override void DoAction()
         {
-            movementSystem.StartMovePhase(moveable);
+            combatSystem.StartCombatPhase(combatable);
+            if (combatSystem.CurrentCombatable != null)
+            {
+                movementSystem.StartMovePhase(moveable);
+            }
             // HashSet<AGridCell> walkableCells = moveableUnitEnemyWalker.GetMoveableCells();
             // moveableUnitEnemyWalker.DoMove();
             EndAction();

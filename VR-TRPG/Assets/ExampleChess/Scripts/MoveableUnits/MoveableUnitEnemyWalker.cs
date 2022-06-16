@@ -68,7 +68,7 @@ namespace VRTRPG.Chess.MoveableUnit
 
         public override void MoveTo(AGridCell cell)
         {
-            CurrentCell.IncludedGameobjects.Remove(gameObject);
+            CurrentCell.RemoveIncludedObject(gameObject);
             transform.position = cell.transform.position;
             transform.parent = cell.transform;
             CurrentCell = transform.parent.GetComponent<AGridCell>();
@@ -78,6 +78,7 @@ namespace VRTRPG.Chess.MoveableUnit
         public override void DoMove()
         {
             var walkableFields = GetAvailableCells();
+            if (walkableFields.Count == 0) return;
             int index = Random.Range(0, walkableFields.Count);
             AGridCell[] array = new AGridCell[walkableFields.Count];
             walkableFields.CopyTo(array);

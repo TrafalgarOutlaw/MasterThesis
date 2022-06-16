@@ -12,7 +12,7 @@ namespace VRTRPG.Combat
         List<Transform> indicatorList = new List<Transform>();
         public static CombatSystem Instance { get; private set; }
         GridSystem gridSystem;
-        private ACombatable CurrentCombatable;
+        public ACombatable CurrentCombatable;
 
         void Awake()
         {
@@ -35,7 +35,7 @@ namespace VRTRPG.Combat
             CurrentCombatable = combatable;
             ClearIndicators();
 
-            combatable.DoCombat();
+            combatable.StartCombat();
         }
 
         public void EndCombatPhase()
@@ -44,10 +44,9 @@ namespace VRTRPG.Combat
             ClearIndicators();
         }
 
-        public void AttackUnit(ACombatable target)
+        public void DoCombat(ACombatable target)
         {
-            print(CurrentCombatable.name + " attacks " + target.name);
-            target.Damage(CurrentCombatable.damageAmount);
+            CurrentCombatable.DoCombat(target);
         }
 
         private void ClearIndicators()

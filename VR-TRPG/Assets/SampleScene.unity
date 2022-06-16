@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 3a408e788dcbed6429c8d22a01b32a76, type: 2}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -316,6 +316,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
+        type: 3}
       propertyPath: m_LocalPosition.x
       value: 13.2
       objectReference: {fileID: 0}
@@ -327,7 +342,7 @@ PrefabInstance:
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -46.2
+      value: -25.8
       objectReference: {fileID: 0}
     - target: {fileID: 8663670572653964453, guid: a8464f26eafd91f4795d08ef1c2db740,
         type: 3}
@@ -1460,6 +1475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pfTargetIndicator: {fileID: 8598939042379461060, guid: 42d896efb874f2744a37731f007b9f71,
     type: 3}
+  CurrentCombatable: {fileID: 0}
 --- !u!1 &1104286904
 GameObject:
   m_ObjectHideFlags: 0

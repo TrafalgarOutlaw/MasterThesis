@@ -17,6 +17,7 @@ namespace VRTRPG.Chess.ActionUnit
         private XRSystem xrSystem;
         private MovementSystem movementSystem;
         private CombatSystem combatSystem;
+        bool isActionEnd = false;
 
         // WIP: Remove Ienmuerator in production
         new IEnumerator Start()
@@ -64,6 +65,11 @@ namespace VRTRPG.Chess.ActionUnit
 
         new public void OnHoverExit(HoverExitEventArgs args)
         {
+            if (isActionEnd)
+            {
+                isActionEnd = false;
+                return;
+            }
             if (args.interactableObject.transform.TryGetComponent<AGridMoveable>(out AGridMoveable moveable))
             {
                 DeactivateHover();
@@ -83,6 +89,11 @@ namespace VRTRPG.Chess.ActionUnit
 
         new public void OnSelectEnter(SelectEnterEventArgs args)
         {
+            if (isActionEnd)
+            {
+                isActionEnd = false;
+                return;
+            }
             if (args.interactableObject.transform.TryGetComponent<AGridMoveable>(out AGridMoveable moveable))
             {
                 DeactivateHover();
@@ -122,6 +133,7 @@ namespace VRTRPG.Chess.ActionUnit
                 movementSystem.EndMovePhase();
                 combatSystem.EndCombatPhase();
                 DeactivateSelect();
+                isActionEnd = true;
                 EndAction();
             }
 
@@ -132,10 +144,11 @@ namespace VRTRPG.Chess.ActionUnit
                 {
                     return go.GetComponent<ACombatable>() != null;
                 });
-                combatSystem.AttackUnit(targetObject.GetComponent<ACombatable>());
-                combatSystem.EndCombatPhase();
+                combatSystem.DoCombat(targetObject.GetComponent<ACombatable>());
                 movementSystem.EndMovePhase();
+                combatSystem.EndCombatPhase();
                 DeactivateSelect();
+                isActionEnd = true;
                 EndAction();
             }
         }

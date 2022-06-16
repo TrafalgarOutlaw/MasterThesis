@@ -125,7 +125,15 @@ namespace VRTRPG.Grid
 
         public override void RemoveIncludedObject(GameObject go)
         {
-            IncludedGameobjects.Remove(go);
+            if (!IncludedGameobjects.Remove(go))
+            {
+                print("COULD NOT REMOVE OBJECT :" + go.name);
+                print(name);
+                foreach (var item in IncludedGameobjects)
+                {
+                    print(item);
+                }
+            }
         }
     }
 }

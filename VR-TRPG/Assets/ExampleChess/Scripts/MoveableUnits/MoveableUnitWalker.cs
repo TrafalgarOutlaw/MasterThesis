@@ -57,7 +57,7 @@ namespace VRTRPG.Movement
                 })
                 || gridCell.IncludedGameobjects.Exists(go =>
                 {
-                    if (go.GetComponent<AGridMoveable>() != null)
+                    if (go.TryGetComponent<AGridMoveable>(out AGridMoveable moveable))
                     {
                         return true;
                     }
@@ -78,7 +78,7 @@ namespace VRTRPG.Movement
 
         public override void MoveTo(AGridCell cell)
         {
-            CurrentCell.IncludedGameobjects.Remove(gameObject);
+            CurrentCell.RemoveIncludedObject(gameObject);
 
             transform.position = cell.transform.position;
             transform.parent = cell.transform;
