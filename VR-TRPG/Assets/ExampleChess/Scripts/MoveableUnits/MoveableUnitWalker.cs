@@ -18,12 +18,10 @@ namespace VRTRPG.Movement
         [SerializeField] Transform visualTransform;
         [SerializeField] float movementSpeed;
 
-        public override int walkDistance { get; protected set; }
 
         new void Start()
         {
             base.Start();
-            walkDistance = 4;
         }
 
         void Update()

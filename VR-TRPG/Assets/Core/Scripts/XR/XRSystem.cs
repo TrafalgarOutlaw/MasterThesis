@@ -57,6 +57,7 @@ namespace VRTRPG.XR
 
         public void SelectUnit(XRUnit unit)
         {
+            DeselectUnit();
             currentXRUnit = unit;
             unit.xrOrigin.gameObject.SetActive(true);
             unit.DisableVisual();
@@ -65,6 +66,7 @@ namespace VRTRPG.XR
 
         public void DeselectUnit()
         {
+            if (currentXRUnit == null) return;
             currentXRUnit.xrOrigin.gameObject.SetActive(false);
             currentXRUnit.EnableVisual();
             currentXRUnit = null;

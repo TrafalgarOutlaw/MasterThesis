@@ -8,10 +8,10 @@ namespace VRTRPG.Combat
 {
     public abstract class ACombatable : MonoBehaviour
     {
-        public UnityEvent OnHealthChanged;
+        [HideInInspector] public UnityEvent OnHealthChanged;
 
         protected int health = 100;
-        protected int attackDistance = 1;
+        [SerializeField] protected int attackDistance = 1;
         public int damageAmount = 20;
         protected CombatSystem combatSystem;
         protected AGridCell CurrentCell;

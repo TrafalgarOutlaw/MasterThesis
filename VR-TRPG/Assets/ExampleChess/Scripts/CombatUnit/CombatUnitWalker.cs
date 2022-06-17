@@ -37,23 +37,26 @@ namespace VRTRPG.Chess.CombatUnit
         List<ACombatable> GetAvailableTargetRecursive(AGridCell gridCell, int attackDistance)
         {
             List<ACombatable> availableTargets = new List<ACombatable>();
+
             ACombatable combatable = null;
 
             if (attackDistance <= 0) return availableTargets;
             if (gridCell == CurrentCell) return availableTargets;
 
+            print("IN " + gridCell.Index);
             gridCell.IncludedGameobjects.ForEach(go =>
             {
                 combatable = go.GetComponent<ACombatable>();
                 if (combatable != null && !combatable.IsPlayerTeam)
                 {
+                    print("FOUND");
                     availableTargets.Add(combatable);
                 }
             });
 
-            foreach (var cel in gridCell.GetNeighbor())
+            foreach (var cell in gridCell.GetNeighbor())
             {
-                availableTargets.AddRange(GetAvailableTargetRecursive(gridCell, attackDistance - 1));
+                availableTargets.AddRange(GetAvailableTargetRecursive(cell, attackDistance - 1));
             }
             return availableTargets;
         }

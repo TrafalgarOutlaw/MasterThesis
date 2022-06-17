@@ -10,6 +10,7 @@ namespace VRTRPG.Movement
     {
         protected MovementSystem movementSystem;
         protected AGridCell CurrentCell;
+        [SerializeField] protected int walkDistance;
 
         public void Start()
         {
@@ -21,7 +22,6 @@ namespace VRTRPG.Movement
         }
 
         // Abstract
-        public abstract int walkDistance { get; protected set; }
         public abstract HashSet<AGridCell> GetAvailableCells();
         public abstract void StartMovePhase();
         public abstract void MoveTo(AGridCell cell);

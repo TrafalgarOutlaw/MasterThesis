@@ -94,6 +94,10 @@ namespace VRTRPG.Chess.ActionUnit
                 isActionEnd = false;
                 return;
             }
+            if (args.interactableObject.transform.TryGetComponent<XRUnit>(out XRUnit xRUnit))
+            {
+                xrSystem.SelectUnit(xRUnit);
+            }
             if (args.interactableObject.transform.TryGetComponent<AGridMoveable>(out AGridMoveable moveable))
             {
                 DeactivateHover();

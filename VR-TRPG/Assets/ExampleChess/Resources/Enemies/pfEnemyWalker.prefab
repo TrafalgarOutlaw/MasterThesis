@@ -4278,6 +4278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d3d59b7929e8b445bf006cd4997ef11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkDistance: 2
   animator: {fileID: 6236565847315566862}
   visualTransform: {fileID: 6236565847306291394}
   movementSpeed: 2

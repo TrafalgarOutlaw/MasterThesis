@@ -17,8 +17,6 @@ namespace VRTRPG.Chess.MoveableUnit
         [SerializeField] Transform visualTransform;
         [SerializeField] float movementSpeed;
 
-        public override int walkDistance { get; protected set; }
-
         new void Start()
         {
             base.Start();
