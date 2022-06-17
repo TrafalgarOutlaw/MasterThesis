@@ -3,7 +3,8 @@
     "rootNamespace": "VRTRPG.Chess.CombatUnit",
     "references": [
         "GUID:15056e86613a16d499bb0704f64c7e7b",
-        "GUID:0da11b3f97acd564193faf35e310a6b4"
+        "GUID:0da11b3f97acd564193faf35e310a6b4",
+        "GUID:fe685ec1767f73d42b749ea8045bfe43"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
