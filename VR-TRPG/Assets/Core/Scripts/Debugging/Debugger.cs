@@ -88,14 +88,14 @@ namespace VRTRPG.Debugger
                     if (!actionSystem.StartDebug()) { isActionDebug = false; return; }
                     inputSystem.SetActive(false);
                     placeSystem.SetActive(false);
-                    placeSystem.GetComponent<PlaceSystem>().currentVisual.gameObject.SetActive(false);
+                    placeSystem.GetComponent<PlacementSystem>().currentVisual.gameObject.SetActive(false);
                     editorCamera.SetActive(false);
                 }
                 else
                 {
                     inputSystem.SetActive(true);
                     placeSystem.SetActive(true);
-                    placeSystem.GetComponent<PlaceSystem>().currentVisual.gameObject.SetActive(true);
+                    placeSystem.GetComponent<PlacementSystem>().currentVisual.gameObject.SetActive(true);
                     // movementSystem.ClearIndicator();
                     editorCamera.SetActive(true);
                     // vrtrpgActions.Editor.Enable();

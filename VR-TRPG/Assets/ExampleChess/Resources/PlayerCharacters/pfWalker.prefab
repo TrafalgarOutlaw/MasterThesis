@@ -4283,6 +4283,7 @@ MonoBehaviour:
   OnHealthChanged:
     m_PersistentCalls:
       m_Calls: []
+  attackDistance: 1
   damageAmount: 20
 --- !u!114 &3232917614816177798
 MonoBehaviour:

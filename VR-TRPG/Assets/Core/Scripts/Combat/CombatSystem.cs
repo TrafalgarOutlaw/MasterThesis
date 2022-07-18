@@ -12,7 +12,7 @@ namespace VRTRPG.Combat
         List<Transform> indicatorList = new List<Transform>();
         public static CombatSystem Instance { get; private set; }
         GridSystem gridSystem;
-        public ACombatable CurrentCombatable;
+        public ACombatable currentCombatable;
 
         void Awake()
         {
@@ -30,9 +30,9 @@ namespace VRTRPG.Combat
 
         public void StartCombatPhase(ACombatable combatable)
         {
-            if (combatable != null && CurrentCombatable == combatable) return;
+            if (combatable != null && currentCombatable == combatable) return;
 
-            CurrentCombatable = combatable;
+            currentCombatable = combatable;
             ClearIndicators();
 
             combatable.StartCombat();
@@ -40,13 +40,13 @@ namespace VRTRPG.Combat
 
         public void EndCombatPhase()
         {
-            CurrentCombatable = null;
+            currentCombatable = null;
             ClearIndicators();
         }
 
         public void DoCombat(ACombatable target)
         {
-            CurrentCombatable.DoCombat(target);
+            currentCombatable.DoCombat(target);
         }
 
         private void ClearIndicators()
@@ -57,7 +57,7 @@ namespace VRTRPG.Combat
 
         public void ShowAvailableTargets()
         {
-            List<ACombatable> availableTargets = new List<ACombatable>(CurrentCombatable.GetAvailableTarget());
+            List<ACombatable> availableTargets = new List<ACombatable>(currentCombatable.GetAvailableTarget());
 
             availableTargets.ForEach(target =>
             {

@@ -28,7 +28,7 @@ namespace VRTRPG.Chess.ActionUnit
         public override void DoAction()
         {
             combatSystem.StartCombatPhase(combatable);
-            if (combatSystem.CurrentCombatable != null)
+            if (combatSystem.currentCombatable != null)
             {
                 movementSystem.StartMovePhase(moveable);
             }

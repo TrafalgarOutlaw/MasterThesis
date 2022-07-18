@@ -32,7 +32,6 @@ namespace VRTRPG.Grid
 
         //______________________________________________________________________________
         public AGridCell SelectedGridCell { get; private set; }
-        [SerializeField] Camera editorCamera;
         [HideInInspector] public OnGridSelectedGridCellChanged OnSelectedGridCellChange;
         [SerializeField] Transform gridContainer;
 

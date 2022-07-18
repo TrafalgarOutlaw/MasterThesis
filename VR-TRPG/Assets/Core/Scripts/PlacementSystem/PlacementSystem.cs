@@ -12,11 +12,11 @@ namespace VRTRPG.Place
     // [System.Serializable] public class OnGridEventInt : UnityEvent<int> { }
 
 
-    public class PlaceSystem : MonoBehaviour
+    public class PlacementSystem : MonoBehaviour
     {
         // This instance
-        private static PlaceSystem _instance;
-        public static PlaceSystem Instance { get { return _instance; } }
+        private static PlacementSystem _instance;
+        public static PlacementSystem Instance { get { return _instance; } }
 
         // Events
         // public OnGridEventQuaternion OnFieldRotationChange;
@@ -39,7 +39,6 @@ namespace VRTRPG.Place
         // public bool isCurrentFieldPlaceable;
 
         // Level
-        [SerializeField] Transform fieldsContainer;
         InputManager inputManager;
         private float _cellSize;
         public AGridCell currentGridCell;
