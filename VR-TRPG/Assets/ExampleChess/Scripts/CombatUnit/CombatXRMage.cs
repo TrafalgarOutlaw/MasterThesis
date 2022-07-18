@@ -6,8 +6,9 @@ using VRTRPG.Grid;
 
 namespace VRTRPG.Chess.CombatUnit
 {
-    public class CombatUnitWalker : ACombatable
+    public class CombatXRMage : ACombatable
     {
+        [SerializeField] GameObject weapon;
         new void Start()
         {
             base.Start();
@@ -67,7 +68,9 @@ namespace VRTRPG.Chess.CombatUnit
 
         public override void DoCombat(ACombatable target)
         {
-            target.Damage(damageAmount);
+            //target.Damage(damageAmount);
+            weapon.SetActive(true);
+            //print("ACTIVATE WEAPON");
         }
     }
 }

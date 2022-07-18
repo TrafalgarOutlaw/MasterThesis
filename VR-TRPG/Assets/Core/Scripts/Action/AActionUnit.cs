@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using VRTRPG.XR;
 
 namespace VRTRPG.Action
 {
@@ -28,5 +29,6 @@ namespace VRTRPG.Action
         // Abstract
         public abstract void DoAction();
         public abstract void EndAction();
+        public abstract XRUnit GetXRUnit();
     }
 }

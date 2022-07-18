@@ -4,6 +4,7 @@ using VRTRPG.Movement;
 using VRTRPG.Grid;
 using System.Collections.Generic;
 using VRTRPG.Combat;
+using VRTRPG.XR;
 
 namespace VRTRPG.Chess.ActionUnit
 {
@@ -42,6 +43,11 @@ namespace VRTRPG.Chess.ActionUnit
             actionSystem.RemoveActionUnit(this);
             actionSystem.PushActionUnit(this);
             actionSystem.EndActionPhase();
+        }
+
+        public override XRUnit GetXRUnit()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -29,6 +29,10 @@ namespace VRTRPG.Chess.ActionUnit
             movementSystem = MovementSystem.Instance;
             combatSystem = CombatSystem.Instance;
         }
+        public override XRUnit GetXRUnit()
+        {
+            return xRUnit;
+        }
 
         public override void DoAction()
         {
@@ -94,9 +98,9 @@ namespace VRTRPG.Chess.ActionUnit
                 isActionEnd = false;
                 return;
             }
-            if (args.interactableObject.transform.TryGetComponent<XRUnit>(out XRUnit xRUnit))
+            if (args.interactableObject.transform.TryGetComponent<AActionUnit>(out AActionUnit xRUnit))
             {
-                xrSystem.SelectUnit(xRUnit);
+                xrSystem.SelectUnit(xRUnit.GetXRUnit());
             }
             if (args.interactableObject.transform.TryGetComponent<AGridMoveable>(out AGridMoveable moveable))
             {
@@ -149,11 +153,11 @@ namespace VRTRPG.Chess.ActionUnit
                     return go.GetComponent<ACombatable>() != null;
                 });
                 combatSystem.DoCombat(targetObject.GetComponent<ACombatable>());
-                movementSystem.EndMovePhase();
-                combatSystem.EndCombatPhase();
-                DeactivateSelect();
-                isActionEnd = true;
-                EndAction();
+                //movementSystem.EndMovePhase();
+                //combatSystem.EndCombatPhase();
+                //DeactivateSelect();
+                //isActionEnd = true;
+                //EndAction();
             }
         }
     }
